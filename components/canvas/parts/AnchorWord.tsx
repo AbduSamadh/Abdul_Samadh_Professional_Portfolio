@@ -1,12 +1,14 @@
 'use client';
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import { useFont } from '@react-three/drei';
 import { TextGeometry } from 'three-stdlib';
 import { FONTS } from '@/lib/asset';
 import { M, glowColor } from '@/lib/materials';
-import { WORD_SIZE, type Gate } from '@/lib/path';
+import { VOICES, WORD_SIZE, type Gate } from '@/lib/path';
+import { journey } from '@/lib/journey';
+import { testimonials } from '@/content/testimonials';
 import { ss } from './common';
 
 type FontData = {
@@ -44,7 +46,13 @@ export function AnchorWord({ gate }: { gate: Gate }) {
 
   const hot = useMemo(() => M.edge.clone(), []);
 
+  const root = useRef<THREE.Group>(null);
   useFrame(({ camera }) => {
+    // SCALE's word would sit behind the recommendation slabs; keep it out of the way while they are read.
+    if (root.current && gate.word === 'SCALE' && testimonials.length) {
+      const p = journey.progress;
+      root.current.visible = !(p > VOICES.start - 0.006 && p < VOICES.end + 0.004);
+    }
     // The through-letter's edges brighten as the camera closes in.
     const d = Math.abs(camera.position.z - gate.z);
     const t = 1 - ss(4, 70, d);
@@ -53,7 +61,7 @@ export function AnchorWord({ gate }: { gate: Gate }) {
   });
 
   return (
-    <group position={[-offset.x, gate.y - offset.y, gate.z - DEPTH]}>
+    <group ref={root} position={[-offset.x, gate.y - offset.y, gate.z - DEPTH]}>
       {letters.map((l, i) => (
         <group key={i} position={[l.x, 0, 0]}>
           <mesh geometry={l.geo} material={M.solid} />

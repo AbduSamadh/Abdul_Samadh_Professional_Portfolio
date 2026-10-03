@@ -116,7 +116,7 @@ const S = (id: string, p: number, pos: V3, look: V3, extra: Partial<Shot> = {}):
  * each in turn (one scroll beat per recommendation), with the slab on the right of the frame
  * and its full text in the reading panel on the left.
  */
-export const VOICES = { center: [0, 1.2, -761] as V3, radius: 9.5, from: -100, to: 100, start: 0.905, end: 0.938 };
+export const VOICES = { center: [0, 1.2, -757] as V3, radius: 9.5, from: -100, to: 100, start: 0.905, end: 0.938 };
 export const voiceAngle = (i: number, n: number) =>
   THREE_DEG * (n < 2 ? 0 : VOICES.from + ((VOICES.to - VOICES.from) * i) / (n - 1));
 const THREE_DEG = Math.PI / 180;

@@ -175,14 +175,6 @@ export default function Overlays() {
               </div>
               <h3>{s.role ? `${s.role}, ${s.org}` : s.org}</h3>
               <p>{s.body}</p>
-              {s.feature && <p className="mist">{scale.fll.judged}</p>}
-              {s.feature && (
-                <ul className="tags">
-                  {scale.fll.roles.map((r) => (
-                    <li key={r}>FLL UAE · {r}</li>
-                  ))}
-                </ul>
-              )}
             </div>
           </Ov>
         );

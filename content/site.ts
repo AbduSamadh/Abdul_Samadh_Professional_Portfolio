@@ -89,8 +89,8 @@ export const route: Stop[] = [
     id: 'atlab',
     country: 'United Arab Emirates',
     org: 'ATLAB',
-    role: 'STEM and AI Specialist',
-    body: 'Curriculum development, educator training and programme delivery across the UAE and the wider GCC. Core team member for FIRST LEGO League UAE, as Head Referee and on the Judging Panel.',
+    role: 'STREAM and AI Training Specialist',
+    body: 'Curriculum development, educator training and programme delivery across the UAE and the wider GCC.',
     feature: true,
   },
   {

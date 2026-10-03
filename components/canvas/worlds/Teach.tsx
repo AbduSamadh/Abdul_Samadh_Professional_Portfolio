@@ -397,7 +397,6 @@ function Route({ mobile }: { mobile: boolean }) {
   const tube = useMemo(() => new THREE.TubeGeometry(curve, 300, 0.016, 6, false), [curve]);
   const pulse = useRef<THREE.Mesh>(null);
   const rings = useRef<THREE.Mesh[]>([]);
-  const pins = useRef<THREE.Mesh[]>([]);
 
   useFrame(({ clock }) => {
     const t = clock.elapsedTime;
@@ -409,9 +408,6 @@ function Route({ mobile }: { mobile: boolean }) {
       r.scale.setScalar(s);
       r.rotation.z = t * 0.3 * (i % 2 ? 1 : -1);
     });
-    // FLL pins light in sequence when the camera reaches the ATLAB stop.
-    const k = ss(P['route-3'] - 0.004, P['route-3b'], journey.progress);
-    pins.current.forEach((m, i) => m && m.scale.setScalar(0.001 + ss(i / 3, (i + 1) / 3, k)));
   });
 
   const p = usePalette();
@@ -445,30 +441,6 @@ function Route({ mobile }: { mobile: boolean }) {
                 {s.org.split(',')[0]}
               </Label>
             </Billboard>
-            {s.feature && (
-              // FIRST LEGO League UAE: the three roles light up in turn.
-              <group position={[mobile ? 0.2 : 2.3, -0.75, -0.6]} rotation={[0, -0.75, 0]}>
-                <mesh material={M.solid}>
-                  <circleGeometry args={[0.95, 40]} />
-                </mesh>
-                <mesh material={M.glowDim}>
-                  <ringGeometry args={[0.94, 0.96, 40]} />
-                </mesh>
-                <Label position={[0, 0.45, 0.02]} size={0.13} tone="accent" letterSpacing={0.2}>
-                  FLL UAE
-                </Label>
-                {scale.fll.roles.map((name, k) => (
-                  <group key={name} position={[-0.62, 0.08 - k * 0.27, 0.02]}>
-                    <mesh ref={(m) => void (m && (pins.current[k] = m))} material={M.glow}>
-                      <sphereGeometry args={[0.04, 12, 12]} />
-                    </mesh>
-                    <Label position={[0.1, 0, 0]} size={0.1} tone="ink" anchorX="left" letterSpacing={0.1}>
-                      {name.toUpperCase()}
-                    </Label>
-                  </group>
-                ))}
-              </group>
-            )}
           </group>
         );
       })}
