@@ -7,7 +7,7 @@ import { TextGeometry } from 'three-stdlib';
 import { FONTS } from '@/lib/asset';
 import { M, glowColor } from '@/lib/materials';
 import { WORD_SIZE, type Gate } from '@/lib/path';
-import { Label, ss } from './common';
+import { ss } from './common';
 
 type FontData = {
   glyphs: Record<string, { ha: number }>;
@@ -60,10 +60,6 @@ export function AnchorWord({ gate }: { gate: Gate }) {
           <lineSegments geometry={l.edges} material={i === gate.letter ? hot : M.edge} />
         </group>
       ))}
-      {/* chapter label, set on the floor line below the word */}
-      <Label position={[width / 2, -1.6, DEPTH + 0.1]} size={0.62} tone="mist" letterSpacing={0.35} anchorX="center">
-        {gate.label.toUpperCase()}
-      </Label>
       {/* a faint plinth line the word stands on */}
       <mesh position={[width / 2, -0.25, DEPTH / 2]} material={M.glowDim}>
         <boxGeometry args={[width + 8, 0.02, 0.05]} />

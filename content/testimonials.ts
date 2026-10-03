@@ -1,4 +1,5 @@
-// Real testimonials only. Each needs the person's permission to publish.
+// LinkedIn recommendations (real ones only). `quote` is the short pull line shown large on the
+// monolith; `detail` is the rest of the recommendation, shown in the reading panel.
 // While this list is empty the testimonial monoliths in SCALE are not rendered at all.
 //
 // Example shape:

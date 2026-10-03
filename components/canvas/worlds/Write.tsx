@@ -308,7 +308,7 @@ function drawCover(g: CanvasRenderingContext2D, n: string, title: string, p: Pal
   g.fillText(line.trim(), 48, y);
   g.fillStyle = '#A99787';
   g.font = '500 20px "IBM Plex Mono", monospace';
-  g.fillText('ICT · AI · STREAM   KG–13', 48, h - 80);
+
 }
 
 function drawPage(g: CanvasRenderingContext2D, i: number, p: Palette) {
@@ -318,10 +318,10 @@ function drawPage(g: CanvasRenderingContext2D, i: number, p: Palette) {
   g.fillStyle = p.dark ? '#b2560a' : '#b2560a';
   g.font = '600 22px "IBM Plex Mono", monospace';
   g.textBaseline = 'top';
-  g.fillText(`UNIT ${i + 2}`, 40, 40);
+
   g.fillStyle = '#1a1510';
   g.font = '700 40px "Space Grotesk", sans-serif';
-  g.fillText(['Progression', 'Activity', 'Teaching notes', 'Practice', 'Rubric', 'Module'][i], 40, 76);
+
   g.fillStyle = '#6b5d4f';
   for (let k = 0; k < 16; k++) g.fillRect(40, 150 + k * 30, (w - 80) * (0.55 + ((k * 31) % 45) / 100), 6);
   g.strokeStyle = '#b2560a';

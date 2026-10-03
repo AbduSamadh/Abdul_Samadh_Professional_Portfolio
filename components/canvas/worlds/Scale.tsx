@@ -224,10 +224,10 @@ function Quotes() {
   return (
     <group>
       {testimonials.slice(0, 4).map((t, i) => {
-        const at: V3 = [(i % 2 ? 1 : -1) * 9 * lx(), 1.5, -676 - i * 20];
+        const at: V3 = [(i % 2 ? -1 : 1) * (5.5 + Math.floor(i / 2) * 1.5) * lx(), 1.2, -759 - Math.floor(i / 2) * 3.5];
         const geo = new THREE.BoxGeometry(3.4, 6.5, 0.5);
         return (
-          <group key={t.name} position={at} rotation={[0, (i % 2 ? -1 : 1) * 0.5, 0]}>
+          <group key={t.name} position={at} rotation={[0, (i % 2 ? 1 : -1) * 0.6, 0]}>
             <mesh geometry={geo} material={M.solid} />
             <EdgeLines geometry={geo} material={M.edgeDim} />
             <Label position={[0, 1, 0.3]} size={0.3} font="display" tone="ink" maxWidth={2.9} textAlign="left">

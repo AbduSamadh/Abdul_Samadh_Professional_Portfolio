@@ -18,10 +18,6 @@ export const person = {
   ticker: ['DUBAI', 'UAE', 'GCC', 'SINGAPORE', 'INDIA'],
 };
 
-export const hero = {
-  headline: 'I build the lessons. Then I build the software that teaches them.',
-  sub: 'Twelve years. Kindergarten to university. Four countries.',
-};
 
 export const who = {
   kicker: '01 / Who',
@@ -177,11 +173,6 @@ export const builds = {
       tags: ['PYHULA', 'APRILTAG'],
     },
   ] as Build[],
-  method: [
-    { n: '1', title: 'Start with the lesson.', body: 'Every build began as a teaching problem, not a tech idea.' },
-    { n: '2', title: "Build what's missing.", body: 'When the right tool does not exist, I write it, from scratch.' },
-    { n: '3', title: 'Make the failure visible.', body: 'The best builds let a class watch the wrong answer fail: 107 collisions, a robot spinning on the spot.' },
-  ],
   hulaLessons: ['Flight basics', 'Obstacle sensing and altitude', 'AprilTag recognition'],
 };
 
@@ -233,7 +224,7 @@ export const scale = {
     { value: 4, label: 'Languages taught in' },
     { value: 3, label: 'Publishers authored for' },
   ],
-  lines: ['Kindergarten to university', 'Four countries', 'Classrooms and screens', 'Written. Taught. Built.', 'The lesson came first.'],
+  lines: ['Kindergarten to university', 'UAE · GCC · Singapore · India', 'For classrooms and for screens'],
   fll: {
     title: 'FIRST LEGO League',
     body: 'Official partnership for the UAE, Qatar and Kuwait.',
@@ -248,5 +239,5 @@ export const contact = {
   body: 'Curriculum, competitions, teacher training, or a simulator that does not exist yet.',
   sign: 'learning never stops',
   footer: 'Abdul Samadh · Dubai, UAE · 2026',
-  credit: 'Hand built · every world designed, not templated',
+  credit: 'Hand built',
 };

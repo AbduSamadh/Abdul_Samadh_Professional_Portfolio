@@ -1,10 +1,9 @@
 'use client';
 import { useMemo } from 'react';
-import { Billboard } from '@react-three/drei';
 import { GATES, W, type V3 } from '@/lib/path';
 import { M } from '@/lib/materials';
 import { DroneSwarm } from '../parts/DroneSwarm';
-import { Label, Region } from '../parts/common';
+import { Region } from '../parts/common';
 import AsciiCity from './build/AsciiCity';
 import { Bench, Hula, Landing, MethodFrame, Plotter } from './build/Exhibits';
 
@@ -38,11 +37,6 @@ function LaunchPad({ at, mobile }: { at: V3; mobile: boolean }) {
         <planeGeometry args={[w + 2, 8]} />
       </mesh>
       <gridHelper args={[w + 2, 24, M.edgeDim.color, M.edgeDim.color]} position={[0, -0.04, 0]} scale={[1, 1, 8 / (w + 2)]} material-transparent material-opacity={0.25} />
-      <Billboard position={[0, -0.8, 5]}>
-        <Label size={0.3} tone="mist" letterSpacing={0.4}>
-          LAUNCH PAD · SWARM
-        </Label>
-      </Billboard>
     </group>
   );
 }

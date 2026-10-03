@@ -21,7 +21,6 @@ const place = (p: V3): V3 => [p[0] * lx(), p[1], p[2]];
 /** One of the three method frames the camera flies through. */
 export function MethodFrame({ i }: { i: number }) {
   const p = place(W.build.frames[i]);
-  const m = builds.method[i];
   const w = 6.4, h = 4.2, t = 0.045;
   return (
     <group position={p}>
@@ -35,9 +34,6 @@ export function MethodFrame({ i }: { i: number }) {
           <boxGeometry args={[sw, sh, t]} />
         </mesh>
       ))}
-      <Label position={[-w / 2 + 0.1, h / 2 + 0.35, 0]} size={0.5} font="display" tone="accent" anchorX="left">
-        {`0${m.n}`}
-      </Label>
     </group>
   );
 }
@@ -52,8 +48,6 @@ export function Bench() {
   const [mode, setMode] = useState<0 | 1>(0);
   const modeRef = useRef(0);
   const vals = useRef([0, 0, 0]);
-  const [readout, setReadout] = useState(['0.00 A', '0', '7.4 V']);
-  const last = useRef(0);
 
   useFrame(({ clock, camera }, dt) => {
     if (camera.position.distanceTo(new THREE.Vector3(...at)) > 60) return;
@@ -83,10 +77,6 @@ export function Bench() {
       b.scale.y = Math.max(0.02, vals.current[i]);
       b.position.y = (b.scale.y * 2) / 2;
     });
-    if (clock.elapsedTime - last.current > 0.2) {
-      last.current = clock.elapsedTime;
-      setReadout([`${(vals.current[0] * 2.4).toFixed(2)} A`, String(Math.floor(clock.elapsedTime * (m === 0 ? 410 : 90)) % 100000), `${(6.2 + vals.current[2] * 2.2).toFixed(1)} V`]);
-    }
     const s = sparks.current;
     if (s) {
       const mm = new THREE.Matrix4();
@@ -101,7 +91,6 @@ export function Bench() {
     }
   });
 
-  const card = mode === 0 ? ['REPORT CARD', 'One motor is wired backwards,', 'so it spins on the spot.', 'FIX: swap its leads, or flip it in code.'] : ['REPORT CARD', 'The battery hangs off the nose,', 'so the front scrapes.', 'FIX: move the mass back over the axle.'];
 
   return (
     <group position={at} rotation={[0, yaw, 0]}>
@@ -114,7 +103,7 @@ export function Bench() {
       </instancedMesh>
       {/* gauges */}
       <group position={[2.9, 0, -0.4]}>
-        {['MOTOR CURRENT', 'ENCODER TICKS', 'BATTERY'].map((name, i) => (
+        {['MOTOR CURRENT', 'ENCODER TICKS', 'BATTERY SAG'].map((name, i) => (
           <group key={name} position={[i * 0.75, 0, 0]}>
             <mesh position={[0, 1, 0]}>
               <boxGeometry args={[0.24, 2, 0.02]} />
@@ -123,33 +112,12 @@ export function Bench() {
             <mesh ref={(m) => void (m && (bars.current[i] = m))} material={i === 1 && mode === 1 ? M.danger : M.glow}>
               <boxGeometry args={[0.18, 2, 0.04]} />
             </mesh>
-            <Label position={[0, 2.35, 0]} size={0.16} tone="ink" font="display">
-              {readout[i]}
-            </Label>
             <Label position={[0, -0.25, 0]} size={0.09} tone="mist" letterSpacing={0.15} maxWidth={0.8} textAlign="center">
               {name}
             </Label>
           </group>
         ))}
       </group>
-      {/* report card */}
-      <group position={[-1.5, 2.4, -0.8]}>
-        <mesh>
-          <planeGeometry args={[3.3, 1.5]} />
-          <meshBasicMaterial color="#000" transparent opacity={0.55} />
-        </mesh>
-        <mesh position={[-1.64, 0, 0.01]} material={M.glow}>
-          <planeGeometry args={[0.03, 1.5]} />
-        </mesh>
-        {card.map((l, i) => (
-          <Label key={i} position={[-1.45, 0.5 - i * 0.32, 0.02]} size={i === 0 ? 0.13 : 0.15} tone={i === 0 ? 'accent' : i === 3 ? 'accent' : 'ink'} anchorX="left" letterSpacing={i === 0 ? 0.3 : 0}>
-            {l}
-          </Label>
-        ))}
-      </group>
-      <Label position={[0, -0.6, 1.7]} size={0.22} tone="mist" letterSpacing={0.3}>
-        BENCH · BUILD A ROBOT, WATCH IT MISBEHAVE
-      </Label>
     </group>
   );
 }
@@ -270,9 +238,6 @@ export function Plotter() {
           <meshBasicMaterial color={c} toneMapped={false} />
         </mesh>
       ))}
-      <Label position={[0.4, -PH / 2 - 0.35, 0.1]} size={0.15} tone="mist" letterSpacing={0.2} anchorX="left">
-        FOUR PENS · BLE · PYTHON
-      </Label>
     </group>
   );
 }
@@ -281,7 +246,6 @@ export function Plotter() {
 export function Landing() {
   const { y, z, xs } = W.build.landing;
   const verdicts = [true, false, false];
-  const names = ['FLAT PAD', 'RUBBLE', 'SLOPE'];
   const reticle = useRef<THREE.Group>(null);
   const scan = useRef<THREE.Mesh>(null);
   const drone = useRef<THREE.Group>(null);
@@ -357,11 +321,6 @@ export function Landing() {
               ))}
             </group>
           )}
-          <group position={[0, 0.02, 1.95]}>
-            <Label rotation={[-Math.PI / 2, 0, 0]} size={0.2} tone="mist" letterSpacing={0.25}>
-              {names[i]}
-            </Label>
-          </group>
           {shown > i && (
             <Billboard position={[0, 2.4, 0]}>
               <Text font={FONTS.display} fontSize={0.62} color={verdicts[i] ? undefined : '#ff5a46'} anchorX="center" anchorY="middle">
@@ -391,9 +350,6 @@ export function Landing() {
           <coneGeometry args={[1.2, 4, 24, 1, true]} />
         </mesh>
       </group>
-      <Label position={[xs[1] * lx(), 6.2, -2.5]} size={0.3} tone="accent" letterSpacing={0.3}>
-        TFLITE CLASSIFIER · ROS 2 SENSOR FUSION
-      </Label>
     </group>
   );
 }
@@ -442,7 +398,7 @@ export function Hula() {
           g.globalAlpha = 1;
           g.fillStyle = p.dark ? p.accent : '#ff9d2e';
           g.font = '600 22px "IBM Plex Mono", monospace';
-          g.fillText(`LESSON 0${i + 1} · PYHULA`, 32, 48);
+          g.fillText(`0${i + 1}`, 32, 48);
           g.fillStyle = '#F6EDE2';
           g.font = '700 46px "Space Grotesk", sans-serif';
           const words = builds.hulaLessons[i].split(' ');
@@ -465,9 +421,6 @@ export function Hula() {
           g.lineTo(w - 44, h - 74);
           g.closePath();
           g.fill();
-          g.fillStyle = '#A99787';
-          g.font = '500 20px "IBM Plex Mono", monospace';
-          g.fillText('VIDEO LESSON', 32, h - 60);
           s.tex.needsUpdate = true;
         });
       }),
@@ -530,9 +483,6 @@ export function Hula() {
           <DroneModel />
         </group>
       </group>
-      <Label position={[0, -0.25, 0.4]} size={0.2} tone="mist" letterSpacing={0.3}>
-        HULA DRONE SDK · VIDEO LESSON SERIES
-      </Label>
     </group>
   );
 }

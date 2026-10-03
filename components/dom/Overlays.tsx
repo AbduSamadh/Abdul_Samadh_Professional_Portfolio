@@ -3,8 +3,10 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 import gsap from 'gsap';
 import { emit, journey, on, setSwarmRandom } from '@/lib/journey';
 import { P } from '@/lib/path';
-import { abstract, authoring, briefs, builds, contact, hero, lab, person, route, scale, who } from '@/content/site';
+import { abstract, authoring, briefs, builds, contact, lab, person, route, scale, who } from '@/content/site';
 import { testimonials } from '@/content/testimonials';
+import GlyphPortrait from './GlyphPortrait';
+import Testimonials from './Testimonials';
 
 /**
  * All readable copy lives here as real HTML, staged against the master timeline. Each block fades in
@@ -86,13 +88,18 @@ export default function Overlays() {
           <span className="dot" />
           Now · {person.nowShort}
         </p>
-        <h1>{hero.headline}</h1>
-        <p className="mist" style={{ maxWidth: 430 }}>
-          {person.oneLine} {person.span}
+        <h1>{person.name}</h1>
+        <p className="big" style={{ maxWidth: 470 }}>
+          {person.oneLine}
         </p>
+        <p className="mist">{person.span}</p>
         <div style={{ marginTop: 22 }}>
           <span className="scroll-hint">SCROLL TO DESCEND</span>
         </div>
+      </Ov>
+
+      <Ov from={-1} to={P['room-drift'] + 0.004} side="right" className="hero-portrait" label="Portrait">
+        <GlyphPortrait />
       </Ov>
 
       {/* TEACH */}
@@ -125,9 +132,9 @@ export default function Overlays() {
               </div>
             ))}
           </dl>
-          <p className="mist" style={{ marginTop: 14, fontSize: 12 }}>
-            Click the portrait to decode it.
-          </p>
+          <button className="btn ghost" style={{ marginTop: 14 }} onClick={() => emit('decode', null)}>
+            Decode the portrait
+          </button>
         </div>
       </Ov>
       <Ov from={P['teach-abstract'] - 0.005} to={P['teach-abstract'] + 0.007} side="right" label="Abstract">
@@ -196,7 +203,6 @@ export default function Overlays() {
             </p>
             <h3>{b.title}</h3>
             <p>{b.body}</p>
-            {i === 0 && <p className="mist">Above you: the arc, KG to Grade 13, on one page.</p>}
           </div>
         </Ov>
       ))}
@@ -209,23 +215,14 @@ export default function Overlays() {
         <h2>{builds.title}</h2>
         <p className="mist">{builds.body}</p>
       </Ov>
-      <Ov from={P['frame-1'] - 0.003} to={P['frame-1'] + 0.008} side="bottom">
-        <Method i={0} />
-      </Ov>
       <BuildPanel i={0} from={P.swarm - 0.006} to={P['swarm-hold'] + 0.008} side="left">
         <SwarmControls />
       </BuildPanel>
       <BuildPanel i={1} from={P.city - 0.006} to={P['city-deep'] + 0.007} side="left" />
-      <Ov from={P['frame-2'] - 0.005} to={P['frame-2'] + 0.006} side="bottom">
-        <Method i={1} />
-      </Ov>
       <BuildPanel i={2} from={P.bench - 0.006} to={P.bench + 0.007} side="left" />
       <BuildPanel i={3} from={P.plotter - 0.006} to={P.plotter + 0.007} side="right" />
       <BuildPanel i={4} from={P.landing - 0.006} to={P.landing + 0.007} side="left" />
       <BuildPanel i={5} from={P.hula - 0.006} to={P.hula + 0.007} side="left" />
-      <Ov from={P['frame-3'] - 0.006} to={P['frame-3'] + 0.008} side="bottom">
-        <Method i={2} />
-      </Ov>
 
       {/* SOLVE */}
       <Ov from={P['gate-build'] + 0.002} to={P['briefs-0'] - 0.0045} side="top" label={briefs.title}>
@@ -263,14 +260,12 @@ export default function Overlays() {
       <Ov from={P['ai-web'] - 0.006} to={P['ai-web'] + 0.006} side="right">
         <div className="panel">
           <p className="kicker">Brief 01 · AI literacy</p>
-          <p className="big">…and where a human still has to decide.</p>
           <p className="mist">{briefs.items[0].body}</p>
         </div>
       </Ov>
       <Ov from={P.ladder - 0.006} to={P['ladder-top'] + 0.004} side="left">
         <div className="panel">
           <p className="kicker">Brief 04 · Robotics pathway</p>
-          <p className="big">One ladder. Floor turtle to competition season.</p>
           <p className="mist">{briefs.items[3].body}</p>
         </div>
       </Ov>
@@ -311,13 +306,6 @@ export default function Overlays() {
           </div>
         </Ov>
       ))}
-      <Ov from={P.humanoid - W} to={P.humanoid + W} side="right">
-        <div className="panel">
-          <p className="kicker">Robotics · hero</p>
-          <h3>Unitree G1 EDU Ultimate C</h3>
-          <p className="mist">Part of the robotics stack I specialise in, from a floor turtle to a humanoid.</p>
-        </div>
-      </Ov>
 
       {/* SCALE */}
       <Ov from={P['gate-lab'] + 0.003} to={P['stat-0'] - 0.002} side="top" label={scale.title}>
@@ -337,7 +325,7 @@ export default function Overlays() {
           <li>{scale.places.join(', ')}</li>
         </ul>
       </section>
-      <Ov from={P.fll - 0.007} to={P.fll + 0.007} side="right">
+      <Ov from={P.fll - 0.007} to={P.fll + 0.006} side="right">
         <div className="panel feature">
           <p className="kicker">Partnership</p>
           <h3>{scale.fll.title}</h3>
@@ -350,15 +338,8 @@ export default function Overlays() {
         </div>
       </Ov>
       {testimonials.length > 0 && (
-        <Ov from={P.fll + 0.007} to={P['gate-scale']} side="bottom">
-          {testimonials.slice(0, 1).map((t) => (
-            <figure key={t.name}>
-              <blockquote className="big">“{t.quote}”</blockquote>
-              <figcaption className="mist">
-                {t.name}, {t.role}, {t.org}
-              </figcaption>
-            </figure>
-          ))}
+        <Ov from={P.voices - 0.007} to={P['gate-scale'] - 0.002} side="left" label="Recommendations">
+          <Testimonials />
         </Ov>
       )}
 
@@ -386,17 +367,6 @@ export default function Overlays() {
         </p>
       </Ov>
     </div>
-  );
-}
-
-function Method({ i }: { i: number }) {
-  const m = builds.method[i];
-  return (
-    <>
-      <p className="kicker">Method · {m.n} / 3</p>
-      <p className="big">{m.title}</p>
-      <p className="mist">{m.body}</p>
-    </>
   );
 }
 

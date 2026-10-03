@@ -1,8 +1,8 @@
 'use client';
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { useFrame, useLoader, type ThreeEvent } from '@react-three/fiber';
-import { journey } from '@/lib/journey';
+import { journey, on } from '@/lib/journey';
 import { GATES, P, W, type V3 } from '@/lib/path';
 import { M, onPalette } from '@/lib/materials';
 import { ATLAS, glyphAtlas } from '@/lib/glyphs';
@@ -160,7 +160,7 @@ function drawFragment(g: CanvasRenderingContext2D, c: HTMLCanvasElement, i: numb
   const pad = W2 * 0.07;
   if (i === 0) {
     // worksheet
-    g.fillText('WORKSHEET 03', pad, pad);
+    // (no invented headings: shapes only)
     for (let k = 0; k < 9; k++) line(pad, pad + 60 + k * 26, (W2 - pad * 2) * (0.5 + ((k * 37) % 40) / 80), mist, 3);
     for (let k = 0; k < 3; k++) {
       g.strokeStyle = ink;
@@ -168,7 +168,7 @@ function drawFragment(g: CanvasRenderingContext2D, c: HTMLCanvasElement, i: numb
       g.strokeRect(pad, pad + 310 + k * 0, (W2 - pad * 2) / 3 - 8, 0);
     }
   } else if (i === 1) {
-    g.fillText('UNIT 4 · SENSORS', pad, pad);
+
     for (let k = 0; k < 4; k++) {
       g.strokeStyle = k === 1 ? acc : mist;
       g.lineWidth = 2;
@@ -177,7 +177,7 @@ function drawFragment(g: CanvasRenderingContext2D, c: HTMLCanvasElement, i: numb
     }
     for (let k = 0; k < 3; k++) line(pad, H * 0.75 + k * 18, W2 * 0.6, mist, 3);
   } else if (i === 2) {
-    g.fillText('WHOLE-SCHOOL SCHEME · KG–13', pad, pad);
+
     const cols = 7, rows = 5;
     const gw = (W2 - pad * 2) / cols, gh = (H - pad * 2 - 60) / rows;
     for (let r = 0; r < rows; r++)
@@ -193,7 +193,7 @@ function drawFragment(g: CanvasRenderingContext2D, c: HTMLCanvasElement, i: numb
         }
       }
   } else if (i === 3) {
-    g.fillText('COMPETITION SEASON', pad, pad);
+
     // a bracket
     const x0 = pad, y0 = pad + 70, h = H - y0 - pad;
     g.strokeStyle = ink;
@@ -214,7 +214,7 @@ function drawFragment(g: CanvasRenderingContext2D, c: HTMLCanvasElement, i: numb
     }
     g.fillStyle = acc;
     g.font = `700 ${Math.round(H * 0.12)}px "Space Grotesk", sans-serif`;
-    g.fillText('FINAL', W2 * 0.72, H * 0.45);
+
   } else {
     // a browser window with a simulator inside
     g.fillStyle = p.dark ? '#0b0907' : '#efe9df';
@@ -227,7 +227,7 @@ function drawFragment(g: CanvasRenderingContext2D, c: HTMLCanvasElement, i: numb
     });
     g.fillStyle = mist;
     g.font = `500 24px "IBM Plex Mono", monospace`;
-    g.fillText('abdusamadh.github.io/simulator', 130, 18);
+
     // a little world: grid + drones
     g.strokeStyle = mist;
     g.globalAlpha = 0.4;
@@ -254,7 +254,7 @@ function drawFragment(g: CanvasRenderingContext2D, c: HTMLCanvasElement, i: numb
     }
     g.font = `700 ${Math.round(H * 0.09)}px "Space Grotesk", sans-serif`;
     g.fillStyle = ink;
-    g.fillText('the software', pad, H - pad - H * 0.09);
+
   }
   void label;
 }
@@ -313,12 +313,17 @@ function Portrait() {
     [mat],
   );
 
-  const clicked = useRef(false);
+  // Stays as glyphs until you ask: click the portrait (or the button in the panel) to decode, again to encode.
+  const decoded = useRef(false);
   const decode = useRef(0);
+  const [label, setLabel] = useState('CLICK TO DECODE');
+  const toggle = () => {
+    decoded.current = !decoded.current;
+    setLabel(decoded.current ? 'CLICK TO ENCODE' : 'CLICK TO DECODE');
+  };
+  useEffect(() => on('decode', toggle), []); // eslint-disable-line react-hooks/exhaustive-deps
   useFrame((_, dt) => {
-    const near = ss(P['teach-fragments'] + 0.006, P['teach-portrait'] - 0.002, journey.progress);
-    const target = clicked.current ? 1 : near;
-    decode.current = damp(decode.current, target, 1.6, dt);
+    decode.current = damp(decode.current, decoded.current ? 1 : 0, 1.4, dt);
     mat.uniforms.uDecode.value = decode.current;
   });
 
@@ -333,7 +338,7 @@ function Portrait() {
         material={mat}
         onClick={(e: ThreeEvent<MouseEvent>) => {
           e.stopPropagation();
-          clicked.current = !clicked.current || decode.current < 0.5;
+          toggle();
         }}
         onPointerOver={() => (document.body.style.cursor = 'pointer')}
         onPointerOut={() => (document.body.style.cursor = '')}
@@ -344,7 +349,7 @@ function Portrait() {
         ABDUL SAMADH · DUBAI · UAE
       </Label>
       <Label position={[0, h / 2 + 0.3, 0]} size={0.16} tone="accent" letterSpacing={0.3}>
-        CLICK TO DECODE
+        {label}
       </Label>
     </group>
   );

@@ -26,6 +26,7 @@ type Events = {
   swarm: boolean;
   modal: ModalPayload | null;
   terminal: boolean;
+  decode: null;
 };
 
 const subs: { [K in keyof Events]?: Set<(v: Events[K]) => void> } = {};

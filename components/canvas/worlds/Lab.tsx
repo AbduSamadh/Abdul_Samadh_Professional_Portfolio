@@ -78,9 +78,6 @@ function BayView({ bay, mobile }: { bay: Bay; mobile: boolean }) {
         <Label size={mobile ? 0.42 : 0.55} font="display" tone="ink">
           {bay.title}
         </Label>
-        <Label position={[0, -0.5, 0]} size={0.14} tone="accent" letterSpacing={0.35}>
-          {`${bay.items.length} ON THE STACK`}
-        </Label>
       </Billboard>
       {items.map((name, i) => {
         const r = rows === 2 ? i % 2 : 0;
@@ -144,13 +141,10 @@ function HoloScreen({ name, i, pos }: { name: string; i: number; pos: [number, n
         g.strokeRect(2, 2, 508, 296);
         g.fillStyle = p.accent;
         g.font = '500 20px "IBM Plex Mono", monospace';
-        g.fillText('AI · ML', 28, 46);
+
         g.fillStyle = p.ink;
         g.font = '700 48px "Space Grotesk", sans-serif';
-        g.fillText(name, 28, 130);
-        // a tiny confidence chart
-        g.fillStyle = p.accent;
-        for (let k = 0; k < 12; k++) g.fillRect(28 + k * 36, 260 - ((k * 37 + i * 11) % 70), 22, (k * 37 + i * 11) % 70);
+        g.fillText(name, 28, 170);
         t.tex.needsUpdate = true;
       }),
     [t, name, i],
