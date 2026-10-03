@@ -38,7 +38,7 @@
 }
 
 :root {
-  --display: 'Unbounded', system-ui, sans-serif;
+  --display: 'Space Mono', system-ui, sans-serif;
   --body: 'Sora', system-ui, sans-serif;
   --mono: 'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace;
   --crt: 'VT323', 'IBM Plex Mono', monospace;
@@ -355,9 +355,9 @@ button {
 .ov h3 {
   font-family: var(--display);
   font-weight: 700;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
   margin: 0 0 12px;
-  line-height: 1.08;
+  line-height: 1.12;
 }
 .ov h1 {
   font-size: clamp(30px, 4.6vw, 66px);
@@ -1303,8 +1303,8 @@ html {
   font-weight: 500;
 }
 .quote-body blockquote {
-  font-weight: 500;
-  letter-spacing: -0.02em;
+  font-weight: 400;
+  letter-spacing: -0.01em;
 }
 .brief-list b {
   font-size: 15px;

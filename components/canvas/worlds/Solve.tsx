@@ -62,12 +62,12 @@ function Constellation() {
           g.font = '500 22px "IBM Plex Mono", monospace';
           g.fillStyle = p.mist;
           g.fillText('BRIEF', 40, 56);
-          g.font = '700 150px "Unbounded", sans-serif';
+          g.font = '700 150px "Space Mono", sans-serif';
           g.fillStyle = p.accent;
           g.fillText(c.n, 36, 210);
           let fs = 46;
           do {
-            g.font = `700 ${fs}px "Unbounded", sans-serif`;
+            g.font = `700 ${fs}px "Space Mono", sans-serif`;
             fs -= 2;
           } while (g.measureText(c.title).width > 640 && fs > 22);
           g.fillStyle = p.ink;

@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next';
-import '@fontsource/unbounded/500.css';
-import '@fontsource/unbounded/700.css';
+import '@fontsource/space-mono/400.css';
+import '@fontsource/space-mono/700.css';
 import '@fontsource/sora/400.css';
 import '@fontsource/sora/600.css';
 import '@fontsource/ibm-plex-mono/400.css';

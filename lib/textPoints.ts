@@ -17,10 +17,10 @@ export function textPoints(lines: string[], count: number, width: number): Float
   g.textBaseline = 'middle';
   // Fit the longest line to the canvas width.
   let size = 200;
-  g.font = `700 ${size}px "Unbounded", system-ui, sans-serif`;
+  g.font = `700 ${size}px "Space Mono", system-ui, sans-serif`;
   const longest = Math.max(...lines.map((l) => g.measureText(l).width));
   size = Math.min(size, (size * (W - 40)) / longest);
-  g.font = `700 ${size}px "Unbounded", system-ui, sans-serif`;
+  g.font = `700 ${size}px "Space Mono", system-ui, sans-serif`;
   lines.forEach((l, i) => g.fillText(l, W / 2, 20 + lineH * (i + 0.5)));
   const data = g.getImageData(0, 0, W, H).data;
 
