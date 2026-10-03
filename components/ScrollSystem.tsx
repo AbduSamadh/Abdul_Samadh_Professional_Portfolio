@@ -4,7 +4,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
 import { journey, navigate, setNavigate } from '@/lib/journey';
-import { shots } from '@/lib/path';
+import { fitShots } from '@/lib/path';
 
 /**
  * The master scroll timeline. Lenis smooths the wheel/touch input; ScrollTrigger maps scroll
@@ -12,9 +12,11 @@ import { shots } from '@/lib/path';
  * curve parameter `journey.u` from one shot to the next with that segment's ease, so pacing and
  * weight are authored in one place (lib/path.ts).
  */
-export default function ScrollSystem({ mobile, reduced }: { mobile: boolean; reduced: boolean }) {
+export default function ScrollSystem({ mobile, reduced, layoutKey }: { mobile: boolean; reduced: boolean; layoutKey: string }) {
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
+    // Phone address bars resize the viewport while scrolling; don't recalculate for that.
+    ScrollTrigger.config({ ignoreMobileResize: true });
     history.scrollRestoration = 'manual';
     window.scrollTo(0, 0);
 
@@ -31,7 +33,7 @@ export default function ScrollSystem({ mobile, reduced }: { mobile: boolean; red
     const onBooted = () => lenis?.start();
     window.addEventListener('as:booted', onBooted);
 
-    const list = shots(mobile);
+    const list = fitShots(journey.lx, journey.fovBoost, journey.sheet);
     const n = list.length - 1;
     journey.u = 0;
     const tl = gsap.timeline({
@@ -77,7 +79,12 @@ export default function ScrollSystem({ mobile, reduced }: { mobile: boolean; red
     // Handy from the console: __journey.progress, __go(0.5)
     Object.assign(window, { __journey: journey, __go: (p: number) => navigate(p, true) });
 
-    const onResize = () => ScrollTrigger.refresh();
+    let lastW = window.innerWidth;
+    const onResize = () => {
+      if (window.innerWidth === lastW && mobile) return;
+      lastW = window.innerWidth;
+      ScrollTrigger.refresh();
+    };
     window.addEventListener('resize', onResize);
 
     return () => {
@@ -90,7 +97,7 @@ export default function ScrollSystem({ mobile, reduced }: { mobile: boolean; red
         lenis.destroy();
       }
     };
-  }, [mobile, reduced]);
+  }, [mobile, reduced, layoutKey]);
 
   return null;
 }

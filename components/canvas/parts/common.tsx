@@ -4,7 +4,6 @@ import * as THREE from 'three';
 import { useFrame, type ThreeElements } from '@react-three/fiber';
 import { Text } from '@react-three/drei';
 import { journey } from '@/lib/journey';
-import { MOBILE_LX } from '@/lib/path';
 import { M } from '@/lib/materials';
 import { FONTS } from '@/lib/asset';
 import { usePalette } from '@/lib/theme';
@@ -17,18 +16,18 @@ export const clamp01 = (x: number) => Math.min(1, Math.max(0, x));
 export const damp = THREE.MathUtils.damp;
 
 /** Lateral factor: content and camera pull toward the centre line on narrow screens. */
-export const lx = () => (journey.mobile ? MOBILE_LX : 1);
+export const lx = () => journey.lx;
 
 /**
  * A slice of the world that only renders while the camera is near it. `near` is the z where it
  * starts (closest to the room), `far` where it ends. Worlds live behind the laptop screen, so
  * nothing here renders while the camera is still in the room.
  */
-export function Region({ near, far, children, ahead = 110 }: { near: number; far: number; children: ReactNode; ahead?: number }) {
+export function Region({ near, far, children, ahead }: { near: number; far: number; children: ReactNode; ahead?: number }) {
   const ref = useRef<THREE.Group>(null);
   useFrame(({ camera }) => {
     const z = camera.position.z;
-    if (ref.current) ref.current.visible = z < -0.25 && z < near + ahead && z > far - 25;
+    if (ref.current) ref.current.visible = z < -0.25 && z < near + (ahead ?? (journey.tier === 'low' ? 85 : 110)) && z > far - 25;
   });
   return <group ref={ref}>{children}</group>;
 }

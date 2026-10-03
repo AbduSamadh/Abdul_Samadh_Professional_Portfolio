@@ -20,6 +20,8 @@ export type Shot = {
   stop?: boolean;
   /** Keep x as authored on mobile (e.g. flying down a street). */
   fixedX?: boolean;
+  /** Where to look instead when reading panels dock at the bottom (subject centred above them). */
+  sheetLook?: V3;
 };
 
 /** Typeface size for anchor words: cap height is 0.7 of this. */
@@ -135,7 +137,7 @@ function voiceShots(): Shot[] {
     const look: V3 = [x - Math.cos(a) * 2.8, y, z - Math.sin(a) * 2.8];
     const [cx, , cz] = VOICES.center;
     // stand near the centre of the arc and turn to each slab
-    return S(`voice-${i}`, p, [cx + Math.sin(a) * 0.4, 1.1, cz - Math.cos(a) * 0.4], look, { stop: true, fixedX: true });
+    return S(`voice-${i}`, p, [cx + Math.sin(a) * 0.4, 1.1, cz - Math.cos(a) * 0.4], look, { stop: true, fixedX: true, sheetLook: [x, y - 0.6, z] });
   });
 }
 
@@ -218,20 +220,18 @@ const DESKTOP: Shot[] = [
   S('cta', 1, [0, 0.4, -783], [0, 0.6, -832], { fov: 54, stop: true }),
 ];
 
-/** Lateral scale for content and camera on narrow screens. */
-export const MOBILE_LX = 0.5;
-
-function toMobile(s: Shot): Shot {
-  const lx = MOBILE_LX;
-  return {
+/**
+ * The shots fitted to a screen: on taller screens everything pulls toward the centre line
+ * (`lx`, shared with the world layout) and the lens widens (`fovBoost`).
+ */
+export function fitShots(lx: number, fovBoost: number, sheet = false): Shot[] {
+  return DESKTOP.map((s) => ({
     ...s,
     pos: [s.fixedX ? s.pos[0] : s.pos[0] * lx, s.pos[1], s.pos[2]],
-    look: [s.fixedX ? s.look[0] : s.look[0] * lx, s.look[1], s.look[2]],
-    fov: (s.fov ?? 50) + 14,
-  };
+    look: ((l: V3) => [s.fixedX ? l[0] : l[0] * lx, l[1], l[2]] as V3)(sheet && s.sheetLook ? s.sheetLook : s.look),
+    fov: (s.fov ?? 50) + fovBoost,
+  }));
 }
-
-export const shots = (mobile: boolean) => (mobile ? DESKTOP.map(toMobile) : DESKTOP);
 
 /** Timeline progress at which the camera reaches a shot. */
 export const P = Object.fromEntries(DESKTOP.map((s) => [s.id, s.p])) as Record<string, number>;

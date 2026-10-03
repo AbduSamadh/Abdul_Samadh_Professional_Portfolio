@@ -20,8 +20,13 @@ import Scale from './worlds/Scale';
 import Finale from './worlds/Finale';
 
 /** One canvas, one continuous world. */
-export default function Scene({ mobile, reduced }: { mobile: boolean; reduced: boolean }) {
-  const [dpr, setDpr] = useState(mobile ? 1.25 : 1.6);
+type Tier = 'low' | 'mid' | 'high';
+// Pixel density per quality tier: starting value and ceiling. PerformanceMonitor moves between them.
+const DPR: Record<Tier, [number, number, number]> = { low: [1, 0.75, 1.5], mid: [1.25, 0.9, 1.75], high: [1.6, 1, 2] };
+
+export default function Scene({ mobile, reduced, tier }: { mobile: boolean; reduced: boolean; tier: Tier }) {
+  const [start, min, max] = DPR[tier];
+  const [dpr, setDpr] = useState(Math.min(start, window.devicePixelRatio || 1));
   return (
     <Canvas
       dpr={dpr}
@@ -33,11 +38,11 @@ export default function Scene({ mobile, reduced }: { mobile: boolean; reduced: b
       }}
     >
       <PerformanceMonitor
-        onDecline={() => setDpr((d) => Math.max(0.8, d - 0.3))}
-        onIncline={() => setDpr((d) => Math.min(mobile ? 1.5 : 2, d + 0.2))}
+        onDecline={() => setDpr((d) => Math.max(min, d - 0.25))}
+        onIncline={() => setDpr((d) => Math.min(max, window.devicePixelRatio || 1, d + 0.15))}
         flipflops={3}
       />
-      <ThemeSync />
+      <ThemeSync far={tier === 'low' ? 92 : 120} />
       <CameraRig mobile={mobile} reduced={reduced} />
       <Lights />
       <Suspense fallback={null}>
@@ -53,7 +58,7 @@ export default function Scene({ mobile, reduced }: { mobile: boolean; reduced: b
         <Gates />
         <Ready />
       </Suspense>
-      <Effects mobile={mobile} />
+      <Effects tier={tier} />
     </Canvas>
   );
 }
@@ -89,13 +94,13 @@ function Ready() {
   return null;
 }
 
-function ThemeSync() {
+function ThemeSync({ far }: { far: number }) {
   const p = usePalette();
   const scene = useThree((s) => s.scene);
   useEffect(() => {
     scene.background = new THREE.Color(p.bg);
-    scene.fog = new THREE.Fog(p.bg, 16, 120);
-  }, [p, scene]);
+    scene.fog = new THREE.Fog(p.bg, 16, far);
+  }, [p, scene, far]);
   return null;
 }
 
@@ -115,14 +120,22 @@ function Lights() {
   );
 }
 
-function Effects({ mobile }: { mobile: boolean }) {
+function Effects({ tier }: { tier: Tier }) {
   const p = usePalette();
   const bloom = useMemo(() => ({ intensity: p.dark ? 0.95 : 0.3, threshold: p.dark ? 0.92 : 0.98 }), [p]);
-  if (mobile) {
+  if (tier === 'low') {
     return (
       <EffectComposer multisampling={0}>
         <Bloom mipmapBlur intensity={bloom.intensity} luminanceThreshold={bloom.threshold} luminanceSmoothing={0.2} radius={0.7} resolutionScale={0.5} />
         <Vignette offset={0.3} darkness={p.dark ? 0.65 : 0.3} />
+      </EffectComposer>
+    );
+  }
+  if (tier === 'mid') {
+    return (
+      <EffectComposer multisampling={0}>
+        <Bloom mipmapBlur intensity={bloom.intensity} luminanceThreshold={bloom.threshold} luminanceSmoothing={0.2} radius={0.72} resolutionScale={0.75} />
+        <Vignette offset={0.28} darkness={p.dark ? 0.7 : 0.32} />
       </EffectComposer>
     );
   }

@@ -22,7 +22,7 @@ export default function Scale({ mobile }: { mobile: boolean }) {
       ))}
       <Globe />
       <Monolith />
-      <Lines mobile={mobile} />
+      {!mobile && <Lines mobile={mobile} />}
       {testimonials.length > 0 && <Quotes />}
     </Region>
   );

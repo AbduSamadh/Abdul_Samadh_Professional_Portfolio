@@ -47,14 +47,19 @@ export default function Overlays() {
       fade: parseFloat(el.dataset.fade || '') || 0.0045,
       a: -1,
     }));
-    const mq = window.matchMedia('(max-width: 760px)');
+    let wasSheet = false;
     const ss = (a: number, b: number, x: number) => {
       const t = Math.min(1, Math.max(0, (x - a) / (b - a)));
       return t * t * (3 - 2 * t);
     };
     const tick = () => {
       const p = journey.progress;
-      const narrow = mq.matches;
+      // panels dock to the bottom on phones and portrait tablets (set by Experience)
+      const narrow = document.documentElement.dataset.sheet === '1';
+      if (narrow !== wasSheet) {
+        wasSheet = narrow;
+        items.forEach((i) => (i.a = -1));
+      }
       for (const it of items) {
         const fin = it.from < 0 ? 1 : ss(it.from, it.from + it.fade, p);
         const fout = it.to > 1 ? 1 : 1 - ss(it.to - it.fade, it.to, p);
@@ -72,11 +77,8 @@ export default function Overlays() {
       }
     };
     gsap.ticker.add(tick);
-    const onMq = () => items.forEach((i) => (i.a = -1));
-    mq.addEventListener('change', onMq);
     return () => {
       gsap.ticker.remove(tick);
-      mq.removeEventListener('change', onMq);
     };
   }, []);
 

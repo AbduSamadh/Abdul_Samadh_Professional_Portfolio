@@ -3,7 +3,7 @@ import { useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import { journey } from '@/lib/journey';
-import { P, shots } from '@/lib/path';
+import { P, fitShots } from '@/lib/path';
 import { damp } from './parts/common';
 
 /**
@@ -12,7 +12,7 @@ import { damp } from './parts/common';
  * In reduced-motion mode the camera snaps between resting shots behind a short crossfade.
  */
 export default function CameraRig({ mobile, reduced }: { mobile: boolean; reduced: boolean }) {
-  const list = useMemo(() => shots(mobile), [mobile]);
+  const list = useMemo(() => fitShots(journey.lx, journey.fovBoost, journey.sheet), []);
   const n = list.length - 1;
   const { pos, look, fovs, stops } = useMemo(() => {
     const v = (a: number[]) => new THREE.Vector3(a[0], a[1], a[2]);
@@ -78,8 +78,8 @@ export default function CameraRig({ mobile, reduced }: { mobile: boolean; reduce
     if (!reduced) cam.rotateZ(pr.roll);
 
     // On phones, shift the lens so the subject sits in the upper part of the frame, above the reading panel.
-    if (mobile) {
-      const want = journey.progress > P.tunnel ? 0.3 : 0;
+    if (journey.sheet) {
+      const want = journey.progress > P.tunnel ? (mobile ? 0.3 : 0.22) : 0;
       const prev = pr.shift;
       pr.shift = damp(pr.shift, want, 2, dt);
       if (Math.abs(prev - pr.shift) > 1e-4 || !cam.view) {

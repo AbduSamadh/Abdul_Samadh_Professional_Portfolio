@@ -19,7 +19,7 @@ export default function Teach({ mobile }: { mobile: boolean }) {
       <Classroom />
       <Fragments />
       <Portrait />
-      <Tags />
+      {!mobile && <Tags />}
       <Route mobile={mobile} />
     </Region>
   );

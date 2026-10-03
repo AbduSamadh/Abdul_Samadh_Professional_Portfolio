@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { useFrame, useLoader } from '@react-three/fiber';
 import { Billboard, Text } from '@react-three/drei';
-import { W, shots, type V3 } from '@/lib/path';
+import { W, fitShots, type V3 } from '@/lib/path';
 import { M, onPalette } from '@/lib/materials';
 import { asset, FONTS } from '@/lib/asset';
 import { journey } from '@/lib/journey';
@@ -13,7 +13,7 @@ import { DroneModel, RobotCarModel } from '../../parts/Models';
 
 /** Yaw that turns an object at `at` to face the camera position of a named shot. */
 export function faceShot(at: V3, shotId: string) {
-  const s = shots(journey.mobile).find((x) => x.id === shotId)!;
+  const s = fitShots(journey.lx, journey.fovBoost, journey.sheet).find((x) => x.id === shotId)!;
   return Math.atan2(s.pos[0] - at[0], s.pos[2] - at[2]);
 }
 const place = (p: V3): V3 => [p[0] * lx(), p[1], p[2]];

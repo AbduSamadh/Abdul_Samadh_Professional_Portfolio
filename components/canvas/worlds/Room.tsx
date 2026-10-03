@@ -67,7 +67,7 @@ function Shell({ mobile }: { mobile: boolean }) {
       ))}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.002, ROOM.z]}>
         <planeGeometry args={[ROOM.w, ROOM.d]} />
-        {mobile ? (
+        {mobile || journey.tier !== 'high' ? (
           <meshStandardMaterial color={p.dark ? '#090706' : '#ebe4d8'} roughness={0.35} metalness={0.4} />
         ) : (
           <MeshReflectorMaterial

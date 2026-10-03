@@ -10,6 +10,13 @@ export const journey = {
   still: 0,
   mobile: false,
   reduced: false,
+  /** Reading panels docked at the bottom (phones, portrait tablets). */
+  sheet: false,
+  /** Lateral spread of content and camera, 0.5..1. */
+  lx: 1,
+  /** Extra field of view on narrow screens. */
+  fovBoost: 0,
+  tier: 'high' as 'low' | 'mid' | 'high',
   /** Swarm planner: false = collision-free assignment, true = random pairing. */
   swarmRandom: false,
   /** Set once the boot screen has gone, so the room can start its intro. */

@@ -4,6 +4,7 @@ import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import { Billboard } from '@react-three/drei';
 import { GATES, W } from '@/lib/path';
+import { journey } from '@/lib/journey';
 import { M, onPalette } from '@/lib/materials';
 import { usePalette } from '@/lib/theme';
 import { lab, type Bay } from '@/content/site';
@@ -118,11 +119,14 @@ function Item({ name, kind, i, pos, labelY }: { name: string; kind: Bay['kind'];
           <ProductProxy variant={i} />
         )}
       </group>
-      <Billboard position={[0, kind === 'hover' ? 2.8 : labelY, 0]}>
-        <Label size={0.15} tone="ink" maxWidth={2.2} textAlign="center">
-          {name}
-        </Label>
-      </Billboard>
+      {/* on phones the reading panel lists the names; floating labels would crowd the frame */}
+      {!journey.mobile && (
+        <Billboard position={[0, kind === 'hover' ? 2.8 : labelY, 0]}>
+          <Label size={0.15} tone="ink" maxWidth={2.2} textAlign="center">
+            {name}
+          </Label>
+        </Billboard>
+      )}
     </group>
   );
 }
