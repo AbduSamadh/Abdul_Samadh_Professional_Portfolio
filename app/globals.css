@@ -1050,7 +1050,9 @@ html {
 
 /* ---------- recommendations ---------- */
 .panel.quote {
-  max-width: 520px;
+  max-width: 560px;
+  max-height: 72vh;
+  overflow-y: auto;
 }
 .quote-body {
   margin: 0;

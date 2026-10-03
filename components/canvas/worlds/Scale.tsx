@@ -223,7 +223,7 @@ function Lines({ mobile }: { mobile: boolean }) {
 function Quotes() {
   return (
     <group>
-      {testimonials.slice(0, 4).map((t, i) => {
+      {testimonials.slice(0, 6).map((t, i) => {
         const at: V3 = [(i % 2 ? -1 : 1) * (5.5 + Math.floor(i / 2) * 1.5) * lx(), 1.2, -759 - Math.floor(i / 2) * 3.5];
         const geo = new THREE.BoxGeometry(3.4, 6.5, 0.5);
         return (
@@ -234,7 +234,7 @@ function Quotes() {
               {`“${t.quote}”`}
             </Label>
             <Label position={[0, -2.4, 0.3]} size={0.13} tone="mist" maxWidth={2.9} textAlign="left">
-              {`${t.name} · ${t.role}, ${t.org}`}
+              {`${t.name} · ${t.role}${t.org ? `, ${t.org}` : ''}`}
             </Label>
           </group>
         );

@@ -18,7 +18,7 @@ export default function Testimonials() {
       <p className="kicker">Recommendations · LinkedIn</p>
       <figure key={i} className="quote-body">
         <blockquote>“{t.quote}”</blockquote>
-        {t.detail && <p className="mist">{t.detail}</p>}
+        {t.detail && <p>{t.detail}</p>}
         <figcaption>
           <b>{t.name}</b>
           <span className="mist">
