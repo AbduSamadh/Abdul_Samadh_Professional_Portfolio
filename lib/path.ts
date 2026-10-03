@@ -25,7 +25,7 @@ export type Shot = {
 };
 
 /** Typeface size for anchor words: cap height is 0.7 of this. */
-export const WORD_SIZE = 22;
+export const WORD_SIZE = 19;
 
 export type Gate = { word: string; letter: number; z: number; y: number; label: string };
 

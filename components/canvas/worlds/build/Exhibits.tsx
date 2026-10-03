@@ -400,7 +400,7 @@ export function Hula() {
           g.font = '600 22px "IBM Plex Mono", monospace';
           g.fillText(`0${i + 1}`, 32, 48);
           g.fillStyle = '#F6EDE2';
-          g.font = '700 46px "Space Grotesk", sans-serif';
+          g.font = '700 38px "Unbounded", sans-serif';
           const words = builds.hulaLessons[i].split(' ');
           let line = '';
           let y = 120;

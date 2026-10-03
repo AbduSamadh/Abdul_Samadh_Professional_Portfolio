@@ -213,7 +213,7 @@ function drawFragment(g: CanvasRenderingContext2D, c: HTMLCanvasElement, i: numb
       }
     }
     g.fillStyle = acc;
-    g.font = `700 ${Math.round(H * 0.12)}px "Space Grotesk", sans-serif`;
+    g.font = `700 ${Math.round(H * 0.12)}px "Unbounded", sans-serif`;
 
   } else {
     // a browser window with a simulator inside
@@ -252,7 +252,7 @@ function drawFragment(g: CanvasRenderingContext2D, c: HTMLCanvasElement, i: numb
       g.arc(W2 / 2 + Math.cos(a) * r * 1.5, H / 2 + 30 + Math.sin(a) * r, 5, 0, Math.PI * 2);
       g.fill();
     }
-    g.font = `700 ${Math.round(H * 0.09)}px "Space Grotesk", sans-serif`;
+    g.font = `700 ${Math.round(H * 0.09)}px "Unbounded", sans-serif`;
     g.fillStyle = ink;
 
   }

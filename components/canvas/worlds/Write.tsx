@@ -289,18 +289,18 @@ function drawCover(g: CanvasRenderingContext2D, n: string, title: string, p: Pal
   g.lineWidth = 4;
   g.strokeRect(24, 24, w - 48, h - 48);
   g.fillStyle = p.accent;
-  g.font = '700 200px "Space Grotesk", sans-serif';
+  g.font = '700 200px "Unbounded", sans-serif';
   g.textBaseline = 'top';
   g.fillText(n, 48, 60);
   g.fillStyle = '#F6EDE2';
-  g.font = '700 54px "Space Grotesk", sans-serif';
+  g.font = '700 42px "Unbounded", sans-serif';
   const words = title.split(' ');
   let line = '';
   let y = 380;
   for (const wd of words) {
     if (g.measureText(line + wd).width > w - 110) {
       g.fillText(line.trim(), 48, y);
-      y += 60;
+      y += 50;
       line = '';
     }
     line += wd + ' ';
@@ -320,7 +320,7 @@ function drawPage(g: CanvasRenderingContext2D, i: number, p: Palette) {
   g.textBaseline = 'top';
 
   g.fillStyle = '#1a1510';
-  g.font = '700 40px "Space Grotesk", sans-serif';
+  g.font = '700 40px "Unbounded", sans-serif';
 
   g.fillStyle = '#6b5d4f';
   for (let k = 0; k < 16; k++) g.fillRect(40, 150 + k * 30, (w - 80) * (0.55 + ((k * 31) % 45) / 100), 6);

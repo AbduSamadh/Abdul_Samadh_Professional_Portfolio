@@ -38,7 +38,8 @@
 }
 
 :root {
-  --display: 'Space Grotesk', system-ui, sans-serif;
+  --display: 'Unbounded', system-ui, sans-serif;
+  --body: 'Sora', system-ui, sans-serif;
   --mono: 'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace;
   --crt: 'VT323', 'IBM Plex Mono', monospace;
   --gutter: clamp(16px, 4vw, 56px);
@@ -354,20 +355,20 @@ button {
 .ov h3 {
   font-family: var(--display);
   font-weight: 700;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.03em;
   margin: 0 0 12px;
-  line-height: 1.02;
+  line-height: 1.08;
 }
 .ov h1 {
-  font-size: clamp(34px, 5.4vw, 78px);
+  font-size: clamp(30px, 4.6vw, 66px);
   text-wrap: balance;
 }
 .ov h2 {
-  font-size: clamp(26px, 3.2vw, 44px);
+  font-size: clamp(22px, 2.7vw, 38px);
   text-wrap: balance;
 }
 .ov h3 {
-  font-size: clamp(20px, 2vw, 26px);
+  font-size: clamp(17px, 1.6vw, 22px);
 }
 .ov p {
   font-size: 14px;
@@ -380,8 +381,8 @@ button {
   color: var(--mist);
 }
 .ov .big {
-  font-family: var(--display);
-  font-weight: 500;
+  font-family: var(--body);
+  font-weight: 600;
   font-size: clamp(22px, 2.6vw, 34px);
   line-height: 1.18;
   letter-spacing: -0.015em;
@@ -632,7 +633,7 @@ button {
   bottom: 5vh;
 }
 .finale h1 {
-  font-size: clamp(30px, 3.6vw, 54px);
+  font-size: clamp(24px, 3vw, 44px);
 }
 .finale .sign {
   font-family: var(--crt);
@@ -652,7 +653,7 @@ button {
   max-width: min(560px, calc(100vw - 2 * var(--gutter)));
 }
 .ov.hero h1 {
-  font-size: clamp(32px, 4.1vw, 60px);
+  font-size: clamp(28px, 3.5vw, 52px);
   max-width: 14ch;
 }
 
@@ -1281,4 +1282,30 @@ html {
   .finale .sign {
     display: none;
   }
+}
+
+/* readable body copy: Sora for paragraphs, mono kept for labels and the HUD */
+.ov p:not(.kicker):not(.chapter-tag):not(.counter):not(.sign):not(.foot),
+.facts dd,
+.brief-list p,
+.hw,
+.quote-body p,
+.modal-card.text p {
+  font-family: var(--body);
+  letter-spacing: 0;
+}
+.ov p:not(.kicker):not(.chapter-tag):not(.counter) {
+  line-height: 1.7;
+}
+.ov.hero .big {
+  font-size: clamp(16px, 1.45vw, 21px);
+  line-height: 1.45;
+  font-weight: 500;
+}
+.quote-body blockquote {
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+.brief-list b {
+  font-size: 15px;
 }

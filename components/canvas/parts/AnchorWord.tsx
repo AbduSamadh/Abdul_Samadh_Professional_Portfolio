@@ -21,7 +21,7 @@ const DEPTH = 3.2;
 const TRACK = 0.4;
 
 /**
- * A chapter word as architecture: extruded Space Grotesk letters, black bodies, light edges.
+ * A chapter word as architecture: extruded Unbounded letters, black bodies, light edges.
  * The word is placed so the camera path runs exactly through the counter of one letter
  * (the A of TEACH, the R of WRITE, the U of BUILD...). That letter brightens as you approach.
  */
