@@ -42,7 +42,8 @@ export default function Experience() {
     const onResize = () => {
       clearTimeout(t);
       t = window.setTimeout(() => {
-        if (journey.mobile && window.innerWidth === lastW) return;
+        const coarse = window.matchMedia('(pointer: coarse)').matches;
+        if ((journey.mobile || coarse) && window.innerWidth === lastW) return;
         lastW = window.innerWidth;
         apply();
       }, 300);

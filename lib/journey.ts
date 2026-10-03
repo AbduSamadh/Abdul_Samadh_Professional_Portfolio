@@ -21,6 +21,8 @@ export const journey = {
   swarmRandom: false,
   /** Set once the boot screen has gone, so the room can start its intro. */
   booted: false,
+  /** The scroll system has initialised once (later re-fits resume in place). */
+  started: false,
   /** Pointer in normalised device coordinates, for subtle parallax. */
   pointer: { x: 0, y: 0 },
 };

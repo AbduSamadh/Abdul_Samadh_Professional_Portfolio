@@ -29,8 +29,8 @@ export function detectProfile(): Profile {
   const mobile = w <= 760 || (coarse && Math.min(w, h) <= 520);
   // Landscape phones keep side panels; tall screens dock them at the bottom.
   const sheet = (mobile || w <= 1100) && aspect < 1;
-  const lx = step(clamp(0.5 + ((aspect - 0.6) / 1.0) * 0.5, 0.5, 1), 0.05);
-  const fovBoost = step(clamp((1.6 - aspect) * 12, 0, 16), 2);
+  const lx = step(clamp(0.5 + ((aspect - 0.6) / 1.0) * 0.5, 0.5, 1), 0.1);
+  const fovBoost = step(clamp((1.6 - aspect) * 12, 0, 16), 4);
   const nav = navigator as Navigator & { deviceMemory?: number };
   const weak = (nav.deviceMemory ?? 8) <= 4 || (navigator.hardwareConcurrency ?? 8) <= 4;
   const tier: Profile['tier'] = mobile || weak ? 'low' : coarse || w < 1200 ? 'mid' : 'high';
