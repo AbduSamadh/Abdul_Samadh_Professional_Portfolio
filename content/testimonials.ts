@@ -23,7 +23,7 @@ export const testimonials: Testimonial[] = [
   {
     quote: 'His ability to break down complex ideas into clear and practical solutions is impressive.',
     detail:
-      'I had the opportunity to work with Abdul Samad and always appreciated his professionalism and collaborative approach. He has a strong understanding of computer science and robotics, and his ability to break down complex ideas into clear and practical solutions is impressive. He is approachable, supportive, and always willing to help colleagues when needed.',
+      'I had the opportunity to work with Abdul Samadh and always appreciated his professionalism and collaborative approach. He has a strong understanding of computer science and robotics, and his ability to break down complex ideas into clear and practical solutions is impressive. He is approachable, supportive, and always willing to help colleagues when needed.',
     name: 'Shirin Shahana',
     role: 'ICT & STEM Teacher, Robotics & Coding Instructor',
     org: 'STEM.org Certified Master Trainer',
@@ -31,7 +31,7 @@ export const testimonials: Testimonial[] = [
   {
     quote: 'He consistently brings clarity, structure, and enthusiasm to every engagement.',
     detail:
-      'Abdul Samad has a deep understanding of computer science concepts as well as robotics and broader STEM applications. His technical knowledge is strong, but what truly sets him apart is his attention to detail and his ability to break down complex concepts into clear, engaging learning experiences. He is highly professional, reliable, and passionate about empowering learners. Whether it’s delivering hands-on training sessions or supporting educators with practical classroom implementation, he consistently brings clarity, structure, and enthusiasm to every engagement.',
+      'Abdul Samadh has a deep understanding of computer science concepts as well as robotics and broader STEM applications. His technical knowledge is strong, but what truly sets him apart is his attention to detail and his ability to break down complex concepts into clear, engaging learning experiences. He is highly professional, reliable, and passionate about empowering learners. Whether it’s delivering hands-on training sessions or supporting educators with practical classroom implementation, he consistently brings clarity, structure, and enthusiasm to every engagement.',
     name: 'Ayesha Zia',
     role: 'Marketing Consultant',
     org: 'Atlab ME',
