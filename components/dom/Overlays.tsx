@@ -6,7 +6,7 @@ import { P } from '@/lib/path';
 import { abstract, authoring, briefs, builds, contact, lab, person, route, scale, who } from '@/content/site';
 import { testimonials } from '@/content/testimonials';
 import GlyphPortrait from './GlyphPortrait';
-import Testimonials from './Testimonials';
+import Testimonial from './Testimonials';
 
 /**
  * All readable copy lives here as real HTML, staged against the master timeline. Each block fades in
@@ -16,9 +16,9 @@ import Testimonials from './Testimonials';
 
 type Side = 'left' | 'right' | 'center' | 'bottom' | 'top';
 
-function Ov({ from, to, side, children, className = '', id, label }: { from: number; to: number; side: Side; children: ReactNode; className?: string; id?: string; label?: string }) {
+function Ov({ from, to, side, children, className = '', id, label, fade }: { from: number; to: number; side: Side; children: ReactNode; className?: string; id?: string; label?: string; fade?: number }) {
   return (
-    <section id={id} className={`ov ov-${side} ${className}`} data-from={from} data-to={to} aria-label={label}>
+    <section id={id} className={`ov ov-${side} ${className}`} data-from={from} data-to={to} data-fade={fade} aria-label={label}>
       {children}
     </section>
   );
@@ -44,10 +44,10 @@ export default function Overlays() {
       from: parseFloat(el.dataset.from!),
       to: parseFloat(el.dataset.to!),
       side: (el.className.match(/ov-(left|right|center|bottom|top)/)?.[1] ?? 'left') as Side,
+      fade: parseFloat(el.dataset.fade || '') || 0.0045,
       a: -1,
     }));
     const mq = window.matchMedia('(max-width: 760px)');
-    const F = 0.0045;
     const ss = (a: number, b: number, x: number) => {
       const t = Math.min(1, Math.max(0, (x - a) / (b - a)));
       return t * t * (3 - 2 * t);
@@ -56,8 +56,8 @@ export default function Overlays() {
       const p = journey.progress;
       const narrow = mq.matches;
       for (const it of items) {
-        const fin = it.from < 0 ? 1 : ss(it.from, it.from + F, p);
-        const fout = it.to > 1 ? 1 : 1 - ss(it.to - F, it.to, p);
+        const fin = it.from < 0 ? 1 : ss(it.from, it.from + it.fade, p);
+        const fout = it.to > 1 ? 1 : 1 - ss(it.to - it.fade, it.to, p);
         let a = Math.min(fin, fout);
         a = Math.round(a * 200) / 200;
         if (a === it.a) continue;
@@ -175,10 +175,11 @@ export default function Overlays() {
               </div>
               <h3>{s.role ? `${s.role}, ${s.org}` : s.org}</h3>
               <p>{s.body}</p>
+              {s.feature && <p className="mist">{scale.fll.judged}</p>}
               {s.feature && (
                 <ul className="tags">
-                  {scale.fll.pins.map((p) => (
-                    <li key={p}>FLL · {p}</li>
+                  {scale.fll.roles.map((r) => (
+                    <li key={r}>FLL UAE · {r}</li>
                   ))}
                 </ul>
               )}
@@ -327,21 +328,22 @@ export default function Overlays() {
       </section>
       <Ov from={P.fll - 0.007} to={P.fll + 0.006} side="right">
         <div className="panel feature">
-          <p className="kicker">Partnership</p>
+          <p className="kicker">Competitions</p>
           <h3>{scale.fll.title}</h3>
           <p>{scale.fll.body}</p>
+          <p className="mist">{scale.fll.judged}</p>
           <ul className="tags">
-            {scale.fll.pins.map((p) => (
-              <li key={p}>{p}</li>
+            {scale.fll.roles.map((r) => (
+              <li key={r}>{r}</li>
             ))}
           </ul>
         </div>
       </Ov>
-      {testimonials.length > 0 && (
-        <Ov from={P.voices - 0.007} to={P['gate-scale'] - 0.002} side="left" label="Recommendations">
-          <Testimonials />
+      {testimonials.map((t, i) => (
+        <Ov key={t.name} from={P[`voice-${i}`] - 0.0032} to={P[`voice-${i}`] + 0.0032} fade={0.0012} side="left" label={`Recommendation from ${t.name}`}>
+          <Testimonial i={i} />
         </Ov>
-      )}
+      ))}
 
       {/* FINALE */}
       <Ov from={P.name + 0.006} to={2} side="bottom" className="finale" id="contact" label="Contact">

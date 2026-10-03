@@ -1,3 +1,5 @@
+import { testimonials } from '@/content/testimonials';
+
 // The single camera journey. Every world is laid out against these numbers.
 //
 // The world runs down the -Z axis. The black room sits at the origin; everything "inside the laptop"
@@ -109,6 +111,34 @@ export const W = {
 
 const S = (id: string, p: number, pos: V3, look: V3, extra: Partial<Shot> = {}): Shot => ({ id, p, pos, look, ...extra });
 
+/**
+ * Recommendations stand in an arc of slabs around one spot in SCALE. The camera turns to face
+ * each in turn (one scroll beat per recommendation), with the slab on the right of the frame
+ * and its full text in the reading panel on the left.
+ */
+export const VOICES = { center: [0, 1.2, -761] as V3, radius: 9.5, from: -100, to: 100, start: 0.905, end: 0.938 };
+export const voiceAngle = (i: number, n: number) =>
+  THREE_DEG * (n < 2 ? 0 : VOICES.from + ((VOICES.to - VOICES.from) * i) / (n - 1));
+const THREE_DEG = Math.PI / 180;
+export function voicePos(i: number, n: number): V3 {
+  const a = voiceAngle(i, n);
+  const [cx, cy, cz] = VOICES.center;
+  return [cx + Math.sin(a) * VOICES.radius, cy, cz - Math.cos(a) * VOICES.radius];
+}
+function voiceShots(): Shot[] {
+  const n = testimonials.length;
+  return testimonials.map((_, i) => {
+    const a = voiceAngle(i, n);
+    const [x, y, z] = voicePos(i, n);
+    const p = n < 2 ? VOICES.start : VOICES.start + ((VOICES.end - VOICES.start) * i) / (n - 1);
+    // look a little to the left of the slab so it sits in the right of the frame
+    const look: V3 = [x - Math.cos(a) * 2.8, y, z - Math.sin(a) * 2.8];
+    const [cx, , cz] = VOICES.center;
+    // stand near the centre of the arc and turn to each slab
+    return S(`voice-${i}`, p, [cx + Math.sin(a) * 0.4, 1.1, cz - Math.cos(a) * 0.4], look, { stop: true, fixedX: true });
+  });
+}
+
 const DESKTOP: Shot[] = [
   // ROOM
   S('room', 0, [0, 1.8, 7.6], [0, 1.0, 0], { fov: 40, stop: true }),
@@ -179,12 +209,12 @@ const DESKTOP: Shot[] = [
   S('stat-3', 0.87, [0, 3.2, -703], [2, -8.5, -716], { stop: true }),
   S('stat-4', 0.882, [1, 0.5, -718], [-6, -0.4, -727.5], { stop: true }),
   S('stat-5', 0.892, [-1, 0.5, -730], [6, 1.4, -739.5], { stop: true }),
-  S('fll', 0.9, [1.4, 0.9, -744], [-3.8, 2.2, -753], { stop: true }),
-  S('voices', 0.913, [0.6, 1.0, -752], [2.5, 1.2, -766], { stop: true }),
-  S('gate-scale', 0.924, [0, 0, -770], [0, 0, -800], { ease: 'power1.in' }),
+  S('fll', 0.895, [1.4, 0.9, -744], [-3.8, 2.2, -753], { stop: true }),
+  ...voiceShots(),
+  S('gate-scale', 0.948, [0, 0, -770], [0, 0, -800], { ease: 'power1.in' }),
   // FINALE
-  S('converge', 0.945, [0, 1.4, -788], [0, 4, -832], { fov: 50, ease: 'power1.out' }),
-  S('name', 0.97, [0, 2.2, -800], [0, 4.6, -832], { fov: 50, stop: true }),
+  S('converge', 0.964, [0, 1.4, -788], [0, 4, -832], { fov: 50, ease: 'power1.out' }),
+  S('name', 0.98, [0, 2.2, -800], [0, 4.6, -832], { fov: 50, stop: true }),
   S('cta', 1, [0, 0.4, -783], [0, 0.6, -832], { fov: 54, stop: true }),
 ];
 
@@ -215,7 +245,7 @@ export const CHAPTERS = [
   { id: 'solve', label: 'SOLVE', p: 0.59 },
   { id: 'lab', label: 'LAB', p: 0.715 },
   { id: 'scale', label: 'SCALE', p: 0.824 },
-  { id: 'contact', label: 'CONTACT', p: 0.93 },
+  { id: 'contact', label: 'CONTACT', p: 0.95 },
 ];
 
 /** Where `cd <chapter>` in the terminal lands. */

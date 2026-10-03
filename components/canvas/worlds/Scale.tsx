@@ -5,8 +5,8 @@ import { useFrame } from '@react-three/fiber';
 import { Billboard, useFont } from '@react-three/drei';
 import { TextGeometry } from 'three-stdlib';
 import { journey } from '@/lib/journey';
-import { GATES, P, W, type V3 } from '@/lib/path';
-import { M } from '@/lib/materials';
+import { GATES, P, VOICES, W, voicePos, type V3 } from '@/lib/path';
+import { M, glowColor } from '@/lib/materials';
 import { FONTS } from '@/lib/asset';
 import { scale } from '@/content/site';
 import { testimonials } from '@/content/testimonials';
@@ -84,8 +84,6 @@ const PLACES: { name: string; lat: number; lon: number }[] = [
   { name: 'INDIA', lat: 20.6, lon: 78.9 },
   { name: 'SINGAPORE', lat: 1.35, lon: 103.8 },
   { name: 'UAE', lat: 24.4, lon: 54.4 },
-  { name: 'QATAR', lat: 25.3, lon: 51.2 },
-  { name: 'KUWAIT', lat: 29.4, lon: 47.9 },
 ];
 
 function ll(lat: number, lon: number, r: number) {
@@ -163,7 +161,7 @@ function Globe() {
   );
 }
 
-/** The FIRST LEGO League partnership as a monolith. */
+/** FIRST LEGO League UAE and competition judging, as a monolith. */
 function Monolith() {
   const at = useMemo(() => [W.scale.fll[0] * lx(), W.scale.fll[1], W.scale.fll[2]] as V3, []);
   const yaw = useMemo(() => faceShot(at, 'fll'), [at]);
@@ -176,21 +174,24 @@ function Monolith() {
         <planeGeometry args={[2.2, 0.03]} />
       </mesh>
       <Label position={[0, 2.4, 0.37]} size={0.13} tone="accent" letterSpacing={0.35}>
-        OFFICIAL PARTNERSHIP
+        CORE TEAM
       </Label>
       <Label position={[0, 1.2, 0.37]} size={0.42} font="display" tone="ink" maxWidth={2.2} textAlign="center" lineHeight={1}>
         {scale.fll.title}
       </Label>
-      {scale.fll.pins.map((p, i) => (
-        <group key={p} position={[0, -0.4 - i * 0.62, 0.37]}>
-          <mesh position={[-0.8, 0, 0]} material={M.glow}>
-            <circleGeometry args={[0.07, 16]} />
+      {scale.fll.roles.slice(1).map((p, i) => (
+        <group key={p} position={[0, -0.2 - i * 0.5, 0.37]}>
+          <mesh position={[-0.95, 0, 0]} material={M.glow}>
+            <circleGeometry args={[0.06, 16]} />
           </mesh>
-          <Label position={[-0.6, 0, 0]} size={0.2} tone="ink" anchorX="left" letterSpacing={0.2}>
+          <Label position={[-0.8, 0, 0]} size={0.17} tone="ink" anchorX="left" letterSpacing={0.15}>
             {p.toUpperCase()}
           </Label>
         </group>
       ))}
+      <Label position={[0, -2.3, 0.37]} size={0.13} tone="mist" maxWidth={2.2} textAlign="center" lineHeight={1.4}>
+        {scale.fll.judged}
+      </Label>
     </group>
   );
 }
@@ -219,22 +220,40 @@ function Lines({ mobile }: { mobile: boolean }) {
   );
 }
 
-/** Testimonial monoliths: only rendered when real testimonials exist in content/testimonials.ts. */
+/** LinkedIn recommendations as an arc of slabs; the one the camera faces lights up. */
 function Quotes() {
+  const n = testimonials.length;
+  const mats = useMemo(() => testimonials.map(() => M.edge.clone()), []);
+  const geo = useMemo(() => new THREE.BoxGeometry(3.6, 6.2, 0.5), []);
+  const [cx, , cz] = VOICES.center;
+  useFrame(() => {
+    const p = journey.progress;
+    mats.forEach((m, i) => {
+      const d = Math.abs(p - P[`voice-${i}`]);
+      const on = 1 - ss(0.002, 0.006, d);
+      m.color.copy(glowColor).multiplyScalar(0.35 + on * 0.9);
+    });
+  });
   return (
     <group>
-      {testimonials.slice(0, 6).map((t, i) => {
-        const at: V3 = [(i % 2 ? -1 : 1) * (5.5 + Math.floor(i / 2) * 1.5) * lx(), 1.2, -759 - Math.floor(i / 2) * 3.5];
-        const geo = new THREE.BoxGeometry(3.4, 6.5, 0.5);
+      {testimonials.map((t, i) => {
+        const at = voicePos(i, n);
+        const yaw = Math.atan2(cx - at[0], cz - at[2]);
         return (
-          <group key={t.name} position={at} rotation={[0, (i % 2 ? 1 : -1) * 0.6, 0]}>
+          <group key={t.name} position={at} rotation={[0, yaw, 0]} scale={0.8}>
             <mesh geometry={geo} material={M.solid} />
-            <EdgeLines geometry={geo} material={M.edgeDim} />
-            <Label position={[0, 1, 0.3]} size={0.3} font="display" tone="ink" maxWidth={2.9} textAlign="left">
+            <EdgeLines geometry={geo} material={mats[i]} />
+            <Label position={[-1.5, 2.55, 0.27]} size={0.14} tone="accent" anchorX="left" letterSpacing={0.3}>
+              {`RECOMMENDATION ${String(i + 1).padStart(2, '0')} / ${String(n).padStart(2, '0')}`}
+            </Label>
+            <Label position={[-1.5, 2.1, 0.27]} size={0.3} font="display" tone="ink" maxWidth={3.0} textAlign="left" anchorX="left" anchorY="top" lineHeight={1.2}>
               {`“${t.quote}”`}
             </Label>
-            <Label position={[0, -2.4, 0.3]} size={0.13} tone="mist" maxWidth={2.9} textAlign="left">
-              {`${t.name} · ${t.role}${t.org ? `, ${t.org}` : ''}`}
+            <Label position={[-1.5, -2.2, 0.27]} size={0.2} font="display" tone="ink" anchorX="left">
+              {t.name}
+            </Label>
+            <Label position={[-1.5, -2.55, 0.27]} size={0.11} tone="mist" maxWidth={3.0} textAlign="left" anchorX="left" anchorY="top">
+              {`${t.role}${t.org ? `, ${t.org}` : ''}`}
             </Label>
           </group>
         );

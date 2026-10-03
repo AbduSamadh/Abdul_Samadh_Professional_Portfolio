@@ -90,7 +90,7 @@ export const route: Stop[] = [
     country: 'United Arab Emirates',
     org: 'ATLAB',
     role: 'STEM and AI Specialist',
-    body: 'Curriculum development, educator training and programme delivery across the UAE and the wider GCC, including the official FIRST LEGO League partnership for the UAE, Qatar and Kuwait.',
+    body: 'Curriculum development, educator training and programme delivery across the UAE and the wider GCC. Core team member for FIRST LEGO League UAE, as Head Referee and on the Judging Panel.',
     feature: true,
   },
   {
@@ -226,9 +226,10 @@ export const scale = {
   ],
   lines: ['Kindergarten to university', 'UAE · GCC · Singapore · India', 'For classrooms and for screens'],
   fll: {
-    title: 'FIRST LEGO League',
-    body: 'Official partnership for the UAE, Qatar and Kuwait.',
-    pins: ['UAE', 'Qatar', 'Kuwait'],
+    title: 'FIRST LEGO League UAE',
+    body: 'Core team member, Head Referee and Judging Panel.',
+    roles: ['Core team member', 'Head Referee', 'Judging Panel'],
+    judged: 'Judged prestigious STEM and robotics competitions in the UAE and online across the globe.',
   },
   places: ['UAE', 'GCC', 'Singapore', 'India'],
 };

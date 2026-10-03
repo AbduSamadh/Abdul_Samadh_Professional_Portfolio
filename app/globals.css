@@ -1049,14 +1049,17 @@ html {
 }
 
 /* ---------- recommendations ---------- */
-.panel.quote {
-  max-width: 560px;
-  max-height: 72vh;
-  overflow-y: auto;
+.ov .panel.quote {
+  width: min(540px, calc(100vw - 2 * var(--gutter)));
+  background: var(--bg);
+  box-shadow: 0 20px 60px -20px rgba(0, 0, 0, 0.8);
+}
+.ov .panel.quote .quote-body p {
+  font-size: 13px;
+  line-height: 1.6;
 }
 .quote-body {
   margin: 0;
-  animation: quote-in 0.6s ease both;
 }
 @keyframes quote-in {
   from {

@@ -446,7 +446,7 @@ function Route({ mobile }: { mobile: boolean }) {
               </Label>
             </Billboard>
             {s.feature && (
-              // A three-pin map: Kuwait, Qatar, UAE, roughly where they sit on the Gulf.
+              // FIRST LEGO League UAE: the three roles light up in turn.
               <group position={[mobile ? 0.2 : 2.3, -0.75, -0.6]} rotation={[0, -0.75, 0]}>
                 <mesh material={M.solid}>
                   <circleGeometry args={[0.95, 40]} />
@@ -454,25 +454,19 @@ function Route({ mobile }: { mobile: boolean }) {
                 <mesh material={M.glowDim}>
                   <ringGeometry args={[0.94, 0.96, 40]} />
                 </mesh>
-                {(
-                  [
-                    [-0.42, 0.5, 'KUWAIT'],
-                    [0.02, -0.02, 'QATAR'],
-                    [0.42, -0.32, 'UAE'],
-                  ] as [number, number, string][]
-                ).map(([px, py, name], k) => (
-                  <group key={name} position={[px, py, 0.02]}>
+                <Label position={[0, 0.45, 0.02]} size={0.13} tone="accent" letterSpacing={0.2}>
+                  FLL UAE
+                </Label>
+                {scale.fll.roles.map((name, k) => (
+                  <group key={name} position={[-0.62, 0.08 - k * 0.27, 0.02]}>
                     <mesh ref={(m) => void (m && (pins.current[k] = m))} material={M.glow}>
-                      <sphereGeometry args={[0.07, 12, 12]} />
+                      <sphereGeometry args={[0.04, 12, 12]} />
                     </mesh>
-                    <Label position={[0, -0.17, 0]} size={0.09} tone="ink" letterSpacing={0.2}>
-                      {name}
+                    <Label position={[0.1, 0, 0]} size={0.1} tone="ink" anchorX="left" letterSpacing={0.1}>
+                      {name.toUpperCase()}
                     </Label>
                   </group>
                 ))}
-                <Label position={[0, -1.2, 0]} size={0.11} tone="accent" letterSpacing={0.2}>
-                  {`FIRST LEGO LEAGUE · ${scale.fll.pins.join(' · ').toUpperCase()}`}
-                </Label>
               </group>
             )}
           </group>
