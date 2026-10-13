@@ -77,7 +77,7 @@ export default function GlyphPortrait() {
 
       g.fillStyle = bg;
       g.fillRect(0, 0, W, H);
-      g.font = `700 ${Math.round(ch * 1.05)}px "Space Mono", monospace`;
+      g.font = `700 ${Math.round(ch * 1.05)}px "Pixelify Sans", monospace`;
       g.textAlign = 'center';
       g.textBaseline = 'middle';
       g.fillStyle = accent;

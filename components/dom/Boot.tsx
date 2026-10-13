@@ -11,7 +11,7 @@ const LINES: [string, string][] = [
   ['[ OK ] lab', 'ok'],
 ];
 
-/** Short, skippable boot. Lines collapse into one amber scanline, which hands over to the room. */
+/** Short, skippable boot. Lines collapse into one neon scanline, which hands over to the room. */
 export default function Boot() {
   const [shown, setShown] = useState(0);
   const [phase, setPhase] = useState<'type' | 'collapse' | 'gone' | 'off'>('type');

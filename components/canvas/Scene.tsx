@@ -150,18 +150,21 @@ function Lights() {
     // A soft light that travels with the camera so nearby black forms read as forms.
     follow.current?.position.set(camera.position.x + 1.5, camera.position.y + 3, camera.position.z - 4);
   });
+  const neon = p.name === 'neon';
   return (
     <>
-      <hemisphereLight args={[p.dark ? '#5a4a3c' : '#ffffff', p.dark ? '#000000' : '#d9cfc0', p.dark ? 0.55 : 1.6]} />
-      <directionalLight position={[6, 12, 4]} intensity={p.dark ? 0.6 : 1.5} color={p.dark ? '#ffd8b0' : '#ffffff'} />
-      <pointLight ref={follow} intensity={p.dark ? 22 : 12} distance={26} decay={1.4} color={p.dark ? '#ffcf9e' : '#ffffff'} />
+      {/* warm light for Phosphor's dark, cool violet for Neon, white for Paper */}
+      <hemisphereLight args={[neon ? '#4a3c66' : p.dark ? '#5a4a3c' : '#ffffff', p.dark ? '#000000' : '#d9cfc0', p.dark ? 0.55 : 1.6]} />
+      <directionalLight position={[6, 12, 4]} intensity={p.dark ? 0.6 : 1.5} color={neon ? '#e0ccff' : p.dark ? '#ffd8b0' : '#ffffff'} />
+      <pointLight ref={follow} intensity={p.dark ? 22 : 12} distance={26} decay={1.4} color={neon ? '#d8c0ff' : p.dark ? '#ffcf9e' : '#ffffff'} />
     </>
   );
 }
 
 function Effects({ tier }: { tier: Tier }) {
   const p = usePalette();
-  const bloom = useMemo(() => ({ intensity: p.dark ? 0.95 : 0.3, threshold: p.dark ? 0.92 : 0.98 }), [p]);
+  // Purple is far less luminous than amber or green, so Neon blooms from a lower threshold.
+  const bloom = useMemo(() => ({ intensity: p.dark ? 0.95 : 0.3, threshold: p.name === 'neon' ? 0.8 : p.dark ? 0.92 : 0.98 }), [p]);
   if (tier === 'low') {
     return (
       <EffectComposer multisampling={0}>

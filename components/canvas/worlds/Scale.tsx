@@ -79,7 +79,8 @@ function Monument({ i, value, suffix, label }: { i: number; value: number; suffi
           <lineSegments geometry={g.edges} material={M.edge} />
         </group>
       </group>
-      <Label position={[0, -2.6 * k, 0]} size={phone ? 0.22 : 0.34} font="display" tone="ink" maxWidth={phone ? 4.1 : 7.5} textAlign="center" anchorY="top" lineHeight={1.25}>
+      {/* captions in Electrolize: Pixelify's small digits blur together (a 5 reads as an 8) */}
+      <Label position={[0, -2.6 * k, 0]} size={phone ? 0.24 : 0.38} tone="ink" maxWidth={phone ? 4.1 : 7.5} textAlign="center" anchorY="top" lineHeight={1.3}>
         {label}
       </Label>
       <Label position={[0, 4.9 * k, 0]} size={0.16} tone="accent" letterSpacing={0.35}>

@@ -1,8 +1,8 @@
 import type { Metadata, Viewport } from 'next';
-import '@fontsource/space-mono/400.css';
-import '@fontsource/space-mono/700.css';
-import '@fontsource/sora/400.css';
-import '@fontsource/sora/600.css';
+import '@fontsource/pixelify-sans/400.css';
+import '@fontsource/pixelify-sans/600.css';
+import '@fontsource/pixelify-sans/700.css';
+import '@fontsource/electrolize/400.css';
 import '@fontsource/vt323/400.css';
 import './globals.css';
 
@@ -33,15 +33,15 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',
-  themeColor: '#100D0B',
+  themeColor: '#0B0713',
 };
 
 // Set the saved theme before first paint so there is no flash.
-const themeScript = `try{var t=localStorage.getItem('as-theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}`;
+const themeScript = `try{var t=localStorage.getItem('as-theme');if(t==='phosphor'||t==='paper')document.documentElement.dataset.theme=t;}catch(e){}`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" data-theme="amber" suppressHydrationWarning>
+    <html lang="en" data-theme="neon" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>

@@ -22,7 +22,7 @@ The terminal from the original site is still there (press <kbd>`</kbd> or the `>
 ## Stack
 
 Next.js (static export) · React · React Three Fiber · three.js · drei · GSAP ScrollTrigger · Lenis · postprocessing.
-Fonts (Space Mono for display and labels, Sora for reading, VT323 for the CRT) are self-hosted. Nothing is loaded from a third-party CDN.
+Fonts (Pixelify Sans for display, Electrolize for labels and reading, VT323 for the CRT) are self-hosted. Nothing is loaded from a third-party CDN.
 
 ## Run it
 
@@ -83,7 +83,7 @@ Placeholders are built so these can drop in without layout changes:
 - `prefers-reduced-motion`: no smooth scrolling, no boot animation, and the camera cuts between resting shots behind a short fade instead of flying
 - Keyboard: skip link to contact, chapter rail, terminal, focus-managed modals
 - Repeated objects are instanced (drones, glyphs, book spines, plinths), worlds only render near the camera, resolution adapts to frame rate, and phones get fewer objects and lighter post-processing
-- Three themes from the original site: Amber (default), Phosphor and Paper
+- Three themes: Neon purple (default), and Phosphor and Paper from the original site
 
 ## Layout
 

@@ -1,18 +1,31 @@
-/* ---------- tokens (the three modes from the original site) ---------- */
+/* ---------- tokens: neon purple by default, then Phosphor and Paper from the original site ---------- */
 :root,
-:root[data-theme='amber'] {
-  --bg: #100d0b;
-  --bg2: #19130f;
-  --ink: #f6ede2;
-  --mist: #a99787;
-  --accent: #ff9d2e;
-  --accent-ink: #100d0b;
-  --edge: rgba(255, 224, 189, 0.13);
-  --edge2: rgba(255, 224, 189, 0.26);
-  --panel: rgba(16, 13, 11, 0.8);
-  --glowc: 255, 157, 46;
+:root[data-theme='neon'] {
+  --bg: #0b0713;
+  --bg2: #140c22;
+  --ink: #f2eaff;
+  --mist: #a08fc0;
+  --accent: #b65cff;
+  --accent-ink: #0b0713;
+  --edge: rgba(214, 190, 255, 0.14);
+  --edge2: rgba(214, 190, 255, 0.28);
+  --panel: rgba(11, 7, 19, 0.8);
+  --glowc: 182, 92, 255;
+  /* the boot screen and terminal: always dark, in the theme's light */
+  --crt-bg: #07040d;
+  --crt-panel: rgba(7, 4, 13, 0.94);
+  --crt-ink: #f2eaff;
+  --crt-dim: #a08fc0;
+  --crt-accent: #c27aff;
+  --crt-glow: 194, 122, 255;
 }
 :root[data-theme='phosphor'] {
+  --crt-bg: #020a06;
+  --crt-panel: rgba(7, 6, 5, 0.94);
+  --crt-ink: #f6ede2;
+  --crt-dim: #a99787;
+  --crt-accent: #8bff9b;
+  --crt-glow: 139, 255, 155;
   --bg: #03120a;
   --bg2: #051a0e;
   --ink: #c9ffd0;
@@ -25,6 +38,12 @@
   --glowc: 139, 255, 155;
 }
 :root[data-theme='paper'] {
+  --crt-bg: #070605;
+  --crt-panel: rgba(26, 21, 16, 0.96);
+  --crt-ink: #f6ede2;
+  --crt-dim: #a99787;
+  --crt-accent: #ff9d2e;
+  --crt-glow: 255, 157, 46;
   --bg: #efe9df;
   --bg2: #e2d9ca;
   --ink: #1a1510;
@@ -38,11 +57,11 @@
 }
 
 :root {
-  --display: 'Space Mono', system-ui, sans-serif;
-  --body: 'Sora', system-ui, sans-serif;
-  /* three families: Space Mono for display and labels, Sora for reading, VT323 for the CRT */
-  --mono: 'Space Mono', ui-monospace, Menlo, Consolas, monospace;
-  --crt: 'VT323', 'Space Mono', monospace;
+  /* three families: Pixelify Sans for display, Electrolize for labels and reading, VT323 for the CRT */
+  --display: 'Pixelify Sans', system-ui, sans-serif;
+  --body: 'Electrolize', system-ui, sans-serif;
+  --mono: 'Electrolize', ui-monospace, Menlo, Consolas, monospace;
+  --crt: 'VT323', ui-monospace, monospace;
   --gutter: clamp(16px, 4vw, 56px);
   color-scheme: dark;
 }
@@ -183,9 +202,9 @@ button {
 }
 .hud-mark {
   white-space: nowrap;
-  font-family: var(--mono);
+  font-family: var(--display);
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
   text-transform: none;
   font-size: 14px;
   text-decoration: none;
@@ -413,7 +432,8 @@ button {
 .ov h3 {
   font-family: var(--display);
   font-weight: 700;
-  letter-spacing: -0.02em;
+  /* pixel letters want their own spacing, not tightened */
+  letter-spacing: 0;
   margin: 0 0 12px;
   line-height: 1.12;
 }
@@ -440,10 +460,10 @@ button {
 }
 .ov .big {
   font-family: var(--body);
-  font-weight: 600;
+  font-weight: 400;
   font-size: clamp(22px, 2.6vw, 34px);
   line-height: 1.18;
-  letter-spacing: -0.015em;
+  letter-spacing: 0;
   text-wrap: balance;
 }
 .hl {
@@ -564,6 +584,7 @@ button {
   line-height: 1.45;
 }
 .stop-org b {
+  font-family: var(--display);
   font-weight: 600;
 }
 .stop-org span {
@@ -607,7 +628,7 @@ button {
 }
 .chapter-tag b {
   color: var(--accent);
-  font-weight: 700;
+  font-weight: 400;
 }
 .scroll-hint {
   display: inline-flex;
@@ -662,7 +683,7 @@ button {
   font-family: var(--display);
   font-size: 18px;
   font-weight: 700;
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
 }
 .brief-list b i {
   font-style: normal;
@@ -706,7 +727,7 @@ button {
   font-family: var(--display);
   font-size: 30px;
   color: var(--accent);
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
   font-variant-numeric: tabular-nums;
   min-width: 2.2em;
   text-align: right;
@@ -760,7 +781,7 @@ button {
 .ov.hero h1 {
   font-size: clamp(44px, 6.4vw, 104px);
   line-height: 0.96;
-  letter-spacing: -0.045em;
+  letter-spacing: 0;
   max-width: 7ch;
   margin: 6px 0 22px;
 }
@@ -793,8 +814,8 @@ button {
   position: fixed;
   inset: 0;
   z-index: 80;
-  background: #070605;
-  color: #ff9d2e;
+  background: var(--crt-bg);
+  color: var(--crt-accent);
   font-family: var(--crt);
   font-size: clamp(20px, 2.2vw, 28px);
   line-height: 1.3;
@@ -805,15 +826,11 @@ button {
   cursor: pointer;
   transition: opacity 0.7s ease;
 }
-:root[data-theme='phosphor'] .boot {
-  color: #8bff9b;
-  background: #020a06;
-}
 .boot .dim {
-  color: #a99787;
+  color: var(--crt-dim);
 }
 .boot .ok {
-  color: #f6ede2;
+  color: var(--crt-ink);
 }
 .boot .skiphint {
   position: absolute;
@@ -822,7 +839,7 @@ button {
   font-family: var(--mono);
   font-size: 10.5px;
   letter-spacing: 0.3em;
-  color: #a99787;
+  color: var(--crt-dim);
 }
 .boot .scan {
   position: absolute;
@@ -867,10 +884,10 @@ button {
   height: min(380px, 60vh);
   display: flex;
   flex-direction: column;
-  background: rgba(7, 6, 5, 0.94);
-  color: #ff9d2e;
-  border: 1px solid rgba(255, 157, 46, 0.4);
-  box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.8), 0 0 40px -10px rgba(255, 157, 46, 0.35);
+  background: var(--crt-panel);
+  color: var(--crt-accent);
+  border: 1px solid rgba(var(--crt-glow), 0.4);
+  box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.8), 0 0 40px -10px rgba(var(--crt-glow), 0.35);
   font-family: var(--crt);
   font-size: 20px;
   line-height: 1.2;
@@ -878,13 +895,6 @@ button {
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.25s, transform 0.25s, visibility 0s 0.25s;
-}
-:root[data-theme='phosphor'] .term {
-  color: #8bff9b;
-  border-color: rgba(139, 255, 155, 0.4);
-}
-:root[data-theme='paper'] .term {
-  background: rgba(26, 21, 16, 0.96);
 }
 .term.open {
   transform: none;
@@ -897,18 +907,18 @@ button {
   justify-content: space-between;
   align-items: center;
   padding: 8px 12px;
-  border-bottom: 1px solid rgba(255, 157, 46, 0.2);
+  border-bottom: 1px solid rgba(var(--crt-glow), 0.2);
   font-family: var(--mono);
   font-size: 10.5px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: #a99787;
+  color: var(--crt-dim);
 }
 .term-bar button {
   background: none;
   border: 0;
   cursor: pointer;
-  color: #a99787;
+  color: var(--crt-dim);
   font-size: 14px;
 }
 .term-out {
@@ -916,20 +926,16 @@ button {
   overflow-y: auto;
   padding: 10px 14px;
   white-space: pre-wrap;
-  color: #f6ede2;
+  color: var(--crt-ink);
 }
 .term-out b,
 .term-out .p {
-  color: #ff9d2e;
+  color: var(--crt-accent);
   font-weight: normal;
-}
-:root[data-theme='phosphor'] .term-out b,
-:root[data-theme='phosphor'] .term-out .p {
-  color: #8bff9b;
 }
 .term-out i {
   font-style: normal;
-  color: #a99787;
+  color: var(--crt-dim);
 }
 .term-in {
   display: flex;
@@ -941,9 +947,9 @@ button {
   background: transparent;
   border: 0;
   outline: none;
-  color: #f6ede2;
+  color: var(--crt-ink);
   font: inherit;
-  caret-color: #ff9d2e;
+  caret-color: var(--crt-accent);
 }
 
 /* ---------- modal ---------- */
@@ -982,7 +988,7 @@ button {
 .modal-card.text h2 {
   font-family: var(--display);
   font-size: clamp(26px, 3vw, 40px);
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
   margin: 0 0 14px;
   line-height: 1.05;
 }
@@ -1207,10 +1213,15 @@ html {
   font-family: var(--display);
   font-size: clamp(18px, 1.7vw, 23px);
   line-height: 1.35;
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
 }
 .quote-body p {
   font-size: 13px;
+}
+.quote-body figcaption b {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 14px;
 }
 .quote-body figcaption {
   display: flex;
@@ -1441,7 +1452,7 @@ html {
   }
 }
 
-/* readable body copy: Sora for paragraphs, mono kept for labels and the HUD */
+/* reading copy in Electrolize; labels and the HUD share it, headings are Pixelify Sans */
 .ov p:not(.kicker):not(.chapter-tag):not(.counter):not(.sign):not(.foot),
 .facts dd,
 .brief-list p,
@@ -1463,7 +1474,7 @@ html {
 }
 .quote-body blockquote {
   font-weight: 400;
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
 }
 .brief-list b {
   font-size: 15px;

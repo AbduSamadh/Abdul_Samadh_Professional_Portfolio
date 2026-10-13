@@ -8,6 +8,7 @@ import { M, onPalette } from '@/lib/materials';
 import { asset, FONTS } from '@/lib/asset';
 import { journey } from '@/lib/journey';
 import { builds } from '@/content/site';
+import { usePalette } from '@/lib/theme';
 import { EdgeBox, Label, lx, makeCanvasTexture } from '../../parts/common';
 import { DroneModel, RobotCarModel } from '../../parts/Models';
 
@@ -255,6 +256,8 @@ export function Landing() {
   const drone = useRef<THREE.Group>(null);
   const [shown, setShown] = useState(0);
   const shownRef = useRef(0);
+  const pal = usePalette();
+  const safe = useMemo(() => new THREE.Color(pal.name === 'neon' ? pal.accent : '#ff9d2e').multiplyScalar(2), [pal]);
   const rocks = useMemo(() => Array.from({ length: 14 }, () => [(Math.random() - 0.5) * 2.6, (Math.random() - 0.5) * 2.6, 0.15 + Math.random() * 0.35, Math.random() * 3] as const), []);
 
   useFrame(({ clock, camera }) => {
@@ -329,7 +332,7 @@ export function Landing() {
             <Billboard position={[0, 2.4, 0]}>
               <Text font={FONTS.display} fontSize={0.62 * Math.min(1, lx() + 0.25)} color={verdicts[i] ? undefined : '#ff5a46'} anchorX="center" anchorY="middle">
                 {verdicts[i] ? 'SAFE' : 'UNSAFE'}
-                {verdicts[i] && <meshBasicMaterial color={new THREE.Color('#ff9d2e').multiplyScalar(2)} toneMapped={false} />}
+                {verdicts[i] && <meshBasicMaterial color={safe} toneMapped={false} />}
               </Text>
             </Billboard>
           )}
@@ -401,10 +404,10 @@ export function Hula() {
           }
           g.globalAlpha = 1;
           g.fillStyle = p.dark ? p.accent : '#ff9d2e';
-          g.font = '700 22px "Space Mono", monospace';
+          g.font = '700 22px "Pixelify Sans", monospace';
           g.fillText(`0${i + 1}`, 32, 48);
           g.fillStyle = '#F6EDE2';
-          g.font = '700 38px "Space Mono", sans-serif';
+          g.font = '700 38px "Pixelify Sans", sans-serif';
           const words = builds.hulaLessons[i].split(' ');
           let line = '';
           let y = 120;

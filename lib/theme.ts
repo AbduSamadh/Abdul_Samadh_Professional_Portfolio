@@ -1,7 +1,7 @@
 'use client';
 import { useSyncExternalStore } from 'react';
 
-export type ThemeName = 'amber' | 'phosphor' | 'paper';
+export type ThemeName = 'neon' | 'phosphor' | 'paper';
 
 export type Palette = {
   name: ThemeName;
@@ -18,18 +18,19 @@ export type Palette = {
   dark: boolean;
 };
 
-// Colours carried over from the original site's three modes.
+// Neon purple by default; Phosphor and Paper are the original site's other two modes.
 export const palettes: Record<ThemeName, Palette> = {
-  amber: {
-    name: 'amber',
-    label: 'Amber',
-    bg: '#100D0B',
-    bg2: '#19130F',
-    ink: '#F6EDE2',
-    mist: '#A99787',
-    accent: '#FF9D2E',
-    solid: '#0E0B09',
-    glow: 2.4,
+  neon: {
+    name: 'neon',
+    label: 'Neon',
+    bg: '#0B0713',
+    bg2: '#140C22',
+    ink: '#F2EAFF',
+    mist: '#A08FC0',
+    accent: '#B65CFF',
+    solid: '#0A0611',
+    // purple carries less luminance than amber, so it is pushed further to bloom as brightly
+    glow: 3.6,
     dark: true,
   },
   phosphor: {
@@ -58,9 +59,9 @@ export const palettes: Record<ThemeName, Palette> = {
   },
 };
 
-export const themeOrder: ThemeName[] = ['amber', 'phosphor', 'paper'];
+export const themeOrder: ThemeName[] = ['neon', 'phosphor', 'paper'];
 
-let current: ThemeName = 'amber';
+let current: ThemeName = 'neon';
 const listeners = new Set<() => void>();
 
 export function initTheme() {
@@ -95,5 +96,5 @@ export function subscribeTheme(fn: () => void) {
 }
 
 export function usePalette(): Palette {
-  return useSyncExternalStore(subscribeTheme, getPalette, () => palettes.amber);
+  return useSyncExternalStore(subscribeTheme, getPalette, () => palettes.neon);
 }

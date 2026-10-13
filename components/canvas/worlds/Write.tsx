@@ -82,8 +82,9 @@ function Shelves({ mobile }: { mobile: boolean }) {
     () =>
       onPalette((p: Palette) => {
         const c = new THREE.Color();
-        const base = new THREE.Color(p.dark ? '#120e0b' : '#f2ece2');
-        const alt = new THREE.Color(p.dark ? '#1f1813' : '#ddd2c2');
+        const neon = p.name === 'neon';
+        const base = new THREE.Color(neon ? '#100b19' : p.dark ? '#120e0b' : '#f2ece2');
+        const alt = new THREE.Color(neon ? '#1c1229' : p.dark ? '#1f1813' : '#ddd2c2');
         built.spines.forEach((s, i) => {
           c.copy(base).lerp(alt, s.shade);
           built.mesh.setColorAt(i, c);
@@ -283,17 +284,17 @@ function Book({ i, n, title, pos }: { i: number; n: string; title: string; pos: 
 
 function drawCover(g: CanvasRenderingContext2D, n: string, title: string, p: Palette) {
   const w = 512, h = 704;
-  g.fillStyle = p.dark ? '#151009' : '#2a2119';
+  g.fillStyle = p.name === 'neon' ? '#170d26' : p.dark ? '#151009' : '#2a2119';
   g.fillRect(0, 0, w, h);
   g.strokeStyle = p.accent;
   g.lineWidth = 4;
   g.strokeRect(24, 24, w - 48, h - 48);
   g.fillStyle = p.accent;
-  g.font = '700 200px "Space Mono", sans-serif';
+  g.font = '700 200px "Pixelify Sans", sans-serif';
   g.textBaseline = 'top';
   g.fillText(n, 48, 60);
-  g.fillStyle = '#F6EDE2';
-  g.font = '700 42px "Space Mono", sans-serif';
+  g.fillStyle = p.name === 'neon' ? p.ink : '#F6EDE2';
+  g.font = '700 42px "Pixelify Sans", sans-serif';
   const words = title.split(' ');
   let line = '';
   let y = 380;
@@ -307,7 +308,7 @@ function drawCover(g: CanvasRenderingContext2D, n: string, title: string, p: Pal
   }
   g.fillText(line.trim(), 48, y);
   g.fillStyle = '#A99787';
-  g.font = '400 20px "Space Mono", monospace';
+  g.font = '400 20px "Electrolize", monospace';
 
 }
 
@@ -315,16 +316,16 @@ function drawPage(g: CanvasRenderingContext2D, i: number, p: Palette) {
   const w = 512, h = 704;
   g.fillStyle = '#f4ece0';
   g.fillRect(0, 0, w, h);
-  g.fillStyle = p.dark ? '#b2560a' : '#b2560a';
-  g.font = '700 22px "Space Mono", monospace';
+  g.fillStyle = p.name === 'neon' ? '#7b3fc4' : '#b2560a';
+  g.font = '700 22px "Pixelify Sans", monospace';
   g.textBaseline = 'top';
 
   g.fillStyle = '#1a1510';
-  g.font = '700 40px "Space Mono", sans-serif';
+  g.font = '700 40px "Pixelify Sans", sans-serif';
 
   g.fillStyle = '#6b5d4f';
   for (let k = 0; k < 16; k++) g.fillRect(40, 150 + k * 30, (w - 80) * (0.55 + ((k * 31) % 45) / 100), 6);
-  g.strokeStyle = '#b2560a';
+  g.strokeStyle = p.name === 'neon' ? '#7b3fc4' : '#b2560a';
   g.lineWidth = 3;
   g.strokeRect(40, 640 - 120, w - 80, 110);
 }

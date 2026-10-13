@@ -153,7 +153,7 @@ function drawFragment(g: CanvasRenderingContext2D, c: HTMLCanvasElement, i: numb
     g.fillStyle = col;
     g.fillRect(x, y, w, lw);
   };
-  g.font = `700 ${Math.round(H * 0.07)}px "Space Mono", monospace`;
+  g.font = `700 ${Math.round(H * 0.07)}px "Pixelify Sans", monospace`;
   g.fillStyle = acc;
   g.textBaseline = 'top';
   const pad = W2 * 0.07;
@@ -212,7 +212,7 @@ function drawFragment(g: CanvasRenderingContext2D, c: HTMLCanvasElement, i: numb
       }
     }
     g.fillStyle = acc;
-    g.font = `700 ${Math.round(H * 0.12)}px "Space Mono", sans-serif`;
+    g.font = `700 ${Math.round(H * 0.12)}px "Pixelify Sans", sans-serif`;
 
   } else {
     // a browser window with a simulator inside
@@ -225,7 +225,7 @@ function drawFragment(g: CanvasRenderingContext2D, c: HTMLCanvasElement, i: numb
       g.fill();
     });
     g.fillStyle = mist;
-    g.font = `400 24px "Space Mono", monospace`;
+    g.font = `400 24px "Electrolize", monospace`;
 
     // a little world: grid + drones
     g.strokeStyle = mist;
@@ -251,7 +251,7 @@ function drawFragment(g: CanvasRenderingContext2D, c: HTMLCanvasElement, i: numb
       g.arc(W2 / 2 + Math.cos(a) * r * 1.5, H / 2 + 30 + Math.sin(a) * r, 5, 0, Math.PI * 2);
       g.fill();
     }
-    g.font = `700 ${Math.round(H * 0.09)}px "Space Mono", sans-serif`;
+    g.font = `700 ${Math.round(H * 0.09)}px "Pixelify Sans", sans-serif`;
     g.fillStyle = ink;
 
   }

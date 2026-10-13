@@ -31,7 +31,7 @@ export type Gate = { word: string; letter: number; z: number; y: number; label: 
 export const GATES: Record<'teach' | 'write' | 'build' | 'solve' | 'lab' | 'scale', Gate> = {
   teach: { word: 'TEACH', letter: 2, z: -175, y: 0, label: '01 — who I am' },
   write: { word: 'WRITE', letter: 1, z: -265, y: 0, label: '02 — authoring' },
-  build: { word: 'BUILD', letter: 2, z: -455, y: 0, label: '03 — software' },
+  build: { word: 'BUILD', letter: 1, z: -455, y: 0, label: '03 — software' },
   solve: { word: 'SOLVE', letter: 1, z: -560, y: 9, label: '04 — custom briefs' },
   lab: { word: 'LAB', letter: 1, z: -660, y: 0, label: '05 — the hardware' },
   scale: { word: 'SCALE', letter: 2, z: -770, y: 0, label: '06 — proof' },

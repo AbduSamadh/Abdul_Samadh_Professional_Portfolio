@@ -34,6 +34,7 @@ const ROOM = { w: 16, h: 6, d: 20, z: 2 };
 
 function Shell({ mobile }: { mobile: boolean }) {
   const p = usePalette();
+  const neon = p.name === 'neon';
   const walls = useMemo(() => new THREE.BoxGeometry(ROOM.w, ROOM.h, ROOM.d), []);
   // Neon strips tracing the room's back and floor edges.
   const strips = useMemo(() => {
@@ -58,7 +59,7 @@ function Shell({ mobile }: { mobile: boolean }) {
   return (
     <group>
       <mesh geometry={walls} position={[0, ROOM.h / 2, ROOM.z]}>
-        <meshStandardMaterial side={THREE.BackSide} color={p.dark ? '#0b0908' : '#f3eee6'} roughness={0.92} metalness={0} />
+        <meshStandardMaterial side={THREE.BackSide} color={neon ? '#0b0812' : p.dark ? '#0b0908' : '#f3eee6'} roughness={0.92} metalness={0} />
       </mesh>
       {strips.map((s, i) => (
         <mesh key={i} position={s.pos} material={M.glow}>
@@ -68,7 +69,7 @@ function Shell({ mobile }: { mobile: boolean }) {
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.002, ROOM.z]}>
         <planeGeometry args={[ROOM.w, ROOM.d]} />
         {mobile || journey.tier !== 'high' ? (
-          <meshStandardMaterial color={p.dark ? '#090706' : '#ebe4d8'} roughness={0.35} metalness={0.4} />
+          <meshStandardMaterial color={neon ? '#08060e' : p.dark ? '#090706' : '#ebe4d8'} roughness={0.35} metalness={0.4} />
         ) : (
           <MeshReflectorMaterial
             blur={[400, 120]}
@@ -79,7 +80,7 @@ function Shell({ mobile }: { mobile: boolean }) {
             depthScale={1.1}
             minDepthThreshold={0.35}
             maxDepthThreshold={1.4}
-            color={p.dark ? '#0a0807' : '#ece5d9'}
+            color={neon ? '#0a0710' : p.dark ? '#0a0807' : '#ece5d9'}
             metalness={0.55}
             mirror={0}
           />
@@ -90,8 +91,8 @@ function Shell({ mobile }: { mobile: boolean }) {
         <planeGeometry args={[10, 6]} />
         <HazeMaterial />
       </mesh>
-      <pointLight position={[0, 4.6, 2.5]} intensity={p.dark ? 4 : 10} distance={14} decay={1.6} color={p.dark ? '#ffd9ae' : '#ffffff'} />
-      <spotLight position={[0, 5.5, 1]} angle={0.42} penumbra={0.9} intensity={p.dark ? 18 : 30} distance={12} decay={1.4} color={p.dark ? '#ffcf9a' : '#fff'} />
+      <pointLight position={[0, 4.6, 2.5]} intensity={p.dark ? 4 : 10} distance={14} decay={1.6} color={neon ? '#e4d2ff' : p.dark ? '#ffd9ae' : '#ffffff'} />
+      <spotLight position={[0, 5.5, 1]} angle={0.42} penumbra={0.9} intensity={p.dark ? 18 : 30} distance={12} decay={1.4} color={neon ? '#dcc6ff' : p.dark ? '#ffcf9a' : '#fff'} />
     </group>
   );
 }
@@ -142,6 +143,8 @@ function Laptop() {
   const light = useRef<THREE.PointLight>(null);
   const screen = useMemo(() => makeCanvasTexture(1024, 640), []);
   const state = useRef({ typed: -1, palette: '' });
+  // the screen's spill light: warm for Phosphor and Paper as before, violet for Neon
+  const glow = usePalette().name === 'neon' ? '#c99aff' : '#ffb366';
 
   const lines = useMemo(
     () => [
@@ -166,7 +169,7 @@ function Laptop() {
     grad.addColorStop(1, 'rgba(0,0,0,0)');
     g.fillStyle = grad;
     g.fillRect(0, 0, canvas.width, canvas.height);
-    g.font = '46px VT323, "Space Mono", monospace';
+    g.font = '46px VT323, monospace, monospace';
     g.textBaseline = 'top';
     let left = chars;
     lines.forEach(([t, c], i) => {
@@ -227,7 +230,7 @@ function Laptop() {
           <planeGeometry args={[LID_W - 0.03, LID_H - 0.04]} />
           <meshBasicMaterial ref={screenMat} map={screen.tex} toneMapped={false} />
         </mesh>
-        <pointLight ref={light} position={[0, LID_H / 2, 0.25]} distance={3} decay={1.8} color="#ffb366" />
+        <pointLight ref={light} position={[0, LID_H / 2, 0.25]} distance={3} decay={1.8} color={glow} />
       </group>
     </group>
   );
@@ -242,9 +245,9 @@ function readPalette() {
   return {
     key: p.name,
     dark: p.dark,
-    bg: p.dark ? '#0a0806' : '#1a1510',
-    ink: p.name === 'phosphor' ? '#C9FFD0' : '#F6EDE2',
-    mist: p.name === 'phosphor' ? '#3E9E52' : '#A99787',
+    bg: p.name === 'neon' ? '#08050e' : p.dark ? '#0a0806' : '#1a1510',
+    ink: p.name === 'paper' ? '#F6EDE2' : p.ink,
+    mist: p.name === 'paper' ? '#A99787' : p.mist,
     accent,
     glowA: `rgba(${rgb},0.18)`,
   };

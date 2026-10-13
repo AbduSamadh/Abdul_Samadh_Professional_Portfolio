@@ -144,13 +144,13 @@ function HoloScreen({ name, i, pos }: { name: string; i: number; pos: [number, n
         g.lineWidth = 3;
         g.strokeRect(2, 2, 508, 296);
         g.fillStyle = p.accent;
-        g.font = '400 20px "Space Mono", monospace';
+        g.font = '400 20px "Electrolize", monospace';
 
         g.fillStyle = p.ink;
         // shrink long names to fit the screen
         let fs = 44;
         do {
-          g.font = `700 ${fs}px "Space Mono", sans-serif`;
+          g.font = `700 ${fs}px "Pixelify Sans", sans-serif`;
           fs -= 2;
         } while (g.measureText(name).width > 456 && fs > 18);
         g.fillText(name, 28, 170);

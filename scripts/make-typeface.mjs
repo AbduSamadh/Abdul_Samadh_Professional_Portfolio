@@ -1,4 +1,4 @@
-// Converts Space Mono Bold into three.js typeface JSON for the extruded anchor words,
+// Converts Pixelify Sans Bold into three.js typeface JSON for the extruded anchor words,
 // and records a "through point" per letter: the spot the camera flies through.
 // Run with: npm run fonts
 import fs from 'node:fs';
@@ -6,8 +6,8 @@ import path from 'node:path';
 import opentype from 'opentype.js';
 
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
-const src = path.join(root, 'node_modules/@fontsource/space-mono/files/space-mono-latin-700-normal.woff');
-const out = path.join(root, 'public/fonts/space-mono-700.typeface.json');
+const src = path.join(root, 'node_modules/@fontsource/pixelify-sans/files/pixelify-sans-latin-700-normal.woff');
+const out = path.join(root, 'public/fonts/pixelify-sans-700.typeface.json');
 
 const buf = fs.readFileSync(src);
 const font = opentype.parse(buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength));
@@ -122,7 +122,7 @@ function winding(poly, x, y) {
 
 const json = {
   glyphs,
-  familyName: 'Space Mono',
+  familyName: 'Pixelify Sans',
   ascender: r(font.ascender),
   descender: r(font.descender),
   capHeight: r(font.tables.os2.sCapHeight || font.ascender * 0.7),
@@ -130,9 +130,10 @@ const json = {
   underlineThickness: r(font.tables.post.underlineThickness),
   boundingBox: { xMin: r(font.tables.head.xMin), yMin: r(font.tables.head.yMin), xMax: r(font.tables.head.xMax), yMax: r(font.tables.head.yMax) },
   resolution: 1000,
-  original_font_information: { format: 0, fontFamily: 'Space Mono', fontSubfamily: 'Bold' },
+  original_font_information: { format: 0, fontFamily: 'Pixelify Sans', fontSubfamily: 'Bold' },
   through,
 };
 fs.writeFileSync(out, JSON.stringify(json));
 console.log('wrote', path.relative(root, out), Object.keys(glyphs).length, 'glyphs');
-for (const ch of 'AUORS') console.log(ch, JSON.stringify(through[ch]));
+for (const ch of 'AUORSI') console.log(ch, JSON.stringify(through[ch]), 'advance', glyphs[ch].ha);
+console.log('capHeight', json.capHeight);
