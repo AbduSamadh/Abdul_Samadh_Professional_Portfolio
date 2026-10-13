@@ -62,7 +62,7 @@ function Constellation() {
           g.strokeRect(1, 1, w - 2, h - 2);
           g.fillStyle = p.accent;
           g.fillRect(0, 0, 6, h);
-          g.font = '500 22px "IBM Plex Mono", monospace';
+          g.font = '400 22px "Space Mono", monospace';
           g.fillStyle = p.mist;
           g.fillText('BRIEF', 40, 56);
           g.font = '700 150px "Space Mono", sans-serif';
@@ -75,7 +75,7 @@ function Constellation() {
           } while (g.measureText(c.title).width > 640 && fs > 22);
           g.fillStyle = p.ink;
           g.fillText(c.title, 40, 330);
-          g.font = '500 20px "IBM Plex Mono", monospace';
+          g.font = '400 20px "Space Mono", monospace';
           g.fillStyle = p.mist;
           g.fillText('CLICK TO OPEN', 40, 392);
           c.tex.needsUpdate = true;

@@ -144,7 +144,7 @@ function HoloScreen({ name, i, pos }: { name: string; i: number; pos: [number, n
         g.lineWidth = 3;
         g.strokeRect(2, 2, 508, 296);
         g.fillStyle = p.accent;
-        g.font = '500 20px "IBM Plex Mono", monospace';
+        g.font = '400 20px "Space Mono", monospace';
 
         g.fillStyle = p.ink;
         // shrink long names to fit the screen

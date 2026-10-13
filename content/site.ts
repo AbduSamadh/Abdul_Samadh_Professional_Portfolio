@@ -8,9 +8,12 @@ export const person = {
   prompt: 'abdul@dubai:~$',
   now: 'Manager of Lab Learning & Operations, Sunmarke School by Fortes Education, Dubai',
   nowShort: 'Manager of Lab Learning & Operations, Sunmarke School, Dubai',
+  nowTiny: 'Sunmarke School, Dubai',
   oneLine:
     'I build outcomes-driven ICT, AI and STREAM curriculum, for classrooms and for screens, then build the software that teaches it when the software does not exist.',
-  span: 'Twelve years, kindergarten to university, across four countries.',
+  span: 'Twelve years, kindergarten to university, across the UAE, the wider GCC, Singapore and India.',
+  /** The hero line: the whole pitch in one breath. `oneLine` above is the long version. */
+  pitch: 'I build STREAM and AI curriculum, then the software that teaches it.',
   linkedin: 'https://www.linkedin.com/in/abdul-samadh-stream-ai-specialist/',
   linkedinShort: 'linkedin.com/in/abdul-samadh-stream-ai-specialist',
   // Drop a PDF into public/assets/ and set this to e.g. '/assets/abdul-samadh-cv.pdf' to show the button.
@@ -20,13 +23,13 @@ export const person = {
 
 
 export const who = {
-  kicker: '01 / Who',
+  kicker: 'Who I am',
   title: 'Twelve years of making the lessons work',
   body:
     'I started in classrooms and never really left them. What changed is the size of the thing I get handed: a worksheet, then a unit, then a whole-school scheme, then a competition season, then the software the lesson needed and nobody had built.',
   facts: [
     { k: 'Now', v: 'Manager of Lab Learning & Operations, Sunmarke School, Dubai' },
-    { k: 'Taught and built', v: 'Kindergarten to University, in three languages' },
+    { k: 'Taught and built', v: 'Kindergarten to university, in four languages' },
     { k: 'Worked', v: 'UAE, GCC, Singapore and India' },
     { k: 'Writes', v: 'ICT, AI literacy and STREAM, offline and online' },
   ],
@@ -34,7 +37,7 @@ export const who = {
 };
 
 export const abstract = {
-  kicker: '02 / Abstract',
+  kicker: 'Abstract',
   // [text, highlighted?]
   parts: [
     ['I design and build learning systems for schools and universities. The work runs from the ', false],
@@ -104,7 +107,7 @@ export const route: Stop[] = [
 ];
 
 export const authoring = {
-  kicker: '04 / Authoring',
+  kicker: 'Authoring',
   title: 'Books, across curricula and grade levels',
   body: 'Written for whole-school adoption, sequenced so each grade stands alone and still builds on the one before.',
   books: [
@@ -115,7 +118,7 @@ export const authoring = {
     { n: '05', title: 'Assessment packs', body: 'Formative checks, end-of-unit tasks and rubrics tied back to the outcome the unit opened with.' },
     { n: '06', title: 'Digital companions', body: 'The same content again for a screen: modular, gradeable, and usable when the hardware never arrives.' },
   ],
-  grades: ['KG', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13'],
+  grades: ['KG1', 'KG2', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13'],
 };
 
 export type Build = {
@@ -128,7 +131,7 @@ export type Build = {
 };
 
 export const builds = {
-  kicker: '05 / Builds',
+  kicker: 'Builds',
   title: 'Software I wrote because the lesson needed it',
   body: 'Each of these began as a teaching problem. None of them use a framework.',
   items: [
@@ -177,7 +180,7 @@ export const builds = {
 };
 
 export const briefs = {
-  kicker: '06 / Custom projects',
+  kicker: 'Custom projects',
   title: 'Briefs I have been handed, and built',
   body: 'Schools rarely ask for a subject. They ask for an outcome.',
   items: [
@@ -199,7 +202,7 @@ export const briefs = {
 export type Bay = { id: string; title: string; items: string[]; kind: 'plinth' | 'screen' | 'hover' };
 
 export const lab = {
-  kicker: '08 / Stack',
+  kicker: 'Stack',
   title: 'What I work in',
   body: 'Hardware on the bench, code in the browser, frameworks on the wall.',
   bays: [
@@ -214,7 +217,7 @@ export const lab = {
 };
 
 export const scale = {
-  kicker: '07 / Scale',
+  kicker: 'Scale',
   title: 'By the numbers',
   stats: [
     { value: 15, label: 'Grade levels, KG to 13' },
@@ -224,7 +227,6 @@ export const scale = {
     { value: 4, label: 'Languages taught in' },
     { value: 3, label: 'Publishers authored for' },
   ],
-  lines: ['Kindergarten to university', 'UAE · GCC · Singapore · India', 'For classrooms and for screens'],
   fll: {
     title: 'FIRST LEGO League UAE',
     body: 'Core team member, Head Referee and Judging Panel.',
@@ -235,7 +237,7 @@ export const scale = {
 };
 
 export const contact = {
-  kicker: '09 / Contact',
+  kicker: 'Contact',
   title: "Let's build something students remember.",
   body: 'Curriculum, competitions, teacher training, or a simulator that does not exist yet.',
   sign: 'learning never stops',

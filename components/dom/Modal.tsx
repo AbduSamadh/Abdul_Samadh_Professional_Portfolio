@@ -1,8 +1,9 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
-import { emit, on, type ModalPayload } from '@/lib/journey';
+import { emit, navigate, on, type ModalPayload } from '@/lib/journey';
+import { contact, person } from '@/content/site';
 
-/** Click-to-expand: live builds in an iframe, briefs and other detail as text. */
+/** Click-to-expand: live builds in an iframe, briefs and other detail as text, and the contact card. */
 export default function Modal() {
   const [m, setM] = useState<ModalPayload | null>(null);
   const close = useRef<HTMLButtonElement>(null);
@@ -28,7 +29,7 @@ export default function Modal() {
       role="dialog"
       aria-modal="true"
       aria-hidden={!m}
-      aria-label={m?.title}
+      aria-label={m ? (m.type === 'contact' ? 'Contact' : m.title) : undefined}
       onClick={(e) => e.target === e.currentTarget && emit('modal', null)}
     >
       {m?.type === 'live' && (
@@ -69,6 +70,36 @@ export default function Modal() {
               </a>
             </div>
           )}
+        </div>
+      )}
+      {m?.type === 'contact' && (
+        <div className="modal-card text contact-card">
+          <button ref={close} className="modal-close" onClick={() => emit('modal', null)}>
+            Close ×
+          </button>
+          <p className="kicker">{contact.kicker}</p>
+          <h2>{contact.title}</h2>
+          <p>{contact.body}</p>
+          <div className="btns">
+            <a className="btn" href={person.linkedin} target="_blank" rel="noopener noreferrer">
+              Connect on LinkedIn →
+            </a>
+            {person.cv && (
+              <a className="btn ghost" href={person.cv} download>
+                Download CV
+              </a>
+            )}
+            <button
+              className="btn ghost"
+              onClick={() => {
+                emit('modal', null);
+                navigate(1);
+              }}
+            >
+              Fly to the end
+            </button>
+          </div>
+          <p className="mist contact-where">{person.location} · {person.linkedinShort}</p>
         </div>
       )}
     </div>

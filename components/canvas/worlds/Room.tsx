@@ -166,7 +166,7 @@ function Laptop() {
     grad.addColorStop(1, 'rgba(0,0,0,0)');
     g.fillStyle = grad;
     g.fillRect(0, 0, canvas.width, canvas.height);
-    g.font = '46px VT323, "IBM Plex Mono", monospace';
+    g.font = '46px VT323, "Space Mono", monospace';
     g.textBaseline = 'top';
     let left = chars;
     lines.forEach(([t, c], i) => {

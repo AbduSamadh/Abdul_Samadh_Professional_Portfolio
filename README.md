@@ -22,7 +22,7 @@ The terminal from the original site is still there (press <kbd>`</kbd> or the `>
 ## Stack
 
 Next.js (static export) · React · React Three Fiber · three.js · drei · GSAP ScrollTrigger · Lenis · postprocessing.
-Fonts (Space Grotesk, IBM Plex Mono, VT323) are self-hosted. Nothing is loaded from a third-party CDN.
+Fonts (Space Mono for display and labels, Sora for reading, VT323 for the CRT) are self-hosted. Nothing is loaded from a third-party CDN.
 
 ## Run it
 
@@ -45,9 +45,11 @@ repository, set it to an empty string.
 All copy lives in `content/`, taken from the original site (`reference/original-index.html`).
 
 - `content/site.ts`: every line of text, the route, books, builds, briefs, hardware and stats
-- `content/testimonials.ts`: empty on purpose. Add real quotes (with permission) and the
-  testimonial monoliths and overlay appear automatically. Nothing is shown while it is empty
+- `content/testimonials.ts`: the LinkedIn recommendations, verbatim. Each one gets a slab in
+  SCALE and a reading panel; nothing is shown if the list is empty
 - `person.cv` in `content/site.ts`: set to a PDF path in `public/assets/` to show a **Download CV** button
+  (in the finale and in the Contact card the HUD opens)
+- `public/og.jpg`: the social share card (the black room and the hero at 1200×630). Re-render it if the hero changes
 
 ## Tuning the journey
 
@@ -73,7 +75,6 @@ Placeholders are built so these can drop in without layout changes:
 - [ ] Book covers and spreads (the covers in WRITE are typographic placeholders: `drawCover` in `components/canvas/worlds/Write.tsx`)
 - [ ] FIRST LEGO League season, lab and teacher-training photos
 - [ ] Product photos for the LAB hero items
-- [ ] Testimonials (`content/testimonials.ts`)
 - [ ] CV as PDF
 
 ## Accessibility and performance

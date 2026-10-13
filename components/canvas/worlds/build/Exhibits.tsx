@@ -327,7 +327,7 @@ export function Landing() {
           )}
           {shown > i && (
             <Billboard position={[0, 2.4, 0]}>
-              <Text font={FONTS.display} fontSize={0.62} color={verdicts[i] ? undefined : '#ff5a46'} anchorX="center" anchorY="middle">
+              <Text font={FONTS.display} fontSize={0.62 * Math.min(1, lx() + 0.25)} color={verdicts[i] ? undefined : '#ff5a46'} anchorX="center" anchorY="middle">
                 {verdicts[i] ? 'SAFE' : 'UNSAFE'}
                 {verdicts[i] && <meshBasicMaterial color={new THREE.Color('#ff9d2e').multiplyScalar(2)} toneMapped={false} />}
               </Text>
@@ -401,7 +401,7 @@ export function Hula() {
           }
           g.globalAlpha = 1;
           g.fillStyle = p.dark ? p.accent : '#ff9d2e';
-          g.font = '600 22px "IBM Plex Mono", monospace';
+          g.font = '700 22px "Space Mono", monospace';
           g.fillText(`0${i + 1}`, 32, 48);
           g.fillStyle = '#F6EDE2';
           g.font = '700 38px "Space Mono", sans-serif';

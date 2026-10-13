@@ -31,7 +31,8 @@ export const journey = {
 
 export type ModalPayload =
   | { type: 'live'; title: string; url: string; body?: string }
-  | { type: 'text'; kicker?: string; title: string; body: string; tags?: string[]; link?: { href: string; label: string } };
+  | { type: 'text'; kicker?: string; title: string; body: string; tags?: string[]; link?: { href: string; label: string } }
+  | { type: 'contact' };
 
 type Events = {
   swarm: boolean;

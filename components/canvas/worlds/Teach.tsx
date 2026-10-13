@@ -8,7 +8,7 @@ import { M, onPalette } from '@/lib/materials';
 import { ATLAS, glyphAtlas } from '@/lib/glyphs';
 import { asset } from '@/lib/asset';
 import { usePalette, type Palette } from '@/lib/theme';
-import { abstract, route, scale, who } from '@/content/site';
+import { route, who } from '@/content/site';
 import { Billboard } from '@react-three/drei';
 import { EdgeLines, Label, Region, damp, lx, makeCanvasTexture, ss } from '../parts/common';
 
@@ -19,7 +19,6 @@ export default function Teach({ mobile }: { mobile: boolean }) {
       <Classroom />
       <Fragments />
       <Portrait />
-      {!mobile && <Tags />}
       <Route mobile={mobile} />
     </Region>
   );
@@ -154,7 +153,7 @@ function drawFragment(g: CanvasRenderingContext2D, c: HTMLCanvasElement, i: numb
     g.fillStyle = col;
     g.fillRect(x, y, w, lw);
   };
-  g.font = `600 ${Math.round(H * 0.07)}px "IBM Plex Mono", monospace`;
+  g.font = `700 ${Math.round(H * 0.07)}px "Space Mono", monospace`;
   g.fillStyle = acc;
   g.textBaseline = 'top';
   const pad = W2 * 0.07;
@@ -226,7 +225,7 @@ function drawFragment(g: CanvasRenderingContext2D, c: HTMLCanvasElement, i: numb
       g.fill();
     });
     g.fillStyle = mist;
-    g.font = `500 24px "IBM Plex Mono", monospace`;
+    g.font = `400 24px "Space Mono", monospace`;
 
     // a little world: grid + drones
     g.strokeStyle = mist;
@@ -351,37 +350,6 @@ function Portrait() {
       <Label position={[0, h / 2 + 0.3, 0]} size={0.16} tone="accent" letterSpacing={0.3}>
         {label}
       </Label>
-    </group>
-  );
-}
-
-/** The seven capability tags, drifting as small lights. */
-function Tags() {
-  const tags = abstract.tags;
-  const refs = useRef<THREE.Group[]>([]);
-  const spots = useMemo(
-    () =>
-      tags.map((_, i) => {
-        const a = i / tags.length;
-        return [(i % 2 ? 1 : -1) * (5.5 + (i % 3) * 1.2), 1.4 + ((i * 7) % 5) * 0.35, -128 - a * 12] as V3;
-      }),
-    [tags],
-  );
-  useFrame(({ clock }) => {
-    refs.current.forEach((g, i) => g && (g.position.y = spots[i][1] + Math.sin(clock.elapsedTime * 0.7 + i * 1.3) * 0.15));
-  });
-  return (
-    <group>
-      {tags.map((t, i) => (
-        <group key={t} ref={(g) => void (g && (refs.current[i] = g))} position={[spots[i][0] * lx(), spots[i][1], spots[i][2]]}>
-          <mesh material={M.glow}>
-            <sphereGeometry args={[0.05, 8, 8]} />
-          </mesh>
-          <Label position={[0, -0.24, 0]} size={0.15} tone="mist" letterSpacing={0.2}>
-            {t.toUpperCase()}
-          </Label>
-        </group>
-      ))}
     </group>
   );
 }

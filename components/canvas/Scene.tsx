@@ -52,7 +52,7 @@ export default function Scene({ mobile, reduced, tier }: { mobile: boolean; redu
         <Build mobile={mobile} />
         <Solve mobile={mobile} />
         <Lab mobile={mobile} />
-        <Scale mobile={mobile} />
+        <Scale />
         <Finale mobile={mobile} />
         <Gates />
         <Ready />

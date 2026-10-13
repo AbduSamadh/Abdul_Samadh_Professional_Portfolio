@@ -31,7 +31,7 @@ export function glyphAtlas() {
     g.fillStyle = '#fff';
     g.textAlign = 'center';
     g.textBaseline = 'middle';
-    g.font = `500 ${CELL * 0.78}px "IBM Plex Mono", ui-monospace, monospace`;
+    g.font = `400 ${CELL * 0.78}px "Space Mono", ui-monospace, monospace`;
     for (let i = 0; i < GLYPHS.length; i++) {
       const x = (i % COLS) * CELL + CELL / 2;
       const y = Math.floor(i / COLS) * CELL + CELL / 2 + 2;
@@ -41,7 +41,7 @@ export function glyphAtlas() {
   };
   draw();
   // Redraw once the webfont is in, so glyphs match the rest of the site.
-  document.fonts?.load(`500 40px "IBM Plex Mono"`).then(draw).catch(() => {});
+  document.fonts?.load(`400 40px "Space Mono"`).then(draw).catch(() => {});
   return atlas;
 }
 

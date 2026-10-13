@@ -88,14 +88,16 @@ export default function Overlays() {
       <Ov from={-1} to={P['room-drift'] + 0.004} side="left" label="Introduction" className="hero">
         <p className="kicker">
           <span className="dot" />
-          Now · {person.nowShort}
+          <span className="when-long">Now · {person.nowShort}</span>
+          <span className="when-short">Now · {person.nowTiny}</span>
         </p>
         <h1>{person.name}</h1>
-        <p className="big" style={{ maxWidth: 470 }}>
-          {person.oneLine}
-        </p>
+        <p className="big">{person.pitch}</p>
         <p className="mist">{person.span}</p>
-        <div style={{ marginTop: 22 }}>
+        <div className="hero-cta">
+          <button className="btn" onClick={() => emit('modal', { type: 'contact' })}>
+            Get in touch
+          </button>
           <span className="scroll-hint">SCROLL TO DESCEND</span>
         </div>
       </Ov>
@@ -126,6 +128,7 @@ export default function Overlays() {
       <Ov from={P['teach-portrait'] - 0.006} to={P['teach-portrait'] + 0.007} side="left" label="Abdul Samadh">
         <div className="panel">
           <p className="kicker">Abdul Samadh · Dubai, UAE</p>
+          <p>{person.oneLine}</p>
           <dl className="facts">
             {who.facts.map((f) => (
               <div key={f.k}>
@@ -168,7 +171,7 @@ export default function Overlays() {
         return (
           <Ov key={s.id} from={from} to={to} side={side} label={s.org}>
             <div className={`panel ${s.feature ? 'feature' : ''}`}>
-              {i === 0 && <p className="kicker">03 / Route · The route so far</p>}
+              {i === 0 && <p className="kicker">The route so far</p>}
               <div className="stop-meta">
                 <span className={s.now ? 'now' : ''}>{s.now ? '● Now · ' : ''}{s.country}</span>
                 <span>

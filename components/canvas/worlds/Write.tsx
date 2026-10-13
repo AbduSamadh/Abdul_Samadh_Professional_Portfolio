@@ -134,7 +134,7 @@ function Floor() {
               <planeGeometry args={[4.6, 0.02]} />
             </mesh>
             <Label rotation={[-Math.PI / 2, 0, 0]} position={[-2.9, 0.01, 0]} size={0.5} tone="mist" font="display" anchorX="right">
-              {g === 'KG' ? 'KG' : `G${g}`}
+              {g.startsWith('KG') ? g : `G${g}`}
             </Label>
           </group>
         );
@@ -175,7 +175,7 @@ function GradeArc() {
             </mesh>
             <Billboard position={[0, 0.42, 0]}>
               <Label size={0.24} tone="ink">
-                {g === 'KG' ? 'KG' : g}
+                {g}
               </Label>
             </Billboard>
           </group>
@@ -307,7 +307,7 @@ function drawCover(g: CanvasRenderingContext2D, n: string, title: string, p: Pal
   }
   g.fillText(line.trim(), 48, y);
   g.fillStyle = '#A99787';
-  g.font = '500 20px "IBM Plex Mono", monospace';
+  g.font = '400 20px "Space Mono", monospace';
 
 }
 
@@ -316,7 +316,7 @@ function drawPage(g: CanvasRenderingContext2D, i: number, p: Palette) {
   g.fillStyle = '#f4ece0';
   g.fillRect(0, 0, w, h);
   g.fillStyle = p.dark ? '#b2560a' : '#b2560a';
-  g.font = '600 22px "IBM Plex Mono", monospace';
+  g.font = '700 22px "Space Mono", monospace';
   g.textBaseline = 'top';
 
   g.fillStyle = '#1a1510';

@@ -6,7 +6,18 @@ import { CHAPTERS, DESTINATIONS } from '@/lib/path';
 import { cycleTheme, usePalette } from '@/lib/theme';
 import { person } from '@/content/site';
 
-const RAIL = ['studio', 'teach', 'write', 'build', 'solve', 'lab', 'scale', 'contact'];
+// The chapter rail: the same numbers as the chapter tags in the reading panels.
+const RAIL: { id: string; n: string; label: string }[] = [
+  { id: 'studio', n: '00', label: 'Start' },
+  { id: 'teach', n: '01', label: 'Teach' },
+  { id: 'write', n: '02', label: 'Write' },
+  { id: 'build', n: '03', label: 'Build' },
+  { id: 'solve', n: '04', label: 'Solve' },
+  { id: 'lab', n: '05', label: 'Lab' },
+  { id: 'scale', n: '06', label: 'Scale' },
+  { id: 'contact', n: '07', label: 'Contact' },
+];
+const RAIL_IDS = RAIL.map((r) => r.id);
 
 export default function HUD() {
   const sector = useRef<HTMLElement>(null);
@@ -26,11 +37,12 @@ export default function HUD() {
       if (label !== lastSector && sector.current) sector.current.textContent = lastSector = label;
       const d = String(Math.round(p * 9999)).padStart(4, '0');
       if (d !== lastDepth && depth.current) depth.current.textContent = lastDepth = d;
-      const railIdx = Math.max(0, RAIL.indexOf(CHAPTERS[idx].id === 'portal' ? 'studio' : CHAPTERS[idx].id));
+      const railIdx = Math.max(0, RAIL_IDS.indexOf(CHAPTERS[idx].id === 'portal' ? 'studio' : CHAPTERS[idx].id));
       if (railIdx !== lastIdx && rail.current) {
         lastIdx = railIdx;
         rail.current.querySelectorAll('button').forEach((b, i) => {
           b.classList.toggle('on', i === railIdx);
+          b.classList.toggle('past', i < railIdx);
           if (i === railIdx) b.setAttribute('aria-current', 'true');
           else b.removeAttribute('aria-current');
         });
@@ -61,6 +73,9 @@ export default function HUD() {
           <button className="hud-btn" onClick={() => emit('terminal', true)} aria-label="Open terminal">
             &gt;_
           </button>
+          <button className="hud-btn hud-contact" onClick={() => emit('modal', { type: 'contact' })}>
+            Contact
+          </button>
         </div>
       </header>
       <div className="ticker" aria-hidden="true">
@@ -72,9 +87,13 @@ export default function HUD() {
         ))}
       </div>
       <nav className="rail" ref={rail} aria-label="Chapters">
-        {RAIL.map((id) => (
-          <button key={id} onClick={() => navigate(DESTINATIONS[id])} aria-label={`Go to ${id}`} title={id.toUpperCase()}>
-            <span />
+        {RAIL.map((r) => (
+          <button key={r.id} onClick={() => navigate(DESTINATIONS[r.id])} aria-label={`Go to ${r.label}`}>
+            <span className="tick" />
+            <em>
+              <i>{r.n}</i>
+              {r.label}
+            </em>
           </button>
         ))}
       </nav>

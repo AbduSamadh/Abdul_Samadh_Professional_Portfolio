@@ -14,7 +14,7 @@ import { EdgeLines, Label, Region, lx, ss } from '../parts/common';
 import { faceShot } from './build/Exhibits';
 
 /** SCENE 8: SCALE. Numbers as architecture, a slow globe, the partnership monolith. */
-export default function Scale({ mobile }: { mobile: boolean }) {
+export default function Scale() {
   return (
     <Region near={GATES.lab.z} far={GATES.scale.z}>
       {scale.stats.map((s, i) => (
@@ -22,7 +22,6 @@ export default function Scale({ mobile }: { mobile: boolean }) {
       ))}
       <Globe />
       <Monolith />
-      {!mobile && <Lines mobile={mobile} />}
       {testimonials.length > 0 && <Quotes />}
     </Region>
   );
@@ -198,42 +197,27 @@ function Monolith() {
   );
 }
 
-/** Bold true lines drifting through the space. */
-function Lines({ mobile }: { mobile: boolean }) {
-  const refs = useRef<THREE.Group[]>([]);
-  const spots = useMemo(
-    () =>
-      scale.lines.map((_, i) => [(i % 2 ? 1 : -1) * (mobile ? 4 : 15 + (i % 3) * 2), 7 + (i % 3) * 2.2, -690 - i * 15] as V3),
-    [mobile],
-  );
-  useFrame(({ clock }) => {
-    refs.current.forEach((g, i) => g && (g.position.x = spots[i][0] + Math.sin(clock.elapsedTime * 0.15 + i) * 1.2));
-  });
-  return (
-    <group>
-      {scale.lines.map((l, i) => (
-        <group key={l} ref={(g) => void (g && (refs.current[i] = g))} position={spots[i]}>
-          <Label size={mobile ? 0.6 : 1.1} font="display" tone="mist" opacity={0.4}>
-            {l}
-          </Label>
-        </group>
-      ))}
-    </group>
-  );
-}
-
 /** LinkedIn recommendations as an arc of slabs; the one the camera faces lights up. */
 function Quotes() {
   const n = testimonials.length;
   const mats = useMemo(() => testimonials.map(() => M.edge.clone()), []);
   const geo = useMemo(() => new THREE.BoxGeometry(3.6, 6.2, 0.5), []);
   const [cx, , cz] = VOICES.center;
+  const slabs = useRef<THREE.Group[]>([]);
   useFrame(() => {
     const p = journey.progress;
     mats.forEach((m, i) => {
       const d = Math.abs(p - P[`voice-${i}`]);
       const on = 1 - ss(0.002, 0.006, d);
       m.color.copy(glowColor).multiplyScalar(0.35 + on * 0.9);
+    });
+    // The slabs rise out of the floor once the FIRST LEGO League card is behind you, so they
+    // never stand behind its reading panel.
+    slabs.current.forEach((g, i) => {
+      if (!g) return;
+      const k = ss(P.fll + 0.001 + i * 0.0005, P['voice-0'] - 0.002 + i * 0.0005, p);
+      g.visible = k > 0.001;
+      g.position.y = VOICES.center[1] - (1 - k) * 10;
     });
   });
   return (
@@ -242,7 +226,7 @@ function Quotes() {
         const at = voicePos(i, n);
         const yaw = Math.atan2(cx - at[0], cz - at[2]);
         return (
-          <group key={t.name} position={at} rotation={[0, yaw, 0]} scale={0.8}>
+          <group key={t.name} ref={(g) => void (g && (slabs.current[i] = g))} position={at} rotation={[0, yaw, 0]} scale={0.8}>
             <mesh geometry={geo} material={M.solid} />
             <EdgeLines geometry={geo} material={mats[i]} />
             <Label position={[-1.5, 2.55, 0.27]} size={0.14} tone="accent" anchorX="left" letterSpacing={0.3}>

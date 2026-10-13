@@ -40,8 +40,9 @@
 :root {
   --display: 'Space Mono', system-ui, sans-serif;
   --body: 'Sora', system-ui, sans-serif;
-  --mono: 'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace;
-  --crt: 'VT323', 'IBM Plex Mono', monospace;
+  /* three families: Space Mono for display and labels, Sora for reading, VT323 for the CRT */
+  --mono: 'Space Mono', ui-monospace, Menlo, Consolas, monospace;
+  --crt: 'VT323', 'Space Mono', monospace;
   --gutter: clamp(16px, 4vw, 56px);
   color-scheme: dark;
 }
@@ -183,7 +184,7 @@ button {
 .hud-mark {
   white-space: nowrap;
   font-family: var(--mono);
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: none;
   font-size: 14px;
@@ -195,7 +196,7 @@ button {
 }
 .hud-mark b {
   color: var(--accent);
-  font-weight: 600;
+  font-weight: 700;
 }
 .hud-right {
   display: flex;
@@ -209,7 +210,7 @@ button {
 }
 .hud-read span b {
   color: var(--ink);
-  font-weight: 500;
+  font-weight: 400;
   margin-left: 8px;
   font-variant-numeric: tabular-nums;
 }
@@ -242,39 +243,96 @@ button {
   font-style: normal;
   margin: 0 0.6em;
 }
+.hud-contact {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.hud-contact:hover {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+/* the chapter rail: a segmented track, one labelled segment per chapter */
 .rail {
   position: fixed;
   right: var(--gutter);
-  bottom: 18px;
+  bottom: 16px;
   z-index: 30;
   display: flex;
-  gap: 6px;
+  gap: 3px;
   align-items: flex-end;
 }
 .rail button {
-  width: 22px;
-  height: 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 7px;
   border: 0;
   background: transparent;
-  padding: 0;
+  padding: 8px 0 2px;
   cursor: pointer;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
+  text-align: left;
 }
-.rail button span {
+.rail .tick {
   display: block;
-  width: 2px;
-  height: 10px;
+  height: 2px;
   background: var(--edge2);
-  transition: height 0.3s, background 0.3s;
+  transition: background 0.3s, transform 0.3s;
+  transform-origin: bottom;
 }
-.rail button.on span {
-  height: 20px;
-  background: var(--accent);
+.rail button.past .tick {
+  background: rgba(var(--glowc), 0.45);
 }
-.rail button:hover span {
+.rail button.on .tick {
   background: var(--accent);
+  transform: scaleY(2);
+  box-shadow: 0 0 10px rgba(var(--glowc), 0.7);
+}
+.rail em {
+  font-style: normal;
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--mist);
+  padding-right: 14px;
+  transition: color 0.2s;
+}
+.rail em i {
+  font-style: normal;
+  color: var(--accent);
+  opacity: 0.75;
+  margin-right: 5px;
+}
+.rail button.on em {
+  color: var(--ink);
+}
+.rail button:hover em {
+  color: var(--accent);
+}
+@media (max-width: 1280px) {
+  .ticker {
+    display: none;
+  }
+}
+/* narrower screens: numbers only, the current chapter spelled out, slimmer reading panels */
+@media (max-width: 1100px) {
+  .ov-left,
+  .ov-right {
+    max-width: min(400px, calc(100vw - 2 * var(--gutter)));
+  }
+  .rail em {
+    padding-right: 10px;
+  }
+  .rail button:not(.on) em {
+    font-size: 0;
+  }
+  .rail button:not(.on) em i {
+    font-size: 9.5px;
+    margin-right: 0;
+  }
+  .rail button.on em i {
+    display: none;
+  }
 }
 
 /* ---------- overlays ---------- */
@@ -503,7 +561,7 @@ button {
 }
 .chapter-tag b {
   color: var(--accent);
-  font-weight: 500;
+  font-weight: 700;
 }
 .scroll-hint {
   display: inline-flex;
@@ -565,7 +623,7 @@ button {
   color: var(--accent);
   font-family: var(--mono);
   font-size: 11px;
-  font-weight: 500;
+  font-weight: 400;
   margin-right: 10px;
   letter-spacing: 0.1em;
 }
@@ -650,11 +708,38 @@ button {
 }
 
 .hero {
-  max-width: min(560px, calc(100vw - 2 * var(--gutter)));
+  max-width: min(600px, calc(100vw - 2 * var(--gutter)));
 }
+/* the name leads; everything else in the hero steps down from it */
 .ov.hero h1 {
-  font-size: clamp(28px, 3.5vw, 52px);
-  max-width: 14ch;
+  font-size: clamp(44px, 6.4vw, 104px);
+  line-height: 0.96;
+  letter-spacing: -0.045em;
+  max-width: 7ch;
+  margin: 6px 0 22px;
+}
+.hero .when-short {
+  display: none;
+}
+:root[data-sheet='1'] .hero .when-long {
+  display: none;
+}
+:root[data-sheet='1'] .hero .when-short {
+  display: inline;
+}
+.hero-cta {
+  display: flex;
+  align-items: flex-start;
+  gap: 28px;
+  margin-top: 26px;
+}
+.hero-cta .scroll-hint {
+  padding-top: 13px;
+}
+.contact-card .contact-where {
+  margin-top: 18px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
 }
 
 /* ---------- boot ---------- */
@@ -855,7 +940,7 @@ button {
   margin: 0 0 14px;
   line-height: 1.05;
 }
-.modal-card.text p {
+.modal-card.text p:not(.kicker) {
   font-size: 15px;
   line-height: 1.7;
 }
@@ -1197,7 +1282,14 @@ html {
 /* phones: lighter type, fewer extras */
 @media (max-width: 760px) {
   .ov.hero h1 {
-    font-size: 30px;
+    font-size: clamp(40px, 12vw, 56px);
+    margin-bottom: 14px;
+  }
+  .hero-cta {
+    margin-top: 16px;
+  }
+  .hero-cta .scroll-hint {
+    display: none;
   }
   .ov.hero .big {
     font-size: 16px;
@@ -1231,6 +1323,16 @@ html {
   }
 }
 
+/* the smallest phones: the HUD keeps the name, theme, terminal and contact */
+@media (max-width: 380px) {
+  .hud-read {
+    display: none;
+  }
+  .hud-mark {
+    font-size: 13px;
+  }
+}
+
 /* short landscape screens (phones on their side) */
 @media (max-height: 520px) and (orientation: landscape) {
   .hud {
@@ -1259,9 +1361,18 @@ html {
   .ov .tags {
     display: none;
   }
-  .ov h1,
-  .ov.hero h1 {
+  .ov h1 {
     font-size: 24px;
+  }
+  .ov.hero h1 {
+    font-size: 34px;
+    margin-bottom: 10px;
+  }
+  .hero-cta {
+    margin-top: 10px;
+  }
+  .hero-cta .scroll-hint {
+    display: none;
   }
   .ov .big {
     font-size: 15px;
@@ -1290,7 +1401,7 @@ html {
 .brief-list p,
 .hw,
 .quote-body p,
-.modal-card.text p {
+.modal-card.text p:not(.kicker) {
   font-family: var(--body);
   letter-spacing: 0;
 }
@@ -1298,9 +1409,11 @@ html {
   line-height: 1.7;
 }
 .ov.hero .big {
-  font-size: clamp(16px, 1.45vw, 21px);
-  line-height: 1.45;
-  font-weight: 500;
+  font-size: clamp(17px, 1.55vw, 23px);
+  line-height: 1.4;
+  font-weight: 400;
+  max-width: 28ch;
+  text-wrap: pretty;
 }
 .quote-body blockquote {
   font-weight: 400;
