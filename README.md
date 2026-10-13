@@ -13,11 +13,16 @@ camera flies through:
 | WRITE | An infinite library ordered KG–13, six authored book types that open as you pass, the scope-and-sequence arc overhead |
 | BUILD | Three method frames, and each build as a working mini-world: Swarm (1,000 drones, with a collision-free / random toggle), ASCII City (traffic, signals, weather), Bench, the LEGO pen plotter drawing the portrait, landing detection, the Hula lesson wall |
 | SOLVE | The twelve briefs as a constellation, a flyby of AI literacy and a climb up the robotics ladder |
-| LAB | The full hardware stack as a gallery of lit plinths, with the humanoid at the end |
+| LAB | The labs set up and taught: what was done with each area of kit, then the kit itself on lit plinths, with the humanoid at the end |
 | SCALE | The numbers from the CV as monuments, a globe with the route and the GCC, the FIRST LEGO League monolith, the LinkedIn recommendations |
 | Finale | Everything converges and the drones spell the name. Contact call to action |
 
 The terminal from the original site is still there (press <kbd>`</kbd> or the `>_` button). `cd build`, `cd lab` and so on fly the camera there.
+
+**Quick view** (`/summary/`, `app/summary/`) is the same story on one plain, printable page for anyone short of
+time: experience with dates, numbers, builds, curriculum, labs, recommendations and credentials. It reads
+the same content files as the 3D site, and is linked from the top bar, the hero, the contact card, the finale
+and the terminal (`summary`).
 
 ## Stack
 
@@ -49,6 +54,9 @@ All copy lives in `content/`, taken from the original site (`reference/original-
   SCALE and a reading panel; nothing is shown if the list is empty
 - `person.cv` in `content/site.ts`: set to a PDF path in `public/assets/` to show a **Download CV** button
   (in the finale and in the Contact card the HUD opens)
+- `lab.bays[].photo` in `content/site.ts`: set a path in `public/assets/` (e.g. `/assets/lab-robotics.jpg`)
+  to show a photo at the top of that LAB panel
+- `featured` in `content/testimonials.ts`: the three recommendations shown on the summary page
 - `public/og.jpg`: the social share card (the black room and the hero at 1200×630). Re-render it if the hero changes
 
 ## Tuning the journey
@@ -74,7 +82,7 @@ Placeholders are built so these can drop in without layout changes:
 - [ ] Photos or video of the LEGO pen plotter, the landing-detection rig and the Hula lessons
 - [ ] Book covers and spreads (the covers in WRITE are typographic placeholders: `drawCover` in `components/canvas/worlds/Write.tsx`)
 - [ ] FIRST LEGO League season, lab and teacher-training photos
-- [ ] Product photos for the LAB hero items
+- [ ] Photos of the labs and kit in use (`lab.bays[].photo`)
 - [ ] CV as PDF
 
 ## Accessibility and performance

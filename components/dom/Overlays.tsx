@@ -5,6 +5,7 @@ import { emit, journey, on, setSwarmRandom } from '@/lib/journey';
 import { P } from '@/lib/path';
 import { abstract, authoring, briefs, builds, contact, lab, person, route, scale, who } from '@/content/site';
 import { testimonials } from '@/content/testimonials';
+import { SUMMARY, asset } from '@/lib/asset';
 import GlyphPortrait from './GlyphPortrait';
 import Testimonial from './Testimonials';
 
@@ -98,6 +99,9 @@ export default function Overlays() {
           <button className="btn" onClick={() => emit('modal', { type: 'contact' })}>
             Get in touch
           </button>
+          <a className="btn ghost" href={SUMMARY}>
+            Quick view
+          </a>
           <span className="scroll-hint">SCROLL TO DESCEND</span>
         </div>
       </Ov>
@@ -306,9 +310,11 @@ export default function Overlays() {
             {ids.map((id) => {
               const bay = lab.bays.find((b) => b.id === id)!;
               return (
-                <div key={id} style={{ marginBottom: 10 }}>
+                <div key={id} className="bay">
+                  {bay.photo && <img className="bay-photo" src={asset(bay.photo)} alt={bay.photoAlt ?? bay.title} loading="lazy" />}
                   <p className="kicker">{bay.title}</p>
-                  <ul className="hw">
+                  <p className="bay-did">{bay.did}</p>
+                  <ul className="hw" aria-label={`${bay.title} kit`}>
                     {bay.items.map((it) => (
                       <li key={it}>{it}</li>
                     ))}
@@ -367,11 +373,14 @@ export default function Overlays() {
           <a className="btn big" href={person.linkedin} target="_blank" rel="noopener noreferrer">
             Connect on LinkedIn →
           </a>
+          <a className="btn big ghost" href={SUMMARY}>
+            One-page summary
+          </a>
           <button className="btn big ghost" onClick={() => emit('terminal', true)}>
             Open a terminal
           </button>
           {person.cv && (
-            <a className="btn big ghost" href={person.cv} download>
+            <a className="btn big ghost" href={asset(person.cv)} download>
               Download CV
             </a>
           )}

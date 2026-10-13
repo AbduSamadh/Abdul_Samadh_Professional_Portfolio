@@ -5,6 +5,7 @@ import { emit, journey, navigate } from '@/lib/journey';
 import { CHAPTERS, DESTINATIONS } from '@/lib/path';
 import { cycleTheme, usePalette } from '@/lib/theme';
 import { person } from '@/content/site';
+import { SUMMARY } from '@/lib/asset';
 
 // The chapter rail: the same numbers as the chapter tags in the reading panels.
 const RAIL: { id: string; n: string; label: string }[] = [
@@ -73,6 +74,9 @@ export default function HUD() {
           <button className="hud-btn" onClick={() => emit('terminal', true)} aria-label="Open terminal">
             &gt;_
           </button>
+          <a className="hud-btn hud-quick" href={SUMMARY} title="Everything on one plain page">
+            Quick view
+          </a>
           <button className="hud-btn hud-contact" onClick={() => emit('modal', { type: 'contact' })}>
             Contact
           </button>

@@ -5,6 +5,7 @@ import '@fontsource/pixelify-sans/700.css';
 import '@fontsource/electrolize/400.css';
 import '@fontsource/vt323/400.css';
 import './globals.css';
+import { SHARE_IMAGE } from '@/lib/asset';
 
 const description =
   'Abdul Samadh. Eleven years building outcomes-driven ICT, AI and STREAM curriculum for offline and online learning, across the UAE, the wider GCC, Singapore and India.';
@@ -13,7 +14,7 @@ const description =
 // hero at 1200x630); re-render it if the hero changes.
 const origin = process.env.NEXT_PUBLIC_SITE_ORIGIN || 'https://abdusamadh.github.io';
 const base = process.env.NEXT_PUBLIC_BASE_PATH || '';
-const image = { url: 'og.jpg', width: 1200, height: 630, alt: 'Abdul Samadh: STREAM and AI curriculum, and the software that teaches it' };
+const image = SHARE_IMAGE;
 
 export const metadata: Metadata = {
   metadataBase: new URL(`${origin}${base}/`),

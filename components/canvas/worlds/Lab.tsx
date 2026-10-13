@@ -11,7 +11,7 @@ import { lab, type Bay } from '@/content/site';
 import { Label, Region, lx, makeCanvasTexture } from '../parts/common';
 import { DroneModel, HumanoidModel, PrinterModel, ProductProxy, QuadrupedModel } from '../parts/Models';
 
-/** SCENE 7: LAB. A dark gallery of lit plinths: every piece of hardware on the stack. */
+/** SCENE 7: LAB. A dark gallery of lit plinths: the kit, and (in the panels) what I did with it. */
 export default function Lab({ mobile }: { mobile: boolean }) {
   return (
     <Region near={GATES.solve.z} far={GATES.lab.z}>
@@ -71,7 +71,7 @@ function BayView({ bay, mobile }: { bay: Bay; mobile: boolean }) {
   const title = useRef<THREE.Group>(null);
   useFrame(({ camera }) => {
     // Only the bay you are passing announces itself.
-    if (title.current) title.current.visible = Math.abs(camera.position.z - spec.z) < 16;
+    if (title.current) title.current.visible = Math.abs(camera.position.z - spec.z) < 9;
   });
   return (
     <group>
@@ -138,7 +138,7 @@ function HoloScreen({ name, i, pos }: { name: string; i: number; pos: [number, n
       onPalette((p) => {
         const g = t.ctx;
         g.clearRect(0, 0, 512, 300);
-        g.fillStyle = p.dark ? 'rgba(255,157,46,0.06)' : 'rgba(178,86,10,0.08)';
+        g.fillStyle = p.name === 'neon' ? 'rgba(182,92,255,0.07)' : p.dark ? 'rgba(255,157,46,0.06)' : 'rgba(178,86,10,0.08)';
         g.fillRect(0, 0, 512, 300);
         g.strokeStyle = p.accent;
         g.lineWidth = 3;
@@ -196,7 +196,7 @@ function Hero() {
         <HumanoidModel />
       </group>
       <primitive object={target} position={[0, 1.2, 0]} />
-      <spotLight target={target} position={[0, 6, 2]} angle={0.4} penumbra={0.8} intensity={p.dark ? 60 : 30} distance={12} color={p.dark ? '#ffcf9a' : '#ffffff'} />
+      <spotLight target={target} position={[0, 6, 2]} angle={0.4} penumbra={0.8} intensity={p.dark ? 60 : 30} distance={12} color={p.name === 'neon' ? '#dcc6ff' : p.dark ? '#ffcf9a' : '#ffffff'} />
       <pointLight position={[-1.2, 1.6, -1.2]} intensity={p.dark ? 6 : 2} distance={5} color={p.accent} />
       <Billboard position={[0, 3, 0]}>
         <Label size={0.24} font="display" tone="ink">

@@ -4,13 +4,14 @@ import { emit, navigate, on, setSwarmRandom } from '@/lib/journey';
 import { DESTINATIONS } from '@/lib/path';
 import { setTheme, cycleTheme, type ThemeName } from '@/lib/theme';
 import { authoring, briefs, builds, lab, person, route, who } from '@/content/site';
+import { SUMMARY } from '@/lib/asset';
 
 const BOOT = '<b>abdul.os</b> 12.0\nType <i>help</i> for commands, <i>ls</i> for places, <i>exit</i> to close.';
 
 // Ported from the original site's terminal, plus `cd` to fly the camera.
 const CMDS: Record<string, (arg: string) => string | void> = {
   help: () =>
-    '<b>commands</b>\n  whoami      who you are talking to\n  timeline    the route, with dates\n  practice    what I actually do\n  ls          places you can go\n  cd &lt;place&gt;  fly there\n  builds      software I wrote\n  books       authoring\n  briefs      custom projects\n  stack       tools of the trade\n  swarm       random | clean\n  theme       neon | phosphor | paper\n  phos        phosphor mode\n  contact     how to reach me\n  clear / exit',
+    '<b>commands</b>\n  whoami      who you are talking to\n  timeline    the route, with dates\n  summary     everything on one page\n  practice    what I actually do\n  ls          places you can go\n  cd &lt;place&gt;  fly there\n  builds      software I wrote\n  books       authoring\n  briefs      custom projects\n  stack       tools of the trade\n  swarm       random | clean\n  theme       neon | phosphor | paper\n  phos        phosphor mode\n  contact     how to reach me\n  clear / exit',
   whoami: () =>
     `${person.name}\n${person.nowShort}.\nEleven years of ICT, AI and STREAM education, KG to Grade 13,\nacross the UAE, the wider GCC, Singapore and India.\nCurriculum, competitions, and the software that teaches them.`,
   timeline: () =>
@@ -68,6 +69,10 @@ const CMDS: Record<string, (arg: string) => string | void> = {
     return 'done.';
   },
   contact: () => `LinkedIn: <a href="${person.linkedin}" target="_blank" rel="noopener noreferrer">${person.linkedinShort}</a>\nDubai, UAE.`,
+  summary: () => {
+    window.location.href = SUMMARY;
+    return 'opening the one-page summary...';
+  },
   linkedin: () => {
     window.open(person.linkedin, '_blank', 'noopener');
     return 'opening LinkedIn...';

@@ -19,6 +19,9 @@ export type Testimonial = {
   org: string;
 };
 
+/** The three shown on the one-page summary (the strongest for curriculum and teaching roles). */
+export const featured = ['Shirin Shahana', 'Ayesha Zia', 'Sahana Parveen'];
+
 export const testimonials: Testimonial[] = [
   {
     quote: 'His ability to break down complex ideas into clear and practical solutions is impressive.',

@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { emit, navigate, on, type ModalPayload } from '@/lib/journey';
 import { contact, person } from '@/content/site';
+import { SUMMARY, asset } from '@/lib/asset';
 
 /** Click-to-expand: live builds in an iframe, briefs and other detail as text, and the contact card. */
 export default function Modal() {
@@ -85,7 +86,7 @@ export default function Modal() {
               Connect on LinkedIn →
             </a>
             {person.cv && (
-              <a className="btn ghost" href={person.cv} download>
+              <a className="btn ghost" href={asset(person.cv)} download>
                 Download CV
               </a>
             )}
@@ -98,6 +99,9 @@ export default function Modal() {
             >
               Fly to the end
             </button>
+            <a className="btn ghost" href={SUMMARY}>
+              One-page summary
+            </a>
           </div>
           <p className="mist contact-where">{person.location} · {person.linkedinShort}</p>
         </div>

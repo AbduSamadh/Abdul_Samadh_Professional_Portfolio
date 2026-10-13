@@ -33,7 +33,7 @@ export const who = {
     { k: 'Now', v: 'Manager of Lab Learning & Operations, Sunmarke School, Dubai' },
     { k: 'Taught and built', v: 'Kindergarten to university, offline and online' },
     { k: 'Worked with', v: 'The UAE, Saudi Arabia, Qatar, Oman, Singapore and India' },
-    { k: 'Education', v: 'B.Tech in Information Technology · PGDET, Asian College of Teachers' },
+    { k: 'Education', v: 'B.Tech in Information Technology' },
     { k: 'Certified', v: 'STEM.org Certified Master Trainer (2022)' },
     { k: 'Languages', v: 'Tamil, English, Malayalam, Hindi' },
   ],
@@ -263,21 +263,93 @@ export const briefs = {
   ],
 };
 
-export type Bay = { id: string; title: string; items: string[]; kind: 'plinth' | 'screen' | 'hover' };
+export type Bay = {
+  id: string;
+  title: string;
+  /** What I did with this kit, not just that I have it (from the CV and the builds). */
+  did: string;
+  items: string[];
+  kind: 'plinth' | 'screen' | 'hover';
+  /** Optional photo, e.g. '/assets/lab-robotics.jpg' in public/. Shown in the reading panel. */
+  photo?: string;
+  photoAlt?: string;
+};
 
 export const lab = {
-  kicker: 'Stack',
-  title: 'What I work in',
-  body: 'Hardware on the bench, code in the browser, frameworks on the wall.',
+  kicker: 'Lab',
+  title: 'Labs, set up and taught',
+  body: 'I install the kit, write the lessons and train the teachers who run them: robotics, AI and ICT labs handed over on time, and new kit in lessons within four weeks of arriving.',
   bays: [
-    { id: 'robotics', title: 'Robotics', kind: 'plinth', items: ['Unitree G1 EDU Ultimate C', 'Unitree Go2-W', 'Booster K1', 'Robosen K1', 'myBuddy 280', 'myController S570', 'uKit Advanced', 'VinciBot', 'Ozobot Ari', 'Magician Go', 'LEGO SPIKE Prime', 'Sphero BOLT+', 'fischertechnik', 'pi-top'] },
-    { id: 'ai', title: 'AI and machine learning', kind: 'screen', items: ['Teachable Machine', 'TensorFlow Lite', 'OpenCV', 'ROS 2'] },
-    { id: 'drones', title: 'Drones and aviation', kind: 'hover', items: ['CoDrone EDU', 'HighGreat Hula', 'Boeing flight simulator'] },
-    { id: 'xr', title: 'Extended reality', kind: 'plinth', items: ['Meta Quest 3S', 'Omni One', 'MergeCube'] },
-    { id: 'design', title: 'Design technology', kind: 'plinth', items: ['Bambu P1 Series', 'Bambu P2S', 'Infento Pro Kit 2'] },
-    { id: 'mobility', title: 'Mobility and motorsport', kind: 'plinth', items: ['F1 Race System Halo', 'EduKart', 'Automobile simulation models', 'Founder Edition bike'] },
-    { id: 'emerging', title: 'Emerging technology', kind: 'plinth', items: ['Gemini Mini', 'Epoc X EEG', 'Werkstation 10'] },
+    {
+      id: 'robotics',
+      title: 'Robotics',
+      did: 'Robotics labs installed, commissioned and handed over to teachers, with five or more age-differentiated robotics and STEAM manuals written each year.',
+      kind: 'plinth',
+      items: ['Unitree G1 EDU Ultimate C', 'Unitree Go2-W', 'Booster K1', 'Robosen K1', 'myBuddy 280', 'myController S570', 'uKit Advanced', 'VinciBot', 'Ozobot Ari', 'Magician Go', 'LEGO SPIKE Prime', 'Sphero BOLT+', 'fischertechnik', 'pi-top'],
+    },
+    {
+      id: 'ai',
+      title: 'AI and machine learning',
+      did: 'Teachable Machine and TensorFlow Lite models running on real robots, and AI literacy taught from kindergarten up.',
+      kind: 'screen',
+      items: ['Teachable Machine', 'TensorFlow Lite', 'OpenCV', 'ROS 2'],
+    },
+    {
+      id: 'drones',
+      title: 'Drones and aviation',
+      did: 'Drone lessons on the HighGreat Hula Python SDK, from first take-off to AprilTag recognition.',
+      kind: 'hover',
+      items: ['CoDrone EDU', 'HighGreat Hula', 'Boeing flight simulator'],
+    },
+    {
+      id: 'xr',
+      title: 'Extended reality',
+      did: 'Headsets, an omnidirectional treadmill and MergeCube, for STEAM lessons you can step inside.',
+      kind: 'plinth',
+      items: ['Meta Quest 3S', 'Omni One', 'MergeCube'],
+    },
+    {
+      id: 'design',
+      title: 'Lab setup and design technology',
+      did: 'Kit lists, installation, commissioning and teacher onboarding: the unglamorous half that decides whether a lab gets used. Proposals behind AED 100,000+ of STEAM lab setups and upgrades.',
+      kind: 'plinth',
+      items: ['Bambu P1 Series', 'Bambu P2S', 'Infento Pro Kit 2'],
+    },
+    {
+      id: 'mobility',
+      title: 'Mobility and motorsport',
+      did: 'Race systems, karts and simulators, so engineering comes off the page and onto a track.',
+      kind: 'plinth',
+      items: ['F1 Race System Halo', 'EduKart', 'Automobile simulation models', 'Founder Edition bike'],
+    },
+    {
+      id: 'emerging',
+      title: 'Emerging technology',
+      did: 'New kit evaluated and turned into lessons within four weeks of arriving, so schools stay ahead of what they buy.',
+      kind: 'plinth',
+      items: ['Gemini Mini', 'Epoc X EEG', 'Werkstation 10'],
+    },
   ] as Bay[],
+};
+
+/** Qualifications and the rest of the CV's side column. */
+export const credentials = {
+  education: [
+    { title: 'B.Tech in Information Technology', where: 'Kalaignar Karunanidhi Institute of Technology, Coimbatore' },
+  ],
+  certifications: [
+    { title: 'STEM.org Certified Master Trainer', when: '2022' },
+    { title: 'Data Analysis', where: 'Google' },
+    { title: 'Agile & Scrum Foundations', where: 'Udemy' },
+    { title: 'Six Sigma White Belt and Six Sigma Foundations', where: 'LinkedIn' },
+  ],
+  standards: ['ISTE', 'CSTA', 'NGSS', 'Common Core', 'CBSE', 'ICSE'],
+  languages: [
+    { name: 'Tamil', level: 'Native' },
+    { name: 'English', level: 'Fluent' },
+    { name: 'Malayalam', level: 'Intermediate' },
+    { name: 'Hindi', level: 'Intermediate' },
+  ],
 };
 
 export type Stat = { value: number; suffix?: string; label: string };

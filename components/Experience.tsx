@@ -5,6 +5,7 @@ import { journey, navigate } from '@/lib/journey';
 import { SCROLL_VH } from '@/lib/path';
 import { initTheme } from '@/lib/theme';
 import { detectProfile, type Profile } from '@/lib/device';
+import { SUMMARY } from '@/lib/asset';
 import ScrollSystem from './ScrollSystem';
 import Boot from './dom/Boot';
 import HUD from './dom/HUD';
@@ -75,6 +76,9 @@ export default function Experience() {
         }}
       >
         Skip to contact
+      </a>
+      <a className="skip" href={SUMMARY}>
+        Read the one-page summary instead
       </a>
       <div className="stage" aria-hidden="true">
         {env && <Scene key={env.key} mobile={env.mobile} reduced={env.reduced} tier={env.tier} />}
