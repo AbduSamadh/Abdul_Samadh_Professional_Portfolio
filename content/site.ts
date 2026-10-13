@@ -263,73 +263,24 @@ export const briefs = {
   ],
 };
 
-export type Bay = {
-  id: string;
-  title: string;
-  /** What I did with this kit, not just that I have it (from the CV and the builds). */
-  did: string;
-  items: string[];
-  kind: 'plinth' | 'screen' | 'hover';
-  /** Optional photo, e.g. '/assets/lab-robotics.jpg' in public/. Shown in the reading panel. */
-  photo?: string;
-  photoAlt?: string;
-};
+export type StackGroup = { id: string; title: string; items: string[]; /** set in code type */ code?: boolean };
 
+// The products, technologies and languages I work with (the original site's stack, plus the CV's).
 export const lab = {
-  kicker: 'Lab',
-  title: 'Labs, set up and taught',
-  body: 'I install the kit, write the lessons and train the teachers who run them: robotics, AI and ICT labs handed over on time, and new kit in lessons within four weeks of arriving.',
-  bays: [
-    {
-      id: 'robotics',
-      title: 'Robotics',
-      did: 'Robotics labs installed, commissioned and handed over to teachers, with five or more age-differentiated robotics and STEAM manuals written each year.',
-      kind: 'plinth',
-      items: ['Unitree G1 EDU Ultimate C', 'Unitree Go2-W', 'Booster K1', 'Robosen K1', 'myBuddy 280', 'myController S570', 'uKit Advanced', 'VinciBot', 'Ozobot Ari', 'Magician Go', 'LEGO SPIKE Prime', 'Sphero BOLT+', 'fischertechnik', 'pi-top'],
-    },
-    {
-      id: 'ai',
-      title: 'AI and machine learning',
-      did: 'Teachable Machine and TensorFlow Lite models running on real robots, and AI literacy taught from kindergarten up.',
-      kind: 'screen',
-      items: ['Teachable Machine', 'TensorFlow Lite', 'OpenCV', 'ROS 2'],
-    },
-    {
-      id: 'drones',
-      title: 'Drones and aviation',
-      did: 'Drone lessons on the HighGreat Hula Python SDK, from first take-off to AprilTag recognition.',
-      kind: 'hover',
-      items: ['CoDrone EDU', 'HighGreat Hula', 'Boeing flight simulator'],
-    },
-    {
-      id: 'xr',
-      title: 'Extended reality',
-      did: 'Headsets, an omnidirectional treadmill and MergeCube, for STEAM lessons you can step inside.',
-      kind: 'plinth',
-      items: ['Meta Quest 3S', 'Omni One', 'MergeCube'],
-    },
-    {
-      id: 'design',
-      title: 'Lab setup and design technology',
-      did: 'Kit lists, installation, commissioning and teacher onboarding: the unglamorous half that decides whether a lab gets used. Proposals behind AED 100,000+ of STEAM lab setups and upgrades.',
-      kind: 'plinth',
-      items: ['Bambu P1 Series', 'Bambu P2S', 'Infento Pro Kit 2'],
-    },
-    {
-      id: 'mobility',
-      title: 'Mobility and motorsport',
-      did: 'Race systems, karts and simulators, so engineering comes off the page and onto a track.',
-      kind: 'plinth',
-      items: ['F1 Race System Halo', 'EduKart', 'Automobile simulation models', 'Founder Edition bike'],
-    },
-    {
-      id: 'emerging',
-      title: 'Emerging technology',
-      did: 'New kit evaluated and turned into lessons within four weeks of arriving, so schools stay ahead of what they buy.',
-      kind: 'plinth',
-      items: ['Gemini Mini', 'Epoc X EEG', 'Werkstation 10'],
-    },
-  ] as Bay[],
+  kicker: 'Stack',
+  title: 'What I work with',
+  body: 'Hardware on the bench, code in the browser, frameworks on the wall.',
+  groups: [
+    { id: 'code', title: 'Programming languages', code: true, items: ['Python', 'JavaScript', 'C', 'C++', 'HTML', 'CSS'] },
+    { id: 'boards', title: 'Boards and electronics', items: ['Arduino', 'Raspberry Pi', 'pi-top'] },
+    { id: 'ai', title: 'AI and machine learning', items: ['Teachable Machine', 'TensorFlow Lite', 'OpenCV', 'ROS 2'] },
+    { id: 'robotics', title: 'Robotics', items: ['Unitree G1 EDU Ultimate C', 'Unitree Go2-W', 'Booster K1', 'Robosen K1', 'myBuddy 280', 'myController S570', 'uKit Advanced', 'VinciBot', 'Ozobot Ari', 'Magician Go', 'LEGO SPIKE Prime', 'LEGO Education Science', 'Sphero BOLT+', 'fischertechnik'] },
+    { id: 'drones', title: 'Drones and aviation', items: ['CoDrone EDU', 'HighGreat Hula', 'Boeing flight simulator'] },
+    { id: 'xr', title: 'Extended reality', items: ['Meta Quest 3S', 'Omni One', 'MergeCube'] },
+    { id: 'design', title: 'Design technology', items: ['Bambu P1 Series', 'Bambu P2S', 'Infento Pro Kit 2'] },
+    { id: 'mobility', title: 'Mobility and motorsport', items: ['F1 Race System Halo', 'EduKart', 'Automobile simulation models', 'Founder Edition bike'] },
+    { id: 'emerging', title: 'Emerging technology', items: ['Gemini Mini', 'Epoc X EEG', 'Werkstation 10'] },
+  ] as StackGroup[],
 };
 
 /** Qualifications and the rest of the CV's side column. */

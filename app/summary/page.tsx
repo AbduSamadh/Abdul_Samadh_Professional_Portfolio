@@ -140,17 +140,23 @@ export default function Summary() {
         <p className={s.inline}>{briefs.items.map((b) => b.title).join(' · ')}</p>
       </section>
 
-      <section aria-labelledby="labs">
-        <h2 id="labs">{lab.title}</h2>
-        <p>{lab.body}</p>
-        <ul className={s.list}>
-          {lab.bays.map((b) => (
-            <li key={b.id}>
-              <b>{b.title}.</b> {b.did}
-              <span className={s.kit}>{b.items.join(', ')}</span>
-            </li>
+      <section aria-labelledby="stack">
+        <h2 id="stack">{lab.title}</h2>
+        <p className={s.mist}>{lab.body}</p>
+        <dl className={s.stack}>
+          {lab.groups.map((g) => (
+            <div key={g.id}>
+              <dt>{g.title}</dt>
+              <dd>
+                {g.items.map((it) => (
+                  <span key={it} className={g.code ? s.code : undefined}>
+                    {it}
+                  </span>
+                ))}
+              </dd>
+            </div>
           ))}
-        </ul>
+        </dl>
       </section>
 
       {quotes.length > 0 && (

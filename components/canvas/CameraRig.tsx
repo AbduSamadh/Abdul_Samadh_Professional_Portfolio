@@ -82,8 +82,11 @@ export default function CameraRig({ mobile, reduced }: { mobile: boolean; reduce
     if (!reduced) cam.rotateZ(pr.roll);
 
     // On phones, shift the lens so the subject sits in the upper part of the frame, above the reading panel.
+    // LAB has no docked panels (its boards carry the text), so there the subject stays centred.
     if (journey.sheet) {
-      const want = journey.progress > P.tunnel ? (mobile ? 0.3 : 0.22) : 0;
+      const prog = journey.progress;
+      const panelFree = prog > P['ladder-top'] + 0.006 && prog < P['gate-lab'];
+      const want = prog > P.tunnel && !panelFree ? (mobile ? 0.3 : 0.22) : 0;
       const prev = pr.shift;
       pr.shift = damp(pr.shift, want, 2, dt);
       if (Math.abs(prev - pr.shift) > 1e-4 || !cam.view) {

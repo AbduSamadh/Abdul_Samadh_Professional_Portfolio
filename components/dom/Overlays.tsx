@@ -295,36 +295,19 @@ export default function Overlays() {
         <h2>{lab.title}</h2>
         <p className="mist">{lab.body}</p>
       </Ov>
-      {(
-        [
-          ['bay-robotics', ['robotics'], 'right'],
-          ['bay-ai', ['ai', 'drones'], 'left'],
-          ['bay-xr', ['xr'], 'right'],
-          ['bay-design', ['design'], 'left'],
-          ['bay-mobility', ['mobility'], 'right'],
-          ['bay-emerging', ['emerging'], 'left'],
-        ] as [string, string[], Side][]
-      ).map(([shot, ids, side]) => (
-        <Ov key={shot} from={P[shot] - W} to={P[shot] + W} side={side}>
-          <div className="panel">
-            {ids.map((id) => {
-              const bay = lab.bays.find((b) => b.id === id)!;
-              return (
-                <div key={id} className="bay">
-                  {bay.photo && <img className="bay-photo" src={asset(bay.photo)} alt={bay.photoAlt ?? bay.title} loading="lazy" />}
-                  <p className="kicker">{bay.title}</p>
-                  <p className="bay-did">{bay.did}</p>
-                  <ul className="hw" aria-label={`${bay.title} kit`}>
-                    {bay.items.map((it) => (
-                      <li key={it}>{it}</li>
-                    ))}
-                  </ul>
-                </div>
-              );
-            })}
+      {/* The stack is drawn on boards in the hall; this list is for screen readers and search. */}
+      <section className="sr-only" aria-label={lab.title}>
+        {lab.groups.map((g) => (
+          <div key={g.id}>
+            <h3>{g.title}</h3>
+            <ul>
+              {g.items.map((it) => (
+                <li key={it}>{it}</li>
+              ))}
+            </ul>
           </div>
-        </Ov>
-      ))}
+        ))}
+      </section>
 
       {/* SCALE */}
       <Ov from={P['gate-lab'] + 0.003} to={P['stat-0'] - 0.002} side="top" label={scale.title}>

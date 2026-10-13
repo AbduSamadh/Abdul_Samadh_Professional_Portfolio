@@ -44,7 +44,7 @@ const CMDS: Record<string, (arg: string) => string | void> = {
     '\n<i>cd build</i> to walk through them.',
   books: () => authoring.books.map((b) => `  ${b.n}  ${b.title}`).join('\n'),
   briefs: () => briefs.items.map((b) => `  ${b.n}  ${b.title}`).join('\n'),
-  stack: () => lab.bays.map((b) => `<b>${b.title}</b>\n  ${b.items.join(', ')}`).join('\n'),
+  stack: () => lab.groups.map((g) => `<b>${g.title}</b>\n  ${g.items.join(', ')}`).join('\n'),
   swarm: (arg) => {
     if (arg === 'random') {
       setSwarmRandom(true);

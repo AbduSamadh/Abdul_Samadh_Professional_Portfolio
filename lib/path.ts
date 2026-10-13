@@ -86,15 +86,7 @@ export const W = {
   },
   lab: {
     floor: -2.6,
-    bays: {
-      robotics: { side: -1, z: -588, len: 18 },
-      ai: { side: 1, z: -585, len: 8 },
-      drones: { side: 1, z: -598, len: 8 },
-      xr: { side: -1, z: -606, len: 7 },
-      design: { side: 1, z: -613, len: 7 },
-      mobility: { side: -1, z: -621, len: 9 },
-      emerging: { side: 1, z: -629, len: 7 },
-    } as Record<string, { side: number; z: number; len: number }>,
+    // the stack boards stand where the bay-* shots look (components/canvas/worlds/Lab.tsx)
     humanoid: [-3.8, -2.6, -642] as V3,
   },
   scale: {
