@@ -7,7 +7,7 @@ import '@fontsource/vt323/400.css';
 import './globals.css';
 
 const description =
-  'Abdul Samadh. Twelve years building outcomes-driven ICT, AI and STREAM curriculum for offline and online learning, across the UAE, GCC, Singapore and India.';
+  'Abdul Samadh. Eleven years building outcomes-driven ICT, AI and STREAM curriculum for offline and online learning, across the UAE, the wider GCC, Singapore and India.';
 
 // Social previews need absolute URLs. The share card is public/og.jpg (the black room and the
 // hero at 1200x630); re-render it if the hero changes.

@@ -354,7 +354,7 @@ function Portrait() {
   );
 }
 
-/** The career as a physical route: a line of light through five waypoints, oldest to newest. */
+/** The career as a physical route: a line of light through one waypoint per role, oldest to newest. */
 function Route({ mobile }: { mobile: boolean }) {
   const pts = useMemo(() => W.teach.route.map((p) => new THREE.Vector3(p[0] * lx(), p[1] - 1.9, p[2])), []);
   const curve = useMemo(() => {
@@ -379,6 +379,10 @@ function Route({ mobile }: { mobile: boolean }) {
   });
 
   const p = usePalette();
+  const feature = useMemo(() => {
+    const wp = W.teach.route[Math.max(0, route.findIndex((s) => s.feature))];
+    return [wp[0] * lx(), wp[1] + 1.3, wp[2] + 1] as V3;
+  }, []);
   return (
     <group>
       <mesh geometry={tube} material={M.glow} />
@@ -402,17 +406,20 @@ function Route({ mobile }: { mobile: boolean }) {
               <sphereGeometry args={[0.09 * big, 16, 16]} />
             </mesh>
             <Billboard position={[0, 0.62 * big, 0]}>
+              <Label position={[0, 0.56, 0]} size={0.15} tone="accent" letterSpacing={0.3}>
+                {s.years.toUpperCase()}
+              </Label>
               <Label position={[0, 0.3, 0]} size={0.15} tone="mist" letterSpacing={0.3}>
-                {(s.now ? 'NOW · ' : '') + s.country.toUpperCase()}
+                {s.country.toUpperCase()}
               </Label>
               <Label size={0.26} font="display" tone="ink" maxWidth={3.2} textAlign="center">
-                {s.org.split(',')[0]}
+                {s.label ?? s.org}
               </Label>
             </Billboard>
           </group>
         );
       })}
-      <pointLight position={[5.5, 1.5, -154]} intensity={p.dark ? 10 : 4} distance={10} color={p.accent} />
+      <pointLight position={feature} intensity={p.dark ? 10 : 4} distance={10} color={p.accent} />
     </group>
   );
 }

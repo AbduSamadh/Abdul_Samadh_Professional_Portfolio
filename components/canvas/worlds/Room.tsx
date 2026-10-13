@@ -147,7 +147,7 @@ function Laptop() {
     () => [
       ['abdul.os 12.0', 'dim'],
       [`${person.prompt} ./descend`, 'ink'],
-      ['loading twelve years of practice...', 'dim'],
+      ['loading eleven years of practice...', 'dim'],
       ['[ OK ] curriculum   [ OK ] competitions', 'ok'],
       ['[ OK ] software     [ OK ] lab', 'ok'],
       ['> entering', 'acc'],

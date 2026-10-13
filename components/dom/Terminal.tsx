@@ -3,16 +3,27 @@ import { useEffect, useRef, useState } from 'react';
 import { emit, navigate, on, setSwarmRandom } from '@/lib/journey';
 import { DESTINATIONS } from '@/lib/path';
 import { setTheme, cycleTheme, type ThemeName } from '@/lib/theme';
-import { authoring, briefs, builds, lab, person } from '@/content/site';
+import { authoring, briefs, builds, lab, person, route, who } from '@/content/site';
 
 const BOOT = '<b>abdul.os</b> 12.0\nType <i>help</i> for commands, <i>ls</i> for places, <i>exit</i> to close.';
 
 // Ported from the original site's terminal, plus `cd` to fly the camera.
 const CMDS: Record<string, (arg: string) => string | void> = {
   help: () =>
-    '<b>commands</b>\n  whoami      who you are talking to\n  practice    what I actually do\n  ls          places you can go\n  cd &lt;place&gt;  fly there\n  builds      software I wrote\n  books       authoring\n  briefs      custom projects\n  stack       tools of the trade\n  swarm       random | clean\n  theme       amber | phosphor | paper\n  phos        phosphor mode\n  contact     how to reach me\n  clear / exit',
+    '<b>commands</b>\n  whoami      who you are talking to\n  timeline    the route, with dates\n  practice    what I actually do\n  ls          places you can go\n  cd &lt;place&gt;  fly there\n  builds      software I wrote\n  books       authoring\n  briefs      custom projects\n  stack       tools of the trade\n  swarm       random | clean\n  theme       amber | phosphor | paper\n  phos        phosphor mode\n  contact     how to reach me\n  clear / exit',
   whoami: () =>
-    `${person.name}\n${person.nowShort}.\nTwelve years of ICT, AI and STREAM education, KG to Grade 13,\nacross the UAE, GCC, Singapore and India.\nCurriculum, competitions, and the software that teaches them.`,
+    `${person.name}\n${person.nowShort}.\nEleven years of ICT, AI and STREAM education, KG to Grade 13,\nacross the UAE, the wider GCC, Singapore and India.\nCurriculum, competitions, and the software that teaches them.`,
+  timeline: () =>
+    route
+      .slice()
+      .reverse()
+      .map((s) => `<b>${s.period.padEnd(20)}</b>${s.role ?? ''}\n${' '.repeat(20)}<i>${s.org}</i>`)
+      .join('\n') +
+    '\n' +
+    who.facts
+      .filter((f) => f.k === 'Education' || f.k === 'Certified')
+      .map((f) => `${f.k.toLowerCase().padEnd(20)}${f.v}`)
+      .join('\n'),
   practice: () =>
     'Outcomes-driven curriculum, built twice:\n  offline  kits, labs, printed workbooks, bench procedures\n  online   modular courses, video scripts, in-browser grading\nSubjects: ICT, AI literacy, STREAM.\nAlways with the teacher training attached.',
   ls: () => 'studio/  teach/  write/  build/  solve/  lab/  scale/  contact/  .secrets',

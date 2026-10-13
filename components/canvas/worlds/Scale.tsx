@@ -18,7 +18,7 @@ export default function Scale() {
   return (
     <Region near={GATES.lab.z} far={GATES.scale.z}>
       {scale.stats.map((s, i) => (
-        <Monument key={s.label} i={i} value={s.value} label={s.label} />
+        <Monument key={s.label} i={i} value={s.value} suffix={s.suffix ?? ''} label={s.label} />
       ))}
       <Globe />
       <Monolith />
@@ -30,7 +30,10 @@ export default function Scale() {
 const geoCache = new Map<string, { geo: THREE.BufferGeometry; edges: THREE.BufferGeometry; width: number }>();
 
 /** A statistic as a monument. It counts up as you arrive. */
-function Monument({ i, value, label }: { i: number; value: number; label: string }) {
+function Monument({ i, value, suffix, label }: { i: number; value: number; suffix: string; label: string }) {
+  // Longer figures are set smaller so every monument is about the same width.
+  const chars = String(value).length + suffix.length;
+  const size = chars <= 2 ? 6 : chars === 3 ? 5.2 : chars === 4 ? 4.4 : 3.8;
   const font = useFont(FONTS.typeface);
   const at = useMemo(() => {
     const p = W.scale.stats[i];
@@ -43,7 +46,7 @@ function Monument({ i, value, label }: { i: number; value: number; label: string
   const get = (s: string) => {
     let g = geoCache.get(s);
     if (!g) {
-      const geo = new TextGeometry(s, { font, size: 6, height: 1.4, curveSegments: 6, bevelEnabled: false });
+      const geo = new TextGeometry(s, { font, size, height: 1.4, curveSegments: 6, bevelEnabled: false });
       geo.computeBoundingBox();
       const width = geo.boundingBox!.max.x - geo.boundingBox!.min.x;
       g = { geo, edges: new THREE.EdgesGeometry(geo, 24), width };
@@ -62,27 +65,40 @@ function Monument({ i, value, label }: { i: number; value: number; label: string
     }
   });
 
-  const g = get(String(shown));
+  // the "+" or "K+" arrives with the final figure, so far-off monuments just read 0
+  const g = get(shown === value ? `${shown}${suffix}` : String(shown));
+  // Phones see the monuments from closer in, so the figure is built smaller and the caption
+  // keeps a readable size.
+  const phone = lx() < 0.75;
+  const k = phone ? 0.32 : 1;
   return (
     <group position={at} rotation={[0, yaw, 0]}>
-      <group position={[-g.width / 2, -2, -1.4]}>
-        <mesh geometry={g.geo} material={M.solid} />
-        <lineSegments geometry={g.edges} material={M.edge} />
+      <group scale={k}>
+        <group position={[-g.width / 2, -2, -1.4]}>
+          <mesh geometry={g.geo} material={M.solid} />
+          <lineSegments geometry={g.edges} material={M.edge} />
+        </group>
       </group>
-      <Label position={[0, -2.75, 0]} size={0.36} font="display" tone="ink">
+      <Label position={[0, -2.6 * k, 0]} size={phone ? 0.22 : 0.34} font="display" tone="ink" maxWidth={phone ? 4.1 : 7.5} textAlign="center" anchorY="top" lineHeight={1.25}>
         {label}
       </Label>
-      <Label position={[0, 4.9, 0]} size={0.16} tone="accent" letterSpacing={0.35}>
+      <Label position={[0, 4.9 * k, 0]} size={0.16} tone="accent" letterSpacing={0.35}>
         {`0${i + 1} / 06`}
       </Label>
     </group>
   );
 }
 
+// The route (India → Singapore → UAE), then the GCC countries worked with from the UAE.
 const PLACES: { name: string; lat: number; lon: number }[] = [
   { name: 'INDIA', lat: 20.6, lon: 78.9 },
   { name: 'SINGAPORE', lat: 1.35, lon: 103.8 },
   { name: 'UAE', lat: 24.4, lon: 54.4 },
+];
+const GCC: { name: string; lat: number; lon: number }[] = [
+  { name: 'SAUDI ARABIA', lat: 24.7, lon: 46.7 },
+  { name: 'QATAR', lat: 25.3, lon: 51.5 },
+  { name: 'OMAN', lat: 23.6, lon: 58.4 },
 ];
 
 const WOB = { q: new THREE.Quaternion(), axis: new THREE.Vector3(0, 18, 13).normalize() };
@@ -109,18 +125,16 @@ function Globe() {
     return g;
   }, []);
   const arcs = useMemo(() => {
-    const route = [PLACES[0], PLACES[1], PLACES[2]];
-    return route.slice(0, -1).map((a, i) => {
-      const b = route[i + 1];
+    const arc = (a: { lat: number; lon: number }, b: { lat: number; lon: number }, lift: number) => {
       const pa = ll(a.lat, a.lon, R), pb = ll(b.lat, b.lon, R);
       const pts: THREE.Vector3[] = [];
       for (let k = 0; k <= 32; k++) {
         const t = k / 32;
-        const p = pa.clone().lerp(pb, t).normalize().multiplyScalar(R + Math.sin(t * Math.PI) * 1.4);
-        pts.push(p);
+        pts.push(pa.clone().lerp(pb, t).normalize().multiplyScalar(R + Math.sin(t * Math.PI) * lift));
       }
       return new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 48, 0.03, 6, false);
-    });
+    };
+    return [arc(PLACES[0], PLACES[1], 1.4), arc(PLACES[1], PLACES[2], 1.4), ...GCC.map((g) => arc(PLACES[2], g, 0.35))];
   }, []);
   // Turn the globe so the Gulf and India face the camera as it looks down.
   const base = useMemo(() => {
@@ -145,6 +159,16 @@ function Globe() {
         {arcs.map((g, i) => (
           <mesh key={i} geometry={g} material={M.glow} />
         ))}
+        {GCC.map((p) => (
+          <mesh key={p.name} position={ll(p.lat, p.lon, R)} material={M.glow}>
+            <sphereGeometry args={[0.09, 10, 10]} />
+          </mesh>
+        ))}
+        <Billboard position={ll(15, 50, R + 0.9)}>
+          <Label size={0.22} tone="mist" letterSpacing={0.25}>
+            KSA · QATAR · OMAN
+          </Label>
+        </Billboard>
         {PLACES.map((p) => (
           <group key={p.name} position={ll(p.lat, p.lon, R)}>
             <mesh material={M.glow}>

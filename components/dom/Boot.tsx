@@ -4,7 +4,7 @@ import { journey } from '@/lib/journey';
 
 const LINES: [string, string][] = [
   ['> abdul.samadh', ''],
-  ['loading twelve years of practice...', 'dim'],
+  ['loading eleven years of practice...', 'dim'],
   ['[ OK ] curriculum', 'ok'],
   ['[ OK ] competitions', 'ok'],
   ['[ OK ] software', 'ok'],

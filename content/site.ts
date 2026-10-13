@@ -1,5 +1,6 @@
 // All copy on the site lives in this folder. Edit here; the 3D code reads from it.
-// Source: reference/original-index.html. Do not add facts that are not true.
+// Sources: reference/original-index.html and Abdul's CV (roles, dates and numbers; the CV
+// predates Sunmarke). Do not add facts that are not true.
 
 export const person = {
   name: 'Abdul Samadh',
@@ -11,7 +12,8 @@ export const person = {
   nowTiny: 'Sunmarke School, Dubai',
   oneLine:
     'I build outcomes-driven ICT, AI and STREAM curriculum, for classrooms and for screens, then build the software that teaches it when the software does not exist.',
-  span: 'Twelve years, kindergarten to university, across the UAE, the wider GCC, Singapore and India.',
+  // Teaching and training since April 2015.
+  span: 'Eleven years, kindergarten to university, across the UAE, the wider GCC, Singapore and India.',
   /** The hero line: the whole pitch in one breath. `oneLine` above is the long version. */
   pitch: 'I build STREAM and AI curriculum, then the software that teaches it.',
   linkedin: 'https://www.linkedin.com/in/abdul-samadh-stream-ai-specialist/',
@@ -24,14 +26,16 @@ export const person = {
 
 export const who = {
   kicker: 'Who I am',
-  title: 'Twelve years of making the lessons work',
+  title: 'Eleven years of making the lessons work',
   body:
     'I started in classrooms and never really left them. What changed is the size of the thing I get handed: a worksheet, then a unit, then a whole-school scheme, then a competition season, then the software the lesson needed and nobody had built.',
   facts: [
     { k: 'Now', v: 'Manager of Lab Learning & Operations, Sunmarke School, Dubai' },
-    { k: 'Taught and built', v: 'Kindergarten to university, in four languages' },
-    { k: 'Worked', v: 'UAE, GCC, Singapore and India' },
-    { k: 'Writes', v: 'ICT, AI literacy and STREAM, offline and online' },
+    { k: 'Taught and built', v: 'Kindergarten to university, offline and online' },
+    { k: 'Worked with', v: 'The UAE, Saudi Arabia, Qatar, Oman, Singapore and India' },
+    { k: 'Education', v: 'B.Tech in Information Technology · PGDET, Asian College of Teachers' },
+    { k: 'Certified', v: 'STEM.org Certified Master Trainer (2022)' },
+    { k: 'Languages', v: 'Tamil, English, Malayalam, Hindi' },
   ],
   fragments: ['a worksheet', 'a unit', 'a whole-school scheme', 'a competition season', 'the software'],
 };
@@ -55,15 +59,25 @@ export const abstract = {
     'ICT',
     'AI literacy',
     'STREAM',
+    'ISTE · CSTA · NGSS · Common Core',
   ],
 };
 
 export type Stop = {
   id: string;
   country: string;
+  city?: string;
   org: string;
+  /** Short name for the 3D waypoint, when the org name is long. */
+  label?: string;
   role?: string;
+  /** As on the CV. */
+  period: string;
+  /** Short form for the 3D waypoint. */
+  years: string;
   body: string;
+  /** What came out of it, from the CV. */
+  wins?: string[];
   now?: boolean;
   feature?: boolean;
 };
@@ -71,36 +85,86 @@ export type Stop = {
 // Oldest to newest, so the camera travels toward the present.
 export const route: Stop[] = [
   {
+    id: 'trainer',
+    country: 'India',
+    city: 'Coimbatore',
+    org: 'Focus Academy for Career Enhancement, then Smart Training Resources India',
+    label: 'Trainer',
+    role: 'Associate Trainer, then Senior Trainer',
+    period: 'Apr 2015 – Apr 2018',
+    years: '2015–2018',
+    body: 'Where it started: training rooms. Career development, interpersonal and technical skills, then nationwide training on technical and employment skills and using technology at work.',
+  },
+  {
     id: 'chrysalis',
     country: 'India',
-    org: 'Chrysalis',
-    body: 'Curriculum writing and classroom delivery at scale, in the publishing model where the material has to work in a school you will never visit.',
+    city: 'Coimbatore',
+    org: 'EZ Vidya (Chrysalis)',
+    label: 'EZ Vidya',
+    role: 'Subject Lead, ICT & STEM',
+    period: 'Apr 2018 – Dec 2020',
+    years: '2018–2020',
+    body: 'Curriculum writing at scale, in the publishing model where the material has to work in a school you will never visit.',
+    wins: [
+      'ICT content for the CBSE and ICSE curricula, with STEM woven into English and Science',
+      'Moved hands-on ICT teaching onto virtual platforms when schools went remote',
+    ],
   },
   {
     id: 'alphagen',
     country: 'Singapore',
-    org: 'AlphaGen',
-    body: 'Curriculum and programme work across year groups and schools.',
+    org: 'Alphagen Learning',
+    label: 'Alphagen',
+    role: 'Manager, Curriculum & Training (STEM & ICT)',
+    period: 'Jan 2021 – Jun 2024',
+    years: '2021–2024',
+    body: 'A fully accredited STEM curriculum for online coding and technology courses, aligned with international standards.',
+    wins: [
+      'Led a team of 10+ curriculum developers and researchers',
+      'Launched 5 new online courses: enrolment up 30% in the first year',
+    ],
   },
   {
     id: 'coding-school',
     country: 'United Arab Emirates',
+    city: 'Sharjah',
     org: 'Coding School',
+    role: 'ICT & Robotics Curriculum Manager',
+    period: 'Jun 2024 – Jun 2025',
+    years: '2024–2025',
     body: 'Computing taught as a craft, with the progression from first block to first program built deliberately rather than left to chance.',
+    wins: [
+      'ICT and STEM curriculum frameworks, and the STEM labs to teach them',
+      'Online and in-person ICT courses for ages 6 to 16, aligned with ISTE and CSTA',
+      'Student engagement up 25% with AI-driven personalised learning tools',
+    ],
   },
   {
     id: 'atlab',
     country: 'United Arab Emirates',
+    city: 'Dubai',
     org: 'ATLAB',
     role: 'STREAM and AI Training Specialist',
+    period: 'From Jul 2025',
+    years: 'From 2025',
     body: 'Curriculum development, educator training and programme delivery across the UAE and the wider GCC.',
+    wins: [
+      'STEAM, robotics and AI training for 600+ teachers and students across the GCC',
+      'Robotics and STEM competitions for 1,000+ students',
+      'Proposals behind AED 100,000+ of STEAM lab setups and upgrades in the UAE, Saudi Arabia, Qatar and Oman',
+      'Robotics, AI and ICT labs installed and handed over to teachers, every one on time',
+    ],
     feature: true,
   },
   {
     id: 'sunmarke',
     country: 'United Arab Emirates',
+    city: 'Dubai',
     org: 'Sunmarke School, Fortes Education',
+    label: 'Sunmarke School',
     role: 'Manager of Lab Learning & Operations',
+    period: 'Now',
+    years: 'Now',
     body: 'Running and building the curriculum for the labs and the learning that happens inside them.',
     now: true,
   },
@@ -109,7 +173,7 @@ export const route: Stop[] = [
 export const authoring = {
   kicker: 'Authoring',
   title: 'Books, across curricula and grade levels',
-  body: 'Written for whole-school adoption, sequenced so each grade stands alone and still builds on the one before.',
+  body: 'Written for whole-school adoption, from CBSE and ICSE content to manuals aligned with ISTE and CSTA, sequenced so each grade stands alone and still builds on the one before.',
   books: [
     { n: '01', title: 'Scope and sequence', body: 'Grade-by-grade progression maps, written so a coordinator sees the whole arc on one page and can defend it in a meeting.' },
     { n: '02', title: 'Student books', body: 'Graded activities, worked examples and projects pitched at the reading level of the grade they are for, not the one above.' },
@@ -216,24 +280,27 @@ export const lab = {
   ] as Bay[],
 };
 
+export type Stat = { value: number; suffix?: string; label: string };
+
 export const scale = {
   kicker: 'Scale',
   title: 'By the numbers',
+  // From the CV. The fourth stands over the globe, so it is the places.
   stats: [
-    { value: 15, label: 'Grade levels, KG to 13' },
-    { value: 12, label: 'Years in education' },
-    { value: 6, label: 'Competition programmes run' },
-    { value: 4, label: 'Countries reached' },
-    { value: 4, label: 'Languages taught in' },
-    { value: 3, label: 'Publishers authored for' },
-  ],
+    { value: 11, suffix: '+', label: 'Years teaching, training and building curriculum, since 2015' },
+    { value: 10, suffix: 'K+', label: 'Students reached by ICT and STEM platforms in UAE and Indian schools' },
+    { value: 1000, suffix: '+', label: 'Students in robotics and STEM competitions I ran' },
+    { value: 6, label: 'Countries: UAE, Saudi Arabia, Qatar, Oman, Singapore, India' },
+    { value: 600, suffix: '+', label: 'Teachers and students trained across the GCC' },
+    { value: 100, suffix: 'K+', label: 'AED of STEAM lab setups and upgrades my proposals shaped' },
+  ] as Stat[],
   fll: {
     title: 'FIRST LEGO League UAE',
     body: 'Core team member, Head Referee and Judging Panel.',
     roles: ['Core team member', 'Head Referee', 'Judging Panel'],
     judged: 'Judged prestigious STEM and robotics competitions in the UAE and online across the globe.',
   },
-  places: ['UAE', 'GCC', 'Singapore', 'India'],
+  places: ['UAE', 'Saudi Arabia', 'Qatar', 'Oman', 'Singapore', 'India'],
 };
 
 export const contact = {

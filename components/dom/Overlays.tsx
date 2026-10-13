@@ -142,7 +142,7 @@ export default function Overlays() {
           </button>
         </div>
       </Ov>
-      <Ov from={P['teach-abstract'] - 0.005} to={P['teach-abstract'] + 0.007} side="right" label="Abstract">
+      <Ov from={P['teach-abstract'] - 0.005} to={P['teach-abstract'] + 0.005} side="right" label="Abstract">
         <div className="panel">
           <p className="kicker">{abstract.kicker}</p>
           <p>
@@ -166,20 +166,35 @@ export default function Overlays() {
       {route.map((s, i) => {
         const id = `route-${i}`;
         const from = P[id] - W;
-        const to = s.feature ? P['route-3b'] + W : P[id] + W;
+        const to = s.feature ? P['route-feature'] + W : P[id] + W;
         const side: Side = i % 2 === 0 ? 'right' : 'left';
         return (
           <Ov key={s.id} from={from} to={to} side={side} label={s.org}>
             <div className={`panel ${s.feature ? 'feature' : ''}`}>
               {i === 0 && <p className="kicker">The route so far</p>}
               <div className="stop-meta">
-                <span className={s.now ? 'now' : ''}>{s.now ? '● Now · ' : ''}{s.country}</span>
+                <span className={s.now ? 'now' : ''}>
+                  {s.now ? '● Now · ' : ''}
+                  {s.country}
+                  {s.city ? ` · ${s.city}` : ''}
+                </span>
                 <span>
                   {String(i + 1).padStart(2, '0')} / {String(route.length).padStart(2, '0')}
                 </span>
               </div>
-              <h3>{s.role ? `${s.role}, ${s.org}` : s.org}</h3>
+              <h3>{s.role ?? s.org}</h3>
+              <p className="stop-org">
+                {s.role && <b>{s.org}</b>}
+                {!s.now && <span>{s.period}</span>}
+              </p>
               <p>{s.body}</p>
+              {s.wins && (
+                <ul className="wins">
+                  {s.wins.map((w) => (
+                    <li key={w}>{w}</li>
+                  ))}
+                </ul>
+              )}
             </div>
           </Ov>
         );
@@ -317,7 +332,8 @@ export default function Overlays() {
         <ul>
           {scale.stats.map((s) => (
             <li key={s.label}>
-              {s.value} {s.label}
+              {s.value}
+              {s.suffix} {s.label}
             </li>
           ))}
           <li>{scale.places.join(', ')}</li>

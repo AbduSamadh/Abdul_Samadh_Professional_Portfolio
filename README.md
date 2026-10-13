@@ -9,12 +9,12 @@ camera flies through:
 | World | What it shows |
 | --- | --- |
 | Room + portal | Boot screen, the black room, the laptop opening and booting `./descend`, a fall through a tunnel of glyphs |
-| TEACH | Who, abstract, the "size of the thing I get handed" fragments, the portrait decoding from ASCII, the career route (India → Singapore → UAE → now) with the FIRST LEGO League moment |
+| TEACH | Who, abstract, the "size of the thing I get handed" fragments, the portrait decoding from ASCII, the career route with dates and outcomes (Coimbatore 2015 → Singapore → Sharjah → Dubai → now) |
 | WRITE | An infinite library ordered KG–13, six authored book types that open as you pass, the scope-and-sequence arc overhead |
 | BUILD | Three method frames, and each build as a working mini-world: Swarm (1,000 drones, with a collision-free / random toggle), ASCII City (traffic, signals, weather), Bench, the LEGO pen plotter drawing the portrait, landing detection, the Hula lesson wall |
 | SOLVE | The twelve briefs as a constellation, a flyby of AI literacy and a climb up the robotics ladder |
 | LAB | The full hardware stack as a gallery of lit plinths, with the humanoid at the end |
-| SCALE | The numbers as monuments, a globe with the route, the FIRST LEGO League monolith |
+| SCALE | The numbers from the CV as monuments, a globe with the route and the GCC, the FIRST LEGO League monolith, the LinkedIn recommendations |
 | Finale | Everything converges and the drones spell the name. Contact call to action |
 
 The terminal from the original site is still there (press <kbd>`</kbd> or the `>_` button). `cd build`, `cd lab` and so on fly the camera there.
