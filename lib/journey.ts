@@ -23,6 +23,8 @@ export const journey = {
   booted: false,
   /** The scroll system has initialised once (later re-fits resume in place). */
   started: false,
+  /** Every world's shaders are compiled and textures uploaded. */
+  sceneReady: false,
   /** Pointer in normalised device coordinates, for subtle parallax. */
   pointer: { x: 0, y: 0 },
 };

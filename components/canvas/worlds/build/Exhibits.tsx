@@ -49,8 +49,10 @@ export function Bench() {
   const modeRef = useRef(0);
   const vals = useRef([0, 0, 0]);
 
+  const atV = useMemo(() => new THREE.Vector3(...at), [at]);
+  const tmp = useMemo(() => ({ m: new THREE.Matrix4(), p: new THREE.Vector3(), q: new THREE.Quaternion(), s: new THREE.Vector3() }), []);
   useFrame(({ clock, camera }, dt) => {
-    if (camera.position.distanceTo(new THREE.Vector3(...at)) > 60) return;
+    if (camera.position.distanceTo(atV) > 60) return;
     const t = clock.elapsedTime % 10;
     const m = t < 5 ? 0 : 1;
     if (m !== modeRef.current) {
@@ -71,7 +73,7 @@ export function Bench() {
       }
     }
     const target = m === 0 ? [0.82 + Math.sin(clock.elapsedTime * 9) * 0.06, (clock.elapsedTime * 0.6) % 1, 0.72] : [0.96, (clock.elapsedTime * 0.15) % 1, 0.42 + Math.sin(clock.elapsedTime * 3) * 0.04];
-    vals.current = vals.current.map((v, i) => THREE.MathUtils.damp(v, target[i], 5, dt));
+    for (let i = 0; i < 3; i++) vals.current[i] = THREE.MathUtils.damp(vals.current[i], target[i], 5, dt);
     bars.current.forEach((b, i) => {
       if (!b) return;
       b.scale.y = Math.max(0.02, vals.current[i]);
@@ -79,13 +81,14 @@ export function Bench() {
     });
     const s = sparks.current;
     if (s) {
-      const mm = new THREE.Matrix4();
       for (let i = 0; i < s.count; i++) {
         const life = (clock.elapsedTime * 3 + i / s.count) % 1;
         const on = m === 1 ? 1 : 0;
         const x = (r?.position.x ?? 0) + 0.75 - life * 0.6;
-        mm.compose(new THREE.Vector3(x, 0.05 + life * 0.35 * Math.sin(i), (Math.sin(i * 7.3) * 0.3) * life), new THREE.Quaternion(), new THREE.Vector3().setScalar(on * (1 - life) * 0.05));
-        s.setMatrixAt(i, mm);
+        tmp.p.set(x, 0.05 + life * 0.35 * Math.sin(i), Math.sin(i * 7.3) * 0.3 * life);
+        tmp.s.setScalar(on * (1 - life) * 0.05);
+        tmp.m.compose(tmp.p, tmp.q, tmp.s);
+        s.setMatrixAt(i, tmp.m);
       }
       s.instanceMatrix.needsUpdate = true;
     }
@@ -173,8 +176,9 @@ export function Plotter() {
   };
   useEffect(clear, [paper]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const atV = useMemo(() => new THREE.Vector3(...at), [at]);
   useFrame(({ camera }, dt) => {
-    if (camera.position.distanceTo(new THREE.Vector3(...at)) > 45) return;
+    if (camera.position.distanceTo(atV) > 45) return;
     const s = st.current;
     const { list, cols, rows } = strokes;
     if (s.i >= list.length) {

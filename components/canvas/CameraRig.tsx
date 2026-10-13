@@ -3,22 +3,25 @@ import { useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import { journey } from '@/lib/journey';
-import { P, fitShots } from '@/lib/path';
+import { P, curveTiming, fitShots } from '@/lib/path';
 import { damp } from './parts/common';
 
 /**
  * The camera is the main character. Shots from lib/path.ts become two Catmull-Rom curves
- * (position and look target). The GSAP master timeline writes `journey.u`; this samples the curves.
+ * (position and look target), each timed from the eased scroll progress by `curveTiming`, so
+ * the camera's speed and turning are continuous everywhere.
  * In reduced-motion mode the camera snaps between resting shots behind a short crossfade.
  */
 export default function CameraRig({ mobile, reduced }: { mobile: boolean; reduced: boolean }) {
   const list = useMemo(() => fitShots(journey.lx, journey.fovBoost, journey.sheet), []);
   const n = list.length - 1;
-  const { pos, look, fovs, stops } = useMemo(() => {
+  const { pos, look, posAt, lookAt, fovs, stops } = useMemo(() => {
     const v = (a: number[]) => new THREE.Vector3(a[0], a[1], a[2]);
     return {
       pos: new THREE.CatmullRomCurve3(list.map((s) => v(s.pos)), false, 'centripetal'),
       look: new THREE.CatmullRomCurve3(list.map((s) => v(s.look)), false, 'centripetal'),
+      posAt: curveTiming(list, list.map((s) => s.pos)),
+      lookAt: curveTiming(list, list.map((s) => s.look)),
       fovs: list.map((s) => s.fov ?? (mobile ? 64 : 50)),
       stops: list.map((s, i) => (s.stop ? i : -1)).filter((i) => i >= 0),
     };
@@ -30,7 +33,8 @@ export default function CameraRig({ mobile, reduced }: { mobile: boolean; reduce
 
   useFrame((state, dt) => {
     const cam = state.camera as THREE.PerspectiveCamera;
-    let u = journey.u;
+    let u = posAt(journey.progress);
+    let ul = lookAt(journey.progress);
 
     if (reduced) {
       // Snap to the nearest resting shot, hidden behind a quick fade.
@@ -49,11 +53,11 @@ export default function CameraRig({ mobile, reduced }: { mobile: boolean; reduce
           }, 60);
         }, 230);
       }
-      u = journey.still / n;
+      u = ul = journey.still / n;
     }
 
     pos.getPoint(u, p);
-    look.getPoint(u, l);
+    look.getPoint(ul, l);
 
     const f = u * n;
     const i = Math.min(n - 1, Math.floor(f));

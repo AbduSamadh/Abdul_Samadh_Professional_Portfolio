@@ -15,7 +15,6 @@ export type Shot = {
   pos: V3;
   look: V3;
   fov?: number;
-  ease?: string;
   /** A resting point: used as a "still" in reduced-motion mode. */
   stop?: boolean;
   /** Keep x as authored on mobile (e.g. flying down a street). */
@@ -146,8 +145,8 @@ const DESKTOP: Shot[] = [
   S('room', 0, [0, 1.8, 7.6], [0, 1.0, 0], { fov: 40, stop: true }),
   S('room-drift', 0.03, [-1.5, 1.6, 4.6], [0, 1.05, 0], { fov: 40 }),
   S('room-desk', 0.058, [-0.35, 1.36, 1.5], [0, 1.16, -0.2], { fov: 42, stop: true }),
-  S('screen', 0.082, [0, 1.222, 0.02], [0, 1.22, -0.6], { fov: 46, ease: 'power2.in' }),
-  S('tunnel', 0.1, [0, 0.8, -14], [0, 0.2, -40], { fov: 72, ease: 'power1.out' }),
+  S('screen', 0.082, [0, 1.222, 0.02], [0, 1.22, -0.6], { fov: 46 }),
+  S('tunnel', 0.1, [0, 0.8, -14], [0, 0.2, -40], { fov: 72 }),
   S('tunnel-exit', 0.125, [0, 0, -52], [0, 0, -80], { fov: 54 }),
   // TEACH
   S('teach-room', 0.15, [1.5, 1.4, -66], [0, -4, -82], { fov: 50, stop: true }),
@@ -160,9 +159,9 @@ const DESKTOP: Shot[] = [
   S('route-3', 0.256, [1.2, 0.6, -149.5], [5.5, 0.4, -156], { stop: true }),
   S('route-3b', 0.264, [1.5, 0.6, -151.5], [5.5, 0.4, -156.5]),
   S('route-4', 0.274, [-0.4, 0.4, -159], [-4.2, 0.5, -164.5], { stop: true }),
-  S('gate-teach', 0.285, [0, 0, -175], [0, 0, -200], { ease: 'power1.in' }),
+  S('gate-teach', 0.285, [0, 0, -175], [0, 0, -200]),
   // WRITE
-  S('write-library', 0.298, [0, 0.8, -188], [0, 3.4, -205], { ease: 'power1.out', stop: true }),
+  S('write-library', 0.298, [0, 0.8, -188], [0, 3.4, -205], { stop: true }),
   S('book-0', 0.31, [0.8, 0.4, -193], [-1.6, 0.3, -203], { stop: true }),
   S('book-1', 0.322, [-0.8, 0.4, -202], [1.6, 0.3, -212], { stop: true }),
   S('book-2', 0.334, [0.8, 0.4, -211], [-1.6, 0.3, -221], { stop: true }),
@@ -170,9 +169,9 @@ const DESKTOP: Shot[] = [
   S('book-4', 0.358, [0.8, 0.4, -229], [-1.6, 0.3, -239], { stop: true }),
   S('book-5', 0.37, [-0.8, 0.4, -238], [1.6, 0.3, -248], { stop: true }),
   S('write-out', 0.382, [0, 0.3, -252], [0, 0, -265]),
-  S('gate-write', 0.392, [0, 0, -265], [0, 0, -290], { ease: 'power1.in' }),
+  S('gate-write', 0.392, [0, 0, -265], [0, 0, -290]),
   // BUILD
-  S('frame-1', 0.402, [-1.5, 0.6, -276], [0, 2, -295], { ease: 'power1.out', stop: true }),
+  S('frame-1', 0.402, [-1.5, 0.6, -276], [0, 2, -295], { stop: true }),
   S('swarm', 0.418, [0, 2, -284], [0, 8.5, -310], { fov: 56, stop: true }),
   S('swarm-hold', 0.44, [0, 2.6, -288], [0, 9, -310], { fov: 56 }),
   S('city', 0.458, [-1, -1.2, -314], [2, -8, -331], { fov: 54, stop: true }),
@@ -184,18 +183,18 @@ const DESKTOP: Shot[] = [
   S('hula', 0.55, [3.2, 1.3, -409], [6.8, 1.6, -415.5], { stop: true }),
   S('frame-3', 0.567, [0, 5, -428], [0, 4, -445], { stop: true }),
   S('build-out', 0.58, [0, 1.2, -441], [0, 0, -455]),
-  S('gate-build', 0.59, [0, 0, -455], [0, 0, -480], { ease: 'power1.in' }),
+  S('gate-build', 0.59, [0, 0, -455], [0, 0, -480]),
   // SOLVE
-  S('briefs-0', 0.605, [0, 0, -458], [0, 0, -474], { ease: 'power1.out', stop: true }),
+  S('briefs-0', 0.605, [0, 0, -458], [0, 0, -474], { stop: true }),
   S('briefs-1', 0.625, [0.3, 0.2, -470.6], [0, 0, -486.6], { stop: true }),
   S('briefs-2', 0.645, [-0.3, 0.2, -483.2], [0, 0, -499.2], { stop: true }),
   S('briefs-3', 0.665, [0.3, 0.2, -495.8], [0, 0, -511.8], { stop: true }),
   S('ai-web', 0.68, [-0.5, 1, -518], [-4.5, 2, -528.5], { stop: true }),
   S('ladder', 0.692, [1.4, 0, -530], [3.4, 6, -543], { stop: true }),
   S('ladder-top', 0.705, [1.4, 8, -543], [0.8, 9.5, -556]),
-  S('gate-solve', 0.715, [0, 9, -560], [0, 8, -585], { ease: 'power1.in' }),
+  S('gate-solve', 0.715, [0, 9, -560], [0, 8, -585]),
   // LAB
-  S('lab-in', 0.728, [0, 2.2, -572], [0, 0.4, -590], { ease: 'power1.out', stop: true }),
+  S('lab-in', 0.728, [0, 2.2, -572], [0, 0.4, -590], { stop: true }),
   S('bay-robotics', 0.74, [0.5, 0.6, -580], [-6, -0.6, -588], { stop: true }),
   S('bay-ai', 0.752, [-0.5, 0.6, -588], [6, 0.4, -592], { stop: true }),
   S('bay-xr', 0.764, [0.5, 0.6, -600], [-6, -0.6, -607], { stop: true }),
@@ -203,19 +202,19 @@ const DESKTOP: Shot[] = [
   S('bay-mobility', 0.788, [0.5, 0.6, -616], [-6, -0.6, -622], { stop: true }),
   S('bay-emerging', 0.8, [-0.5, 0.6, -624], [6, -0.6, -630], { stop: true }),
   S('humanoid', 0.812, [-0.6, 0.3, -636.5], [-3.8, -1.0, -642], { stop: true }),
-  S('gate-lab', 0.824, [0, 0, -660], [0, 0, -685], { ease: 'power1.in' }),
+  S('gate-lab', 0.824, [0, 0, -660], [0, 0, -685]),
   // SCALE
-  S('stat-0', 0.836, [1, 0.5, -670], [-6, 1.6, -679.5], { ease: 'power1.out', stop: true }),
+  S('stat-0', 0.836, [1, 0.5, -670], [-6, 1.6, -679.5], { stop: true }),
   S('stat-1', 0.848, [-1, 0.5, -682], [6, -0.4, -691.5], { stop: true }),
   S('stat-2', 0.858, [1, 0.6, -694], [-6, 2.4, -703.5], { stop: true }),
-  S('stat-3', 0.87, [0, 3.2, -703], [2, -8.5, -716], { stop: true }),
-  S('stat-4', 0.882, [1, 0.5, -718], [-6, -0.4, -727.5], { stop: true }),
-  S('stat-5', 0.892, [-1, 0.5, -730], [6, 1.4, -739.5], { stop: true }),
-  S('fll', 0.895, [1.4, 0.9, -744], [-3.8, 2.2, -753], { stop: true }),
+  S('stat-3', 0.868, [0, 3.2, -703], [2, -8.5, -716], { stop: true }),
+  S('stat-4', 0.877, [1, 0.5, -718], [-6, -0.4, -727.5], { stop: true }),
+  S('stat-5', 0.885, [-1, 0.5, -730], [6, 1.4, -739.5], { stop: true }),
+  S('fll', 0.896, [1.4, 0.9, -744], [-3.8, 2.2, -753], { stop: true }),
   ...voiceShots(),
-  S('gate-scale', 0.948, [0, 0, -770], [0, 0, -800], { ease: 'power1.in' }),
+  S('gate-scale', 0.948, [0, 0, -770], [0, 0, -800]),
   // FINALE
-  S('converge', 0.964, [0, 1.4, -788], [0, 4, -832], { fov: 50, ease: 'power1.out' }),
+  S('converge', 0.964, [0, 1.4, -788], [0, 4, -832], { fov: 50 }),
   S('name', 0.98, [0, 2.2, -800], [0, 4.6, -832], { fov: 50, stop: true }),
   S('cta', 1, [0, 0.4, -783], [0, 0.6, -832], { fov: 54, stop: true }),
 ];
@@ -263,3 +262,90 @@ export const DESTINATIONS: Record<string, number> = {
 
 /** Total scroll length of the journey, in viewport heights. */
 export const SCROLL_VH = 3600;
+
+/**
+ * A smooth monotone map through the points (x[i], y[i]) — Fritsch–Carlson cubic. It never
+ * overshoots or reverses, and its slope changes continuously. Where `linger[i]` is set the slope
+ * is reduced, so motion eases past that point instead of rushing through it.
+ */
+export function monotoneMap(x: number[], y: number[], linger: boolean[] = []) {
+  const n = x.length - 1;
+  const d: number[] = [];
+  for (let i = 0; i < n; i++) d[i] = (y[i + 1] - y[i]) / Math.max(1e-6, x[i + 1] - x[i]);
+  const m: number[] = new Array(n + 1);
+  m[0] = d[0];
+  m[n] = d[n - 1];
+  for (let i = 1; i < n; i++) m[i] = (d[i - 1] + d[i]) / 2;
+  for (let i = 0; i < n; i++) {
+    if (d[i] <= 0) {
+      m[i] = m[i + 1] = 0;
+      continue;
+    }
+    const a = m[i] / d[i];
+    const b = m[i + 1] / d[i];
+    const s = a * a + b * b;
+    if (s > 9) {
+      const t = 3 / Math.sqrt(s);
+      m[i] = t * a * d[i];
+      m[i + 1] = t * b * d[i];
+    }
+  }
+  // smaller slopes keep the curve monotone
+  for (let i = 1; i < n; i++) if (linger[i]) m[i] *= 0.45;
+  return (p: number) => {
+    if (p <= x[0]) return y[0];
+    if (p >= x[n]) return y[n];
+    let lo = 0;
+    let hi = n;
+    while (hi - lo > 1) {
+      const mid = (lo + hi) >> 1;
+      if (x[mid] <= p) lo = mid;
+      else hi = mid;
+    }
+    const h = x[lo + 1] - x[lo];
+    const t = (p - x[lo]) / h;
+    const t2 = t * t;
+    const t3 = t2 * t;
+    return (2 * t3 - 3 * t2 + 1) * y[lo] + (t3 - 2 * t2 + t) * h * m[lo] + (-2 * t3 + 3 * t2) * y[lo + 1] + (t3 - t2) * h * m[lo + 1];
+  };
+}
+
+/**
+ * Timing for one of the camera's curves (position or look target): scroll progress → the
+ * curve's `getPoint` parameter, so that
+ *  - the camera is exactly on each shot at that shot's progress,
+ *  - its speed changes continuously everywhere, forward or back, with no lurch at the shots.
+ *
+ * three.js's centripetal Catmull-Rom is smooth in its own knot spacing (square root of the
+ * chord length between shots) but not in the per-segment index `getPoint` takes, so the camera
+ * used to change speed abruptly at every shot. We time the motion in the knot spacing instead
+ * and convert back to the index only at the end.
+ */
+export function curveTiming(list: Shot[], pts: V3[]) {
+  const n = pts.length - 1;
+  const knots = [0];
+  for (let i = 0; i < n; i++) {
+    const [a, b] = [pts[i], pts[i + 1]];
+    let dt = Math.pow((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2 + (a[2] - b[2]) ** 2, 0.25);
+    if (dt < 1e-4) dt = 1;
+    knots.push(knots[i] + dt);
+  }
+  const total = knots[n];
+  const along = monotoneMap(
+    list.map((s) => s.p),
+    knots.map((k) => k / total),
+    list.map((s) => !!s.stop),
+  );
+  return (p: number) => {
+    const v = along(p) * total;
+    let lo = 0;
+    let hi = n;
+    while (hi - lo > 1) {
+      const mid = (lo + hi) >> 1;
+      if (knots[mid] <= v) lo = mid;
+      else hi = mid;
+    }
+    const local = Math.min(1, Math.max(0, (v - knots[lo]) / (knots[lo + 1] - knots[lo])));
+    return (lo + local) / n;
+  };
+}

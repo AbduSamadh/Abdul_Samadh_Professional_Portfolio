@@ -58,7 +58,15 @@ export default function Boot() {
       i++;
       setShown(i);
       if (i < LINES.length) timers.push(window.setTimeout(next, i === 1 ? 320 : 170));
-      else timers.push(window.setTimeout(() => finish(false), 420));
+      else {
+        // Let the boot lines cover the one-time warm-up of the 3D world (at most a few seconds).
+        const started = performance.now();
+        const wait = () => {
+          if (journey.sceneReady || performance.now() - started > 6000) finish(false);
+          else timers.push(window.setTimeout(wait, 120));
+        };
+        timers.push(window.setTimeout(wait, 420));
+      }
     };
     timers.push(window.setTimeout(next, 200));
     const skip = () => finish(false);

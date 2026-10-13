@@ -35,6 +35,8 @@ export default function Finale({ mobile }: { mobile: boolean }) {
   );
 }
 
+const UP = new THREE.Vector3(0, 1, 0);
+
 /** Glyphs and pixels from every world, converging into a slow orbit around the name. */
 function Debris({ mobile }: { mobile: boolean }) {
   const count = mobile ? 260 : 700;
@@ -65,7 +67,7 @@ function Debris({ mobile }: { mobile: boolean }) {
       tmp.p.set(data.from[i * 3], data.from[i * 3 + 1], data.from[i * 3 + 2]);
       const k = ss(0, 1, Math.min(1, f * 1.2 - (i % 10) * 0.02));
       tmp.p.lerp(tmp.t, k);
-      tmp.q.setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.atan2(-tmp.p.x, 20) * 0.5);
+      tmp.q.setFromAxisAngle(UP, Math.atan2(-tmp.p.x, 20) * 0.5);
       tmp.m.compose(tmp.p.set(tmp.p.x + cx, tmp.p.y + cy, tmp.p.z + cz), tmp.q, tmp.s);
       data.mesh.setMatrixAt(i, tmp.m);
     }

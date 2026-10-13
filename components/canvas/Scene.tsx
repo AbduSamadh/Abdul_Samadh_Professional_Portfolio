@@ -5,6 +5,7 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { PerformanceMonitor } from '@react-three/drei';
 import { Bloom, EffectComposer, Noise, Vignette } from '@react-three/postprocessing';
 import { usePalette } from '@/lib/theme';
+import { journey } from '@/lib/journey';
 import { GATES } from '@/lib/path';
 import '@/lib/materials';
 import CameraRig from './CameraRig';
@@ -21,11 +22,11 @@ import Finale from './worlds/Finale';
 
 /** One canvas, one continuous world. */
 type Tier = 'low' | 'mid' | 'high';
-// Pixel density per quality tier: starting value and ceiling. PerformanceMonitor moves between them.
+// Pixel density per quality tier: starting value, floor, ceiling. PerformanceMonitor only steps down.
 const DPR: Record<Tier, [number, number, number]> = { low: [1, 0.75, 1.5], mid: [1.25, 0.9, 1.75], high: [1.6, 1, 2] };
 
 export default function Scene({ mobile, reduced, tier }: { mobile: boolean; reduced: boolean; tier: Tier }) {
-  const [start, min, max] = DPR[tier];
+  const [start, min] = DPR[tier];
   const [dpr, setDpr] = useState(Math.min(start, window.devicePixelRatio || 1));
   return (
     <Canvas
@@ -37,11 +38,9 @@ export default function Scene({ mobile, reduced, tier }: { mobile: boolean; redu
         gl.toneMappingExposure = 1.05;
       }}
     >
-      <PerformanceMonitor
-        onDecline={() => setDpr((d) => Math.max(min, d - 0.25))}
-        onIncline={() => setDpr((d) => Math.min(max, window.devicePixelRatio || 1, d + 0.15))}
-        flipflops={3}
-      />
+      {/* Step resolution down if the device struggles, but never back up mid-journey:
+          every change resizes the canvas, which is a visible hitch while scrolling. */}
+      <PerformanceMonitor onDecline={() => setDpr((d) => Math.max(min, d - 0.25))} flipflops={2} />
       <ThemeSync far={tier === 'low' ? 92 : 120} />
       <CameraRig mobile={mobile} reduced={reduced} />
       <Lights />
@@ -86,11 +85,51 @@ function Gates() {
   );
 }
 
-/** Tell the boot screen the world is ready to be seen. */
+/**
+ * Once everything has loaded, compile every material and upload every texture in the whole
+ * journey up front (while the boot screen is still showing). Otherwise each world compiles its
+ * shaders the first time it comes into view, which is a visible stall mid-scroll.
+ */
 function Ready() {
+  const { gl, scene, camera } = useThree();
   useEffect(() => {
-    window.dispatchEvent(new Event('as:scene-ready'));
-  }, []);
+    const id = requestAnimationFrame(() => {
+      const hidden: THREE.Object3D[] = [];
+      scene.traverse((o) => {
+        if (!o.visible) {
+          hidden.push(o);
+          o.visible = true;
+        }
+      });
+      try {
+        gl.compile(scene, camera);
+        const seen = new Set<THREE.Texture>();
+        scene.traverse((o) => {
+          const mats = (o as THREE.Mesh).material;
+          if (!mats) return;
+          (Array.isArray(mats) ? mats : [mats]).forEach((m) => {
+            for (const v of Object.values(m as unknown as Record<string, unknown>)) {
+              if (v instanceof THREE.Texture && !seen.has(v)) {
+                seen.add(v);
+                gl.initTexture(v);
+              }
+            }
+            const u = (m as THREE.ShaderMaterial).uniforms;
+            if (u) for (const k in u) if (u[k].value instanceof THREE.Texture && !seen.has(u[k].value)) {
+              seen.add(u[k].value);
+              gl.initTexture(u[k].value);
+            }
+          });
+        });
+      } catch {
+        // compiling ahead is an optimisation; rendering still works without it
+      }
+      hidden.forEach((o) => (o.visible = false));
+      journey.sceneReady = true;
+      window.dispatchEvent(new Event('as:scene-ready'));
+    });
+    return () => cancelAnimationFrame(id);
+  }, [gl, scene, camera]);
   return null;
 }
 

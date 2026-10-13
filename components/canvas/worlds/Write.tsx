@@ -341,7 +341,9 @@ function Pixels({ mobile }: { mobile: boolean }) {
   const start = useMemo(() => new THREE.Vector3(W.write.books[5][0] * lx(), W.write.books[5][1], W.write.books[5][2]), []);
   const end = useMemo(() => new THREE.Vector3(0, GATES.write.y, GATES.write.z - 20), []);
   const tmp = useMemo(() => ({ m: new THREE.Matrix4(), p: new THREE.Vector3(), q: new THREE.Quaternion(), s: new THREE.Vector3() }), []);
-  useFrame(({ clock }) => {
+  useFrame(({ clock, camera }) => {
+    // only while WRITE is close; nothing to animate from elsewhere in the journey
+    if (camera.position.z > GATES.teach.z + 40 || camera.position.z < GATES.write.z - 60) return;
     const t = clock.elapsedTime;
     for (let i = 0; i < count; i++) {
       const [a, jx, jy, sp] = seeds[i];

@@ -23,6 +23,9 @@ export default function Solve({ mobile }: { mobile: boolean }) {
   );
 }
 
+// Scratch objects reused every frame (no allocation in the render loop).
+const T = { m: new THREE.Matrix4(), q: new THREE.Quaternion(), v: new THREE.Vector3(), up: new THREE.Vector3(0, 1, 0) };
+
 const CW = 3.6;
 const CH = 2.2;
 
@@ -93,6 +96,7 @@ function Constellation() {
 
   useFrame(({ camera, clock }, dt) => {
     // Which group of three is the camera looking at?
+    if (camera.position.z > GATES.build.z + 60 || camera.position.z < GATES.solve.z - 40) return;
     const prog = journey.progress;
     let active = 0;
     for (let g = 0; g < 4; g++) if (prog >= P[`briefs-${g}`] - 0.009) active = g;
@@ -104,10 +108,9 @@ function Constellation() {
       grp.scale.setScalar(s);
       mats[i].opacity = damp(mats[i].opacity, on ? 1 : 0.35, 4, dt);
       // turn gently toward the camera
-      const look = new THREE.Vector3(camera.position.x, camera.position.y, camera.position.z);
-      const m = new THREE.Matrix4().lookAt(look, grp.position, new THREE.Vector3(0, 1, 0));
-      const q = new THREE.Quaternion().setFromRotationMatrix(m);
-      grp.quaternion.slerp(q, 1 - Math.exp(-dt * (on ? 4 : 1.5)));
+      T.m.lookAt(camera.position, grp.position, T.up);
+      T.q.setFromRotationMatrix(T.m);
+      grp.quaternion.slerp(T.q, 1 - Math.exp(-dt * (on ? 4 : 1.5)));
       grp.position.y = cards[i].pos[1] + Math.sin(clock.elapsedTime * 0.5 + i) * 0.12;
     });
     if (root.current) root.current.rotation.z = Math.sin(clock.elapsedTime * 0.05) * 0.05;
@@ -202,16 +205,15 @@ function AiWeb() {
 
   const pulses = useRef<THREE.InstancedMesh>(null);
   const seeds = useMemo(() => Array.from({ length: 30 }, () => Math.random()), []);
-  useFrame(({ clock }) => {
+  useFrame(({ clock, camera }) => {
     const m = pulses.current;
-    if (!m) return;
-    const mm = new THREE.Matrix4();
+    if (!m || Math.abs(camera.position.z - at[2]) > 70) return;
     seeds.forEach((s, k) => {
       const t = (clock.elapsedTime * 0.45 + s) % 1;
       const e = edges[(k * 7 + Math.floor(clock.elapsedTime * 0.45 + s) * 13) % edges.length];
-      const p = nodes[e[0]].clone().lerp(nodes[e[1]], t);
-      mm.makeTranslation(p.x, p.y, p.z);
-      m.setMatrixAt(k, mm);
+      T.v.copy(nodes[e[0]]).lerp(nodes[e[1]], t);
+      T.m.makeTranslation(T.v.x, T.v.y, T.v.z);
+      m.setMatrixAt(k, T.m);
     });
     m.instanceMatrix.needsUpdate = true;
   });

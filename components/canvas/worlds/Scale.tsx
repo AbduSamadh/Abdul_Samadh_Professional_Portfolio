@@ -86,6 +86,8 @@ const PLACES: { name: string; lat: number; lon: number }[] = [
   { name: 'UAE', lat: 24.4, lon: 54.4 },
 ];
 
+const WOB = { q: new THREE.Quaternion(), axis: new THREE.Vector3(0, 18, 13).normalize() };
+
 function ll(lat: number, lon: number, r: number) {
   const a = THREE.MathUtils.degToRad(lat);
   const b = THREE.MathUtils.degToRad(lon);
@@ -130,8 +132,8 @@ function Globe() {
   const ref = useRef<THREE.Group>(null);
   useFrame(({ clock }) => {
     if (!ref.current) return;
-    const wob = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 18, 13).normalize(), Math.sin(clock.elapsedTime * 0.12) * 0.35);
-    ref.current.quaternion.copy(wob).multiply(base);
+    WOB.q.setFromAxisAngle(WOB.axis, Math.sin(clock.elapsedTime * 0.12) * 0.35);
+    ref.current.quaternion.copy(WOB.q).multiply(base);
   });
   const [x, y, z] = W.scale.globe;
   return (

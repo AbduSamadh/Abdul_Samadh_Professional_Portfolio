@@ -4,13 +4,17 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
 import { journey, navigate, setNavigate } from '@/lib/journey';
-import { fitShots } from '@/lib/path';
 
 /**
- * The master scroll timeline. Lenis smooths the wheel/touch input; ScrollTrigger maps scroll
- * position onto one GSAP timeline whose total duration is 1.0. Each tween in it moves the camera
- * curve parameter `journey.u` from one shot to the next with that segment's ease, so pacing and
- * weight are authored in one place (lib/path.ts).
+ * Scroll → journey, in three stages, the same on every device:
+ *
+ * 1. Input. Lenis smooths the mouse wheel and trackpad on desktop. Touch screens keep the
+ *    browser's own momentum scrolling, which is already smooth and feels native.
+ * 2. Progress. ScrollTrigger turns the scroll position into a raw 0..1 target, and a single
+ *    frame-rate-independent spring (below) eases `journey.progress` toward it. Everything — the
+ *    camera, the reading panels, the HUD — reads that one value, so they always move together.
+ * 3. Camera. CameraRig times its path from that progress (lib/path.ts `curveTiming`) so its
+ *    speed changes continuously whether you scroll forward or back.
  */
 export default function ScrollSystem({ mobile, reduced, layoutKey }: { mobile: boolean; reduced: boolean; layoutKey: string }) {
   useEffect(() => {
@@ -24,59 +28,66 @@ export default function ScrollSystem({ mobile, reduced, layoutKey }: { mobile: b
     if (!journey.started) window.scrollTo(0, 0);
     journey.started = true;
 
-    const lenis = reduced
-      ? null
-      : new Lenis({ lerp: mobile ? 0.12 : 0.085, wheelMultiplier: 0.9, touchMultiplier: 1, smoothWheel: true });
+    // Desktop wheels and trackpads get Lenis; touch keeps native momentum.
+    const lenis =
+      reduced || coarse
+        ? null
+        : new Lenis({ lerp: 0.1, wheelMultiplier: 0.85, smoothWheel: true, syncTouch: false });
     const raf = (time: number) => lenis?.raf(time * 1000);
     if (lenis) {
       lenis.on('scroll', ScrollTrigger.update);
       gsap.ticker.add(raf);
-      gsap.ticker.lagSmoothing(0);
       if (!journey.booted) lenis.stop();
     }
+    gsap.ticker.lagSmoothing(0);
+    // Hold the page still under the boot screen on touch, too.
+    const lockTouch = (e: TouchEvent) => !journey.booted && e.preventDefault();
+    window.addEventListener('touchmove', lockTouch, { passive: false });
     const onBooted = () => lenis?.start();
     window.addEventListener('as:booted', onBooted);
 
-    const list = fitShots(journey.lx, journey.fovBoost, journey.sheet);
-    const n = list.length - 1;
-    journey.u = 0;
-    const tl = gsap.timeline({
-      defaults: { ease: 'power1.inOut' },
-      scrollTrigger: {
-        trigger: '#journey',
-        start: 'top top',
-        end: 'bottom bottom',
-        scrub: reduced ? true : coarse ? 0.6 : 1.25,
-        invalidateOnRefresh: true,
-      },
-      onUpdate: () => {
-        journey.progress = tl.time();
+    let target = resumeAt;
+    journey.progress = resumeAt;
+    const st = ScrollTrigger.create({
+      trigger: '#journey',
+      start: 'top top',
+      end: 'bottom bottom',
+      onUpdate: (self) => {
+        target = self.progress;
       },
     });
-    for (let i = 1; i <= n; i++) {
-      const a = list[i - 1];
-      const b = list[i];
-      tl.fromTo(
-        journey,
-        { u: (i - 1) / n },
-        { u: i / n, duration: b.p - a.p, ease: b.ease ?? 'power1.inOut', immediateRender: false },
-        a.p,
-      );
-    }
+
+    // The one spring. Higher = tighter; touch already carries momentum, so it follows a little closer.
+    const lambda = coarse ? 7 : 6;
+    const tick = (_time: number, deltaMs: number) => {
+      const dt = Math.min(deltaMs / 1000, 1 / 20);
+      let p = journey.progress;
+      if (reduced) p = target;
+      else {
+        p += (target - p) * (1 - Math.exp(-lambda * dt));
+        if (Math.abs(target - p) < 1e-6) p = target;
+      }
+      journey.progress = p;
+    };
+    gsap.ticker.add(tick);
 
     setNavigate((p, immediate) => {
       const max = document.documentElement.scrollHeight - window.innerHeight;
-      const target = Math.max(0, Math.min(1, p)) * max;
+      const to = Math.max(0, Math.min(1, p)) * max;
+      if (immediate) {
+        target = Math.max(0, Math.min(1, p));
+        journey.progress = target;
+      }
       if (lenis) {
-        const dist = Math.abs(target - window.scrollY) / window.innerHeight;
-        lenis.scrollTo(target, {
+        const dist = Math.abs(to - window.scrollY) / window.innerHeight;
+        lenis.scrollTo(to, {
           immediate: !!immediate,
           duration: Math.min(6, Math.max(1.4, dist * 0.06)),
           easing: (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2),
           force: true,
         });
       } else {
-        window.scrollTo({ top: target, behavior: 'auto' });
+        window.scrollTo({ top: to, behavior: immediate || reduced ? 'auto' : 'smooth' });
       }
     });
 
@@ -86,13 +97,14 @@ export default function ScrollSystem({ mobile, reduced, layoutKey }: { mobile: b
       window.scrollTo(0, p * max);
       lenis?.resize();
       lenis?.scrollTo(p * max, { immediate: true, force: true });
+      target = p;
+      journey.progress = p;
       ScrollTrigger.update();
     };
     if (resumeAt > 0) {
       requestAnimationFrame(() => {
         ScrollTrigger.refresh();
         holdPlace(resumeAt);
-        tl.progress(resumeAt);
       });
     }
 
@@ -113,8 +125,9 @@ export default function ScrollSystem({ mobile, reduced, layoutKey }: { mobile: b
     return () => {
       window.removeEventListener('resize', onResize);
       window.removeEventListener('as:booted', onBooted);
-      tl.scrollTrigger?.kill();
-      tl.kill();
+      window.removeEventListener('touchmove', lockTouch);
+      gsap.ticker.remove(tick);
+      st.kill();
       if (lenis) {
         gsap.ticker.remove(raf);
         lenis.destroy();

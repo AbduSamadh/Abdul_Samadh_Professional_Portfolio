@@ -54,7 +54,8 @@ All copy lives in `content/`, taken from the original site (`reference/original-
 `lib/path.ts` is the single source of truth for the camera:
 
 - `DESKTOP` is the list of shots. `p` is when (0–1 of the scroll), `pos` / `look` are where.
-  The GSAP master timeline tweens between shots with each shot's `ease`
+  The camera moves through the shots on one smooth curve (`curveTiming`): its speed changes
+  continuously, and it slows a little at shots marked `stop` so you can read what's there
 - `W` holds the world anchors that the scene components are laid out against
 - `GATES` are the giant words and which letter the camera flies through
 - `SCROLL_VH` is the total scroll length
@@ -89,7 +90,7 @@ Placeholders are built so these can drop in without layout changes:
 app/                 Next.js entry, global styles and theme tokens
 components/
   Experience.tsx     the root: canvas, overlays, HUD, terminal, boot
-  ScrollSystem.tsx   Lenis + GSAP ScrollTrigger master timeline
+  ScrollSystem.tsx   scroll input (Lenis on desktop, native on touch) → one eased progress value
   canvas/            the WebGL world (Scene, CameraRig, worlds/, parts/)
   dom/               HTML layers: overlays, HUD, terminal, modal, boot
 content/             all the words
