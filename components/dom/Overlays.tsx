@@ -386,21 +386,32 @@ function BuildPanel({ i, from, to, side, children }: { i: number; from: number; 
           {builds.kicker} · {String(i + 1).padStart(2, '0')} / 06
         </p>
         <h3>{b.name}</h3>
+        {b.tagline && <p className="tagline">{b.tagline}</p>}
         <p>{b.body}</p>
+        {b.classroom && <p className="mist">{b.classroom}</p>}
         <ul className="tags">
           {b.tags.map((t) => (
             <li key={t}>{t}</li>
           ))}
         </ul>
         {children}
-        {b.live && (
+        {(b.live || b.code) && (
           <div className="btns">
-            <button className="btn" onClick={() => emit('modal', { type: 'live', title: b.name, url: b.live! })}>
-              {b.liveLabel} →
-            </button>
-            <a className="btn ghost" href={b.live} target="_blank" rel="noopener noreferrer">
-              New tab ↗
-            </a>
+            {b.live && (
+              <>
+                <button className="btn" onClick={() => emit('modal', { type: 'live', title: b.name, url: b.live! })}>
+                  {b.liveLabel} →
+                </button>
+                <a className="btn ghost" href={b.live} target="_blank" rel="noopener noreferrer">
+                  New tab ↗
+                </a>
+              </>
+            )}
+            {b.code && (
+              <a className="btn ghost" href={b.code} target="_blank" rel="noopener noreferrer">
+                Code ↗
+              </a>
+            )}
           </div>
         )}
       </div>

@@ -39,7 +39,7 @@ const CMDS: Record<string, (arg: string) => string | void> = {
   builds: () =>
     '<b>live</b>\n' +
     builds.items
-      .map((b) => `  ${b.id.padEnd(11)} ${b.name}${b.live ? '  [live]' : ''}`)
+      .map((b) => `  ${b.id.padEnd(11)} ${b.name}${b.live ? `  <a href="${b.live}" target="_blank" rel="noopener noreferrer">[live]</a>` : ''}${b.code ? `  <a href="${b.code}" target="_blank" rel="noopener noreferrer">[code]</a>` : ''}`)
       .join('\n') +
     '\n<i>cd build</i> to walk through them.',
   books: () => authoring.books.map((b) => `  ${b.n}  ${b.title}`).join('\n'),

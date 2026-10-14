@@ -472,6 +472,11 @@ button {
 .hl {
   color: var(--accent);
 }
+.ov p.tagline {
+  color: var(--accent);
+  font-size: 15px;
+  margin-top: -4px;
+}
 .facts {
   display: grid;
   gap: 10px;

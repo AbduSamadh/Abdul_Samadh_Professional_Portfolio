@@ -111,13 +111,22 @@ export default function Summary() {
           {builds.items.map((b) => (
             <li key={b.id}>
               <h3>{b.name}</h3>
+              {b.tagline && <p className={s.tagline}>{b.tagline}</p>}
               <p>{b.body}</p>
+              {b.classroom && <p className={s.mist}>{b.classroom}</p>}
               <p className={s.tags}>{b.tags.join(' · ')}</p>
-              {b.live && (
-                <a href={b.live} target="_blank" rel="noopener noreferrer">
-                  {b.liveLabel} ↗
-                </a>
-              )}
+              <p className={s.links}>
+                {b.live && (
+                  <a href={b.live} target="_blank" rel="noopener noreferrer">
+                    {b.liveLabel} ↗
+                  </a>
+                )}
+                {b.code && (
+                  <a href={b.code} target="_blank" rel="noopener noreferrer">
+                    Code ↗
+                  </a>
+                )}
+              </p>
             </li>
           ))}
         </ul>

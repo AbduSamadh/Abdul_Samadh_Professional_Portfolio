@@ -188,10 +188,16 @@ export const authoring = {
 export type Build = {
   id: string;
   name: string;
+  /** One line under the name. */
+  tagline?: string;
   body: string;
+  /** How it is used in a classroom. */
+  classroom?: string;
   tags: string[];
   live?: string;
   liveLabel?: string;
+  /** Source repository. */
+  code?: string;
 };
 
 export const builds = {
@@ -217,9 +223,14 @@ export const builds = {
     },
     {
       id: 'bench',
-      name: 'Bench',
-      body: 'A build-a-robot sandbox where bad builds visibly misbehave. Wire one wheel backwards and it spins on the spot. Hang the battery off the nose and it scrapes. Live motor current, encoder ticks and battery sag, then a report card telling you what to change.',
-      tags: ['3D FROM SCRATCH', 'HONEST PHYSICS'],
+      name: 'Bench: Robotics Simulator',
+      tagline: 'Build a robot, then find out what you got wrong.',
+      body: 'A robot sandbox that runs in the browser. Pick wheels, gears, sensors, a gripper and a battery, then race it through mazes, hill climbs, drag strips and delivery courses on tile, carpet and wet floors. Weight, grip and gearing all change the result, so every build teaches something.',
+      classroom: 'Built for classrooms: guided lessons, live telemetry, CSV export of every run, and a teacher mode that re-runs student builds to check their claimed times.',
+      tags: ['Robotics', 'Physics simulation', 'STEM education', 'JavaScript', 'Single-file app'],
+      live: 'https://abdusamadh.github.io/Bench_Robotics_Simulator/',
+      liveLabel: 'Try the simulator',
+      code: 'https://github.com/AbduSamadh/Bench_Robotics_Simulator',
     },
     {
       id: 'plotter',

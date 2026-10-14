@@ -262,6 +262,14 @@
   padding: 4px 18px 16px;
   background: var(--panel);
 }
+.tagline {
+  color: var(--accent);
+}
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+}
 .tags {
   font-family: var(--mono);
   font-size: 11px;
