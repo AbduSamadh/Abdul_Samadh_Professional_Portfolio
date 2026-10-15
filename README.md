@@ -8,7 +8,7 @@ camera flies through:
 
 | World | What it shows |
 | --- | --- |
-| Room + portal | Boot screen, the black room, the laptop opening and booting `./descend`, a fall through a tunnel of glyphs |
+| Room + portal | Boot screen, the name typed out with a blinking cursor (again on every return to the landing view), the black room, the laptop opening and booting `./descend`, a fall through a tunnel of glyphs |
 | TEACH | Who, abstract, the "size of the thing I get handed" fragments, the portrait decoding from ASCII, the career route with dates and outcomes (Coimbatore 2015 → Singapore → Sharjah → Dubai → now) |
 | WRITE | An infinite library ordered KG–13, six authored book types that open as you pass, the scope-and-sequence arc overhead |
 | BUILD | Three method frames, and each build as a working mini-world: Swarm (1,000 drones, with a collision-free / random toggle), ASCII City (traffic, signals, weather), Bench, the LEGO pen plotter drawing the portrait, landing detection, the Hula lesson wall |

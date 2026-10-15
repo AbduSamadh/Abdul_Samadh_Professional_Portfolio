@@ -802,6 +802,42 @@ button {
 :root[data-sheet='1'] .hero .when-short {
   display: inline;
 }
+/* the typed name: letters still to come keep their place, invisibly; words never split */
+.typed-word {
+  white-space: nowrap;
+}
+.typed-rest {
+  visibility: hidden;
+}
+/* a block cursor that takes no room, so it never pushes the name onto another line */
+.caret {
+  display: inline-block;
+  position: relative;
+  width: 0;
+}
+.caret::after {
+  content: '';
+  position: absolute;
+  left: 0.08em;
+  bottom: -0.02em;
+  width: 0.46em;
+  height: 0.76em;
+  background: var(--accent);
+  box-shadow: 0 0 18px rgba(var(--glowc), 0.75);
+}
+.caret.idle::after {
+  animation: caret-blink 1.06s steps(1, end) infinite;
+}
+@keyframes caret-blink {
+  50% {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .caret.idle::after {
+    animation: none;
+  }
+}
 .hero-cta {
   display: flex;
   align-items: flex-start;

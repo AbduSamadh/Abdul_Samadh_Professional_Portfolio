@@ -8,6 +8,7 @@ import { testimonials } from '@/content/testimonials';
 import { SUMMARY, asset } from '@/lib/asset';
 import GlyphPortrait from './GlyphPortrait';
 import Testimonial from './Testimonials';
+import TypedName from './TypedName';
 
 /**
  * All readable copy lives here as real HTML, staged against the master timeline. Each block fades in
@@ -92,7 +93,7 @@ export default function Overlays() {
           <span className="when-long">Now · {person.nowShort}</span>
           <span className="when-short">Now · {person.nowTiny}</span>
         </p>
-        <h1>{person.name}</h1>
+        <TypedName text={person.name} />
         <p className="big">{person.pitch}</p>
         <p className="mist">{person.span}</p>
         <div className="hero-cta">
