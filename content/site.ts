@@ -210,7 +210,7 @@ export const builds = {
       name: 'Swarm',
       body: 'A drone light show you conduct in a browser. Type a word and a thousand drones spell it. One switch flips the planner from collision-free assignment to random pairing, so a class can watch the maths fail: zero collisions against a hundred and seven.',
       tags: ['CANVAS', 'CAPT PLANNING', '1000 DRONES'],
-      live: 'https://abdusamadh.github.io/DroneShow/',
+      live: 'https://abdul-samadh-drone-show-simulator.netlify.app/',
       liveLabel: 'Open the live build',
     },
     {
@@ -218,7 +218,7 @@ export const builds = {
       name: 'ASCII City',
       body: 'A city of roads, towers, parks, traffic and pedestrians, raycast every frame and drawn with nothing but letters and symbols. It rains, snows and fogs, and the traffic obeys signals without ever deadlocking.',
       tags: ['RAYCASTER', 'NO LIBRARIES', 'WEATHER'],
-      live: 'https://abdusamadh.github.io/ASCII-City/',
+      live: 'https://abdul-samadh-ascii-city.netlify.app/',
       liveLabel: 'Walk the live city',
     },
     {
@@ -228,7 +228,7 @@ export const builds = {
       body: 'A robot sandbox that runs in the browser. Pick wheels, gears, sensors, a gripper and a battery, then race it through mazes, hill climbs, drag strips and delivery courses on tile, carpet and wet floors. Weight, grip and gearing all change the result, so every build teaches something.',
       classroom: 'Built for classrooms: guided lessons, live telemetry, CSV export of every run, and a teacher mode that re-runs student builds to check their claimed times.',
       tags: ['Robotics', 'Physics simulation', 'STEM education', 'JavaScript', 'Single-file app'],
-      live: 'https://abdusamadh.github.io/Bench_Robotics_Simulator/',
+      live: 'https://abdul-samadh-bench-robot-simulator.netlify.app/',
       liveLabel: 'Try the simulator',
       code: 'https://github.com/AbduSamadh/Bench_Robotics_Simulator',
     },
