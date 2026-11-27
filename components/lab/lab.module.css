@@ -1,0 +1,652 @@
+/* The hero: a drawing sheet. Pencil drawing → orange scan → built lab → callouts. */
+
+.hero {
+  --reveal: 0;
+  --draw: 0;
+  position: relative;
+  height: 320svh;
+}
+.hero[data-reduced] {
+  height: auto;
+}
+.sticky {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  padding: 14px var(--gutter) 14px;
+  display: flex;
+}
+.hero[data-reduced] .sticky {
+  position: relative;
+  height: auto;
+  min-height: 100svh;
+}
+
+.sheet {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--ink);
+  padding: 0 18px 10px;
+}
+/* registration ticks at the four corners */
+.sheet::before,
+.sheet::after {
+  content: '';
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 0 solid var(--orange);
+  pointer-events: none;
+}
+.sheet::before {
+  top: -6px;
+  left: -6px;
+  border-top-width: 2px;
+  border-left-width: 2px;
+}
+.sheet::after {
+  bottom: -6px;
+  right: -6px;
+  border-bottom-width: 2px;
+  border-right-width: 2px;
+}
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0 -18px;
+  padding: 7px 18px;
+  border-bottom: 1px solid var(--ink);
+  font: 400 11px/1.3 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.topnav {
+  display: flex;
+  gap: 4px;
+  margin: -7px 0;
+}
+.topnav a {
+  padding: 7px 10px;
+  text-decoration: none;
+  border-left: 1px solid var(--ink);
+}
+.topnav a:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+.topnav .topcta {
+  background: var(--orange);
+  color: #fff;
+  border-right: 1px solid var(--ink);
+}
+.meta {
+  align-items: center;
+}
+.head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px 32px;
+  padding: 10px 0 12px;
+}
+.name {
+  margin: 0;
+  font: 400 clamp(56px, 8.6vw, 132px) / 0.86 var(--serif);
+  letter-spacing: -0.035em;
+  white-space: nowrap;
+}
+.name em {
+  font-style: italic;
+  color: var(--orange);
+}
+
+.block {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 260px);
+  margin: 0;
+  border: 1px solid var(--ink);
+  font-size: 13px;
+  line-height: 1.35;
+  flex: none;
+}
+.block > div {
+  padding: 6px 10px 7px;
+  border-right: 1px solid var(--ink);
+}
+.block > div:nth-child(2) {
+  border-right: 0;
+}
+.block .blockWide {
+  grid-column: 1 / -1;
+  border-top: 1px solid var(--ink);
+  border-right: 0;
+}
+.block dt {
+  font: 400 10px/1.4 var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mist);
+}
+.block dd {
+  margin: 2px 0 0;
+}
+.status {
+  position: relative;
+  display: inline-grid;
+  font: 500 15px/1.2 var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.status > span {
+  grid-area: 1 / 1;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.status > span:last-child {
+  opacity: 0;
+  transform: translateY(6px);
+  color: var(--orange);
+}
+.status[data-built] > span:first-child {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+.status[data-built] > span:last-child {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- the drawing ---------- */
+.drawingWrap {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  container-type: size;
+}
+.drawing {
+  position: relative;
+  /* contain the image's shape inside whatever room is left */
+  width: min(100cqw, 100cqh * 1376 / 768);
+  aspect-ratio: 1376 / 768;
+  overflow: hidden;
+  background:
+    linear-gradient(var(--grid) 1px, transparent 1px) 0 0 / 24px 24px,
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0 / 24px 24px,
+    var(--paper);
+  outline: 1px solid var(--line);
+}
+.stage {
+  position: absolute;
+  inset: 0;
+  transform-origin: 0 0;
+  transition: transform 0.9s cubic-bezier(0.22, 0.7, 0.18, 1);
+}
+.render,
+.sketch {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  user-select: none;
+}
+.render {
+  clip-path: inset(0 calc((1 - var(--reveal)) * 100%) 0 0);
+}
+.sketch {
+  pointer-events: none;
+  clip-path: inset(0 0 0 calc(var(--reveal) * 100%));
+}
+.hero[data-open] .render {
+  cursor: zoom-out;
+}
+
+.lens {
+  position: absolute;
+  inset: 0;
+  background-size: 100% 100%;
+  pointer-events: none;
+  opacity: 0;
+  -webkit-mask: radial-gradient(circle 92px at var(--mx, -200px) var(--my, -200px), #000 98%, transparent 100%);
+  mask: radial-gradient(circle 92px at var(--mx, -200px) var(--my, -200px), #000 98%, transparent 100%);
+  transition: opacity 0.25s ease;
+}
+.drawing[data-lens] .lens {
+  opacity: calc(1 - var(--reveal));
+}
+
+.scan {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--reveal) * 100%);
+  width: 0;
+  pointer-events: none;
+  opacity: calc(min(var(--reveal) * 30, (1 - var(--reveal)) * 30, 1));
+}
+.scan::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -1px;
+  width: 2px;
+  background: var(--orange);
+  box-shadow: 0 0 24px 4px rgba(255, 79, 0, 0.45);
+}
+.scan span::before {
+  content: 'Rendering';
+  position: absolute;
+  top: 10px;
+  left: 8px;
+  padding: 2px 6px;
+  background: var(--orange);
+  color: #fff;
+  font: 500 10px/1.4 var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ---------- callouts ---------- */
+.leaders {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+.leaders line {
+  opacity: min(1, calc(var(--draw) * 4));
+  stroke: var(--ink);
+  stroke-width: 1;
+  stroke-dasharray: 1;
+  stroke-dashoffset: calc(1 - var(--draw));
+}
+.pins {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.mark {
+  position: absolute;
+  width: 11px;
+  height: 11px;
+  margin: -5.5px 0 0 -5.5px;
+  border-radius: 50%;
+  background: var(--orange);
+  box-shadow: 0 0 0 2px #fff, 0 0 0 3px var(--ink);
+  transform: scale(var(--draw));
+  pointer-events: none;
+}
+.callout {
+  position: absolute;
+  display: flex;
+  align-items: stretch;
+  padding: 0;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  font: 500 11px/1 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  transform: translate(0, -50%);
+  opacity: clamp(0, calc(var(--draw) * 10 - var(--i) * 0.6), 1);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.callout[data-end] {
+  transform: translate(-100%, -50%);
+}
+.hero:not([data-reduced]) .callout {
+  pointer-events: none;
+}
+.hero[data-ready] .callout,
+.hero[data-reduced] .callout {
+  pointer-events: auto;
+}
+.callout b {
+  padding: 6px 7px;
+  background: var(--ink);
+  color: var(--paper);
+  font-weight: 500;
+}
+.callout span {
+  padding: 6px 9px;
+}
+.callout:hover,
+.callout:focus-visible,
+.callout[data-on] {
+  background: var(--orange);
+  border-color: var(--orange);
+  color: #fff;
+  outline: none;
+}
+.callout:hover b,
+.callout:focus-visible b,
+.callout[data-on] b {
+  background: #1a1a18;
+}
+.hero[data-open] .callout:not([data-on]),
+.hero[data-open] .mark,
+.hero[data-open] .leaders {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ---------- foot of the sheet ---------- */
+.foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding-top: 10px;
+  font: 400 11px/1.3 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.cue {
+  display: inline-grid;
+}
+.cue > span {
+  grid-area: 1 / 1;
+  transition: opacity 0.3s ease;
+}
+.cueBuilt {
+  opacity: var(--draw);
+}
+.cueDrawn {
+  opacity: calc(1 - var(--reveal) * 3);
+}
+.progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.progress i {
+  position: relative;
+  width: 120px;
+  height: 3px;
+  background: var(--line);
+}
+.progress i::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--orange);
+  transform-origin: 0 50%;
+  transform: scaleX(var(--reveal));
+}
+
+/* ---------- detail sheet ---------- */
+.panel {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  bottom: 12px;
+  z-index: 5;
+  width: min(400px, 40%);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 18px 22px 16px;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.6;
+  animation: panelIn 0.45s cubic-bezier(0.22, 0.7, 0.18, 1) both;
+  box-shadow: 8px 8px 0 var(--orange);
+}
+.panel:focus {
+  outline: none;
+}
+@keyframes panelIn {
+  from {
+    opacity: 0;
+    transform: translateX(18px);
+  }
+}
+.panelHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin: -18px -22px 12px;
+  padding: 8px 10px 8px 22px;
+  border-bottom: 1px solid var(--ink);
+}
+.kicker {
+  margin: 0;
+  font: 400 11px/1.4 var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.close {
+  width: 30px;
+  height: 30px;
+  flex: none;
+  border: 1px solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+.close:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+.panel h2 {
+  margin: 4px 0 10px;
+  font: 400 30px/1.05 var(--serif);
+  letter-spacing: -0.02em;
+}
+.panel h3 {
+  margin: 16px 0 8px;
+  font: 400 10px/1.3 var(--mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mist);
+}
+.panel .build h3 {
+  font: 400 21px/1.15 var(--serif);
+  letter-spacing: -0.01em;
+  text-transform: none;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+.panel p {
+  margin: 0 0 10px;
+}
+.points {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+.points li {
+  padding: 5px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 14px;
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.chips li {
+  padding: 3px 8px;
+  border: 1px solid var(--ink);
+  font: 400 11px/1.4 var(--mono);
+}
+.build {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--ink);
+}
+.build p {
+  font-size: 14px;
+  color: var(--mist);
+}
+.links {
+  display: flex;
+  gap: 16px;
+}
+.links a {
+  color: var(--orange);
+  font-weight: 500;
+  text-underline-offset: 3px;
+}
+.nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 18px;
+  padding-top: 10px;
+  border-top: 1px solid var(--ink);
+}
+.nav button {
+  padding: 4px 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font: 400 11px/1.3 var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.nav button:hover {
+  color: var(--orange);
+}
+
+.list {
+  display: none;
+}
+
+/* ---------- phones ---------- */
+@media (max-width: 760px) {
+  .hero {
+    height: 260svh;
+  }
+  .sticky {
+    padding: 10px 10px;
+  }
+  .sheet {
+    padding: 0 10px 8px;
+  }
+  .meta {
+    margin: 0 -10px;
+    padding: 6px 10px;
+    font-size: 10px;
+  }
+  .metaMid,
+  .metaSheet {
+    display: none;
+  }
+  .meta {
+    justify-content: flex-end;
+  }
+  .drawingWrap {
+    flex: none;
+    container-type: normal;
+  }
+  .drawing {
+    width: 100%;
+  }
+  .head {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .name {
+    font-size: clamp(54px, 17vw, 84px);
+    white-space: normal;
+  }
+  .block {
+    grid-template-columns: 90px minmax(0, 1fr);
+    font-size: 12px;
+  }
+  .drawingWrap {
+    margin: 0 -10px;
+  }
+  .callout span {
+    display: none;
+  }
+  .callout b {
+    padding: 4px 5px;
+    font-size: 10px;
+  }
+  .panel {
+    position: fixed;
+    top: auto;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    width: auto;
+    max-height: 62svh;
+    box-shadow: 0 0 0 1px var(--ink), 0 -20px 60px -20px rgba(0, 0, 0, 0.35);
+    animation-name: sheetIn;
+  }
+  @keyframes sheetIn {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+  }
+  .foot .progress {
+    display: none;
+  }
+  .list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-content: flex-start;
+    flex: 1;
+    margin: 0;
+    padding: 14px 0 0;
+    list-style: none;
+  }
+  .list button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 10px;
+    border: 1px solid var(--ink);
+    background: var(--paper);
+    color: var(--ink);
+    font: 400 12px/1.2 var(--mono);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+  }
+  .list button b {
+    color: var(--orange);
+    font-weight: 500;
+  }
+  .list button[data-on] {
+    background: var(--ink);
+    color: var(--paper);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage,
+  .status > span,
+  .lens {
+    transition: none;
+  }
+  .panel {
+    animation: none;
+  }
+}

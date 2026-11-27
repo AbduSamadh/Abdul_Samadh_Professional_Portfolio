@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import '../legacy-styles';
 import { SHARE_IMAGE, asset } from '@/lib/asset';
 import { abstract, authoring, briefs, builds, contact, credentials, lab, person, route, scale } from '@/content/site';
 import { featured, testimonials } from '@/content/testimonials';
@@ -22,7 +23,7 @@ export default function Summary() {
   return (
     <main className={s.page}>
       <nav className={s.top}>
-        <a href={asset('/')}>← The 3D portfolio</a>
+        <a href={asset('/')}>← The lab</a>
         <span>Quick view</span>
       </nav>
 
@@ -234,8 +235,8 @@ export default function Summary() {
           <a className={s.btn} href={person.linkedin} target="_blank" rel="noopener noreferrer">
             Connect on LinkedIn ↗
           </a>
-          <a className={s.ghost} href={asset('/')}>
-            Enter the 3D portfolio
+          <a className={s.ghost} href={asset('/explore/')}>
+            The 3D journey
           </a>
         </div>
         <p className={s.small}>{contact.footer}</p>

@@ -203,7 +203,7 @@ export type Build = {
 export const builds = {
   kicker: 'Builds',
   title: 'Software I wrote because the lesson needed it',
-  body: 'Each of these began as a teaching problem. None of them use a framework.',
+  body: 'Each of these began as a teaching problem.',
   items: [
     {
       id: 'swarm',
