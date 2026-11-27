@@ -1,17 +1,11 @@
 import type { Metadata, Viewport } from 'next';
-import '@fontsource/pixelify-sans/400.css';
-import '@fontsource/pixelify-sans/600.css';
-import '@fontsource/pixelify-sans/700.css';
-import '@fontsource/electrolize/400.css';
-import '@fontsource/vt323/400.css';
-import './globals.css';
 import { SHARE_IMAGE } from '@/lib/asset';
 
 const description =
   'Abdul Samadh. Eleven years building outcomes-driven ICT, AI and STREAM curriculum for offline and online learning, across the UAE, the wider GCC, Singapore and India.';
 
-// Social previews need absolute URLs. The share card is public/og.jpg (the black room and the
-// hero at 1200x630); re-render it if the hero changes.
+// Social previews need absolute URLs. The share card is public/og.jpg (the lab image at
+// 1200x630); re-render it if the lab image changes.
 const origin = process.env.NEXT_PUBLIC_SITE_ORIGIN || 'https://abdusamadh.github.io';
 const base = process.env.NEXT_PUBLIC_BASE_PATH || '';
 const image = SHARE_IMAGE;
@@ -34,7 +28,7 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',
-  themeColor: '#0B0713',
+  themeColor: '#F7F5EF',
 };
 
 // Set the saved theme before first paint so there is no flash.

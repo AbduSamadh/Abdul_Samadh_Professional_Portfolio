@@ -1,6 +1,26 @@
-# Abdul Samadh — immersive 3D portfolio
+# Abdul Samadh — portfolio
 
-One continuous, scroll-driven camera journey. It starts in a black room with a desk and a laptop,
+## Home: the lab (`/`)
+
+The home page is a realistic school innovation lab, shown as one image
+(`public/assets/lab/`). The lab is the menu: pins sit on the objects (AI vision screen, coding
+desks, humanoid and robot arm, competition table, drone cage, learning-pathway board, books and
+trophies, 3D printers, VR station, electronics bench). Choosing one zooms toward it and opens a
+panel about that part of the work. Under the lab is a plain, paper-white reading layer: about,
+numbers, experience, software, authoring, briefs, recommendations, credentials and contact.
+
+- Zones, pin positions and panel copy: `content/zones.ts` (copy is pulled from `content/site.ts`).
+  If the lab image is re-rendered, re-place the pins there (x and y are fractions of the image).
+- Scene: `components/lab/LabScene.tsx` and `lab.module.css`. Styles for the page: `app/paper.css`.
+- Keyboard: Tab through the pins, Enter to open, arrow keys for the next zone, Escape to close.
+  Phones get the image full width plus a tap list under it. Reduced motion turns off the zoom
+  animation and the pin pulse.
+- The terminal is still there as an easter egg: press <kbd>`</kbd>, or "Open the terminal" in the footer.
+- The lab image is a working image, to be re-rendered at higher resolution.
+
+## The 3D journey (`/explore/`)
+
+The original site, kept as an optional walk-through. One continuous, scroll-driven camera journey. It starts in a black room with a desk and a laptop,
 drops through the laptop screen and travels through six worlds, each ending in a giant word the
 camera flies through:
 
