@@ -1,7 +1,9 @@
-import '@fontsource/ibm-plex-sans/400.css';
-import '@fontsource/ibm-plex-sans/500.css';
-import '@fontsource/ibm-plex-sans/600.css';
-import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/instrument-serif/400.css';
+import '@fontsource/instrument-serif/400-italic.css';
+import '@fontsource/instrument-sans/400.css';
+import '@fontsource/instrument-sans/500.css';
+import '@fontsource/jetbrains-mono/400.css';
+import '@fontsource/jetbrains-mono/500.css';
 import './paper.css';
 import LabScene from '@/components/lab/LabScene';
 import LabTerminal, { TerminalButton } from '@/components/lab/LabTerminal';
@@ -9,75 +11,90 @@ import { asset, SUMMARY } from '@/lib/asset';
 import { authoring, briefs, builds, contact, credentials, person, route, scale, who } from '@/content/site';
 import { featured, testimonials } from '@/content/testimonials';
 
-// Home: the lab (an image you explore) on top, then a plain reading layer with everything a
-// recruiter or a school needs, in order. Copy comes from content/.
+// Home, as a set of drawing sheets. Sheet 01 is the lab (drawn, then built as you scroll). The
+// rest read like the sheets that follow a plan: the brief, the timeline, the parts list, the
+// specifications and the sign-off. Copy comes from content/.
 
 const quotes = featured.map((n) => testimonials.find((t) => t.name === n)).filter((t) => !!t);
 const EXPLORE = asset('/explore/');
+const SHEETS = 6;
+
+// The timeline's scale. Spans are read from each role's dates on the CV; roles with no end
+// date run to now.
+const T0 = 2015;
+const NOW = 2026.9;
+const T1 = 2027;
+const spans: Record<string, [number, number]> = {
+  trainer: [2015.25, 2018.3],
+  chrysalis: [2018.25, 2021],
+  alphagen: [2021, 2024.5],
+  'coding-school': [2024.42, 2025.5],
+  atlab: [2025.5, NOW],
+  sunmarke: [NOW, NOW],
+};
+const pct = (y: number) => `${((y - T0) / (T1 - T0)) * 100}%`;
+const years = Array.from({ length: T1 - T0 + 1 }, (_, i) => T0 + i);
+
+function SheetHead({ n, title, note }: { n: number; title: string; note?: string }) {
+  return (
+    <div className="sheet-head">
+      <span>
+        <b>{String(n).padStart(2, '0')}</b> {title}
+      </span>
+      {note && <span className="sheet-note">{note}</span>}
+      <span>
+        Sheet {String(n).padStart(2, '0')} / {String(SHEETS).padStart(2, '0')}
+      </span>
+    </div>
+  );
+}
 
 export default function Home() {
   return (
     <>
-      <a className="skip" href="#experience">
+      <a className="skip" href="#brief">
         Skip to the reading version
       </a>
 
-      <header className="bar">
-        <a className="brand" href="#top">
-          <b>{person.name}</b>
-          <span>STREAM and AI curriculum</span>
+      <nav className="rev" aria-label="Sections">
+        <span className="rev-title" aria-hidden="true">
+          Index
+        </span>
+        <a href="#top">01 Lab</a>
+        <a href="#brief">02 Brief</a>
+        <a href="#experience">03 Timeline</a>
+        <a href="#work">04 Parts</a>
+        <a href="#specs">05 Specs</a>
+        <a className="rev-cta" href="#contact">
+          06 Contact
         </a>
-        <nav aria-label="Sections">
-          <a href="#lab">Lab</a>
-          <a href="#experience">Experience</a>
-          <a href="#work">Work</a>
-          {person.cv ? (
-            <a href={asset(person.cv)} download>
-              CV
-            </a>
-          ) : (
-            <a href={SUMMARY}>One page</a>
-          )}
-          <a className="bar-cta" href="#contact">
-            Contact
-          </a>
-        </nav>
-      </header>
+      </nav>
 
       <main id="top">
-        <section className="intro">
-          <div>
-            <h1>{person.name}</h1>
-            <p className="now">
-              <span className="live" aria-hidden="true" />
-              {person.nowShort}
-            </p>
-          </div>
-          <p className="pitch">{person.pitch}</p>
-        </section>
+        <LabScene />
 
-        <div id="lab" className="lab-wrap">
-          <LabScene />
-        </div>
-
-        <section className="wrap about" aria-labelledby="about-h">
-          <h2 id="about-h" className="label">
-            {who.kicker}
-          </h2>
-          <div className="about-grid">
-            <div>
-              <p className="lede">{who.title}.</p>
+        <section id="brief" className="sheet" aria-labelledby="brief-h">
+          <SheetHead n={2} title="The brief" note={person.location} />
+          <div className="brief">
+            <h2 id="brief-h" className="statement">
+              {who.title}. <em>{person.pitch}</em>
+            </h2>
+            <figure className="portrait">
+              <img src={asset('/assets/portrait.jpg')} alt={person.name} width={560} height={626} loading="lazy" />
+              <figcaption>Fig. 1 · {person.name}</figcaption>
+            </figure>
+            <div className="brief-body">
               <p>{who.body}</p>
               <p className="mist">{person.span}</p>
             </div>
-            <img className="portrait" src={asset('/assets/portrait.jpg')} alt={person.name} width={560} height={626} loading="lazy" />
           </div>
-          <ul className="stats">
-            {scale.stats.map((st) => (
+          <ul className="figures">
+            {scale.stats.map((st, i) => (
               <li key={st.label}>
+                <span className="fig-n">{String.fromCharCode(65 + i)}</span>
                 <b>
                   {st.value.toLocaleString('en')}
-                  {st.suffix}
+                  <i>{st.suffix}</i>
                 </b>
                 <span>{st.label}</span>
               </li>
@@ -85,10 +102,40 @@ export default function Home() {
           </ul>
         </section>
 
-        <section id="experience" className="wrap" aria-labelledby="exp-h">
-          <h2 id="exp-h" className="label">
-            Experience
+        <section id="experience" className="sheet" aria-labelledby="exp-h">
+          <SheetHead n={3} title="Timeline" note="Scale: 1 year" />
+          <h2 id="exp-h" className="sheet-title">
+            Eleven years, <em>to scale</em>
           </h2>
+
+          <div className="gantt" aria-hidden="true">
+            <div className="gantt-axis">
+              {years.map((y) => (
+                <span key={y} style={{ left: pct(y) }}>
+                  {y === T1 ? '' : `’${String(y).slice(2)}`}
+                </span>
+              ))}
+              <span className="gantt-now" style={{ left: pct(NOW) }}>
+                Now
+              </span>
+            </div>
+            {route.map((r) => {
+              const [a, b] = spans[r.id] ?? [NOW, NOW];
+              const point = a === b;
+              return (
+                <div className="gantt-row" key={r.id}>
+                  <span
+                    className={point ? 'gantt-bar gantt-point' : 'gantt-bar'}
+                    style={{ left: pct(a), width: point ? undefined : `calc(${pct(b)} - ${pct(a)})` }}
+                  />
+                  <span className="gantt-label" style={point ? { right: `calc(100% - ${pct(a)} + 14px)` } : { left: pct(a) }}>
+                    {r.label ?? r.org}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+
           <ol className="roles">
             {route
               .slice()
@@ -118,117 +165,104 @@ export default function Home() {
               ))}
           </ol>
           <div className="fll">
-            <h3>{scale.fll.title}</h3>
-            <p>{scale.fll.body}</p>
-            <p className="mist">{scale.fll.judged}</p>
+            <span className="stamp">Judged</span>
+            <div>
+              <h3>{scale.fll.title}</h3>
+              <p>{scale.fll.body}</p>
+              <p className="mist">{scale.fll.judged}</p>
+            </div>
           </div>
         </section>
 
-        <section id="work" className="wrap" aria-labelledby="work-h">
-          <h2 id="work-h" className="label">
-            Work
+        <section id="work" className="sheet" aria-labelledby="work-h">
+          <SheetHead n={4} title="Parts list" note={`${builds.items.length} items`} />
+          <h2 id="work-h" className="sheet-title">
+            {builds.title.replace(/ because the lesson needed it$/, '')}, <em>because the lesson needed it</em>
           </h2>
-          <p className="lede">{builds.title}.</p>
-          <p className="mist">{builds.body}</p>
-          <ul className="cards">
-            {builds.items.map((b) => (
+          <ol className="parts">
+            {builds.items.map((b, i) => (
               <li key={b.id}>
-                <h3>{b.name}</h3>
-                {b.tagline && <p className="tagline">{b.tagline}</p>}
-                <p>{b.body}</p>
-                {b.classroom && <p className="mist">{b.classroom}</p>}
-                <p className="tags">{b.tags.join(' · ')}</p>
-                {(b.live || b.code) && (
-                  <p className="links">
-                    {b.live && (
-                      <a href={b.live} target="_blank" rel="noopener noreferrer">
-                        {b.liveLabel} ↗
-                      </a>
-                    )}
-                    {b.code && (
-                      <a href={b.code} target="_blank" rel="noopener noreferrer">
-                        Code ↗
-                      </a>
-                    )}
-                  </p>
-                )}
+                <span className="part-no">{String(i + 1).padStart(3, '0')}</span>
+                <div className="part-name">
+                  <h3>{b.name}</h3>
+                  {b.tagline && <p>{b.tagline}</p>}
+                </div>
+                <div className="part-body">
+                  <p>{b.body}</p>
+                  {b.classroom && <p className="mist">{b.classroom}</p>}
+                  <p className="tags">{b.tags.join(' / ')}</p>
+                </div>
+                <div className="part-links">
+                  {b.live && (
+                    <a href={b.live} target="_blank" rel="noopener noreferrer">
+                      {b.liveLabel} ↗
+                    </a>
+                  )}
+                  {b.code && (
+                    <a href={b.code} target="_blank" rel="noopener noreferrer">
+                      Code ↗
+                    </a>
+                  )}
+                </div>
               </li>
             ))}
-          </ul>
-
-          <div className="two">
-            <div>
-              <h3>{authoring.title}</h3>
-              <p className="mist">{authoring.body}</p>
-              <ul className="plain">
-                {authoring.books.map((b) => (
-                  <li key={b.n}>
-                    <b>{b.title}.</b> {b.body}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <h3>{briefs.title}</h3>
-              <p className="mist">{briefs.body}</p>
-              <ul className="pills">
-                {briefs.items.map((b) => (
-                  <li key={b.n}>{b.title}</li>
-                ))}
-              </ul>
-            </div>
-          </div>
+          </ol>
         </section>
 
-        {quotes.length > 0 && (
-          <section className="wrap" aria-labelledby="rec-h">
-            <h2 id="rec-h" className="label">
-              Recommendations
-            </h2>
+        <section id="specs" className="sheet" aria-labelledby="spec-h">
+          <SheetHead n={5} title="Specifications" note={credentials.standards.join(' · ')} />
+          <div className="spec">
+            <div>
+              <h2 id="spec-h" className="sheet-title">
+                {authoring.title.split(',')[0]}, <em>{authoring.title.split(',').slice(1).join(',').trim()}</em>
+              </h2>
+              <p className="mist">{authoring.body}</p>
+              <ol className="books">
+                {authoring.books.map((b) => (
+                  <li key={b.n}>
+                    <span>{b.n}</span>
+                    <div>
+                      <b>{b.title}</b>
+                      <p>{b.body}</p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </div>
+            <div>
+              <h3 className="mono-h">{briefs.title}</h3>
+              <p className="mist">{briefs.body}</p>
+              <p className="briefs">
+                {briefs.items.map((b) => (
+                  <span key={b.n}>{b.title}</span>
+                ))}
+              </p>
+            </div>
+          </div>
+          {quotes.length > 0 && (
             <ul className="quotes">
               {quotes.map((t) => (
                 <li key={t.name}>
                   <blockquote>“{t.quote}”</blockquote>
-                  <p className="mist">
-                    <b>{t.name}</b>, {t.role}
-                    {t.org ? `, ${t.org}` : ''}
+                  <p>
+                    <b>{t.name}</b>
+                    <span>
+                      {t.role}
+                      {t.org ? `, ${t.org}` : ''}
+                    </span>
                   </p>
                 </li>
               ))}
             </ul>
-          </section>
-        )}
-
-        <section className="wrap creds" aria-labelledby="cred-h">
-          <div>
-            <h2 id="cred-h" className="label">
-              Education and certification
-            </h2>
-            <ul className="plain">
-              {credentials.education.map((e) => (
-                <li key={e.title}>
-                  <b>{e.title}</b>, {e.where}
-                </li>
-              ))}
-              {credentials.certifications.map((c) => (
-                <li key={c.title}>
-                  <b>{c.title}</b>
-                  {'where' in c && c.where ? `, ${c.where}` : ''}
-                  {'when' in c && c.when ? ` (${c.when})` : ''}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <h2 className="label">Standards and languages</h2>
-            <p>{credentials.standards.join(' · ')}</p>
-            <p>{credentials.languages.map((l) => `${l.name} (${l.level.toLowerCase()})`).join(' · ')}</p>
-          </div>
+          )}
         </section>
 
-        <section id="contact" className="wrap contact" aria-labelledby="contact-h">
-          <h2 id="contact-h">{contact.title}</h2>
-          <p className="mist">{contact.body}</p>
+        <section id="contact" className="sheet signoff" aria-labelledby="contact-h">
+          <SheetHead n={6} title="Sign-off" />
+          <h2 id="contact-h" className="big">
+            {contact.title.replace(/ remember\.$/, '')} <em>remember.</em>
+          </h2>
+          <p className="mist center">{contact.body}</p>
           <div className="actions">
             <a className="btn" href={person.linkedin} target="_blank" rel="noopener noreferrer">
               Connect on LinkedIn ↗
@@ -242,17 +276,51 @@ export default function Home() {
               One-page version
             </a>
           </div>
+
+          <dl className="titleblock">
+            <div>
+              <dt>Drawn by</dt>
+              <dd>{person.name}</dd>
+            </div>
+            <div>
+              <dt>Education</dt>
+              <dd>
+                {credentials.education.map((e) => (
+                  <span key={e.title}>
+                    {e.title}, {e.where}
+                  </span>
+                ))}
+              </dd>
+            </div>
+            <div>
+              <dt>Certified</dt>
+              <dd>
+                {credentials.certifications.map((c) => (
+                  <span key={c.title}>
+                    {c.title}
+                    {'where' in c && c.where ? `, ${c.where}` : ''}
+                    {'when' in c && c.when ? ` (${c.when})` : ''}
+                  </span>
+                ))}
+              </dd>
+            </div>
+            <div>
+              <dt>Languages</dt>
+              <dd>{credentials.languages.map((l) => `${l.name} (${l.level.toLowerCase()})`).join(' · ')}</dd>
+            </div>
+            <div>
+              <dt>Also on file</dt>
+              <dd>
+                <a href={EXPLORE}>The 3D journey</a> · <TerminalButton className="linkish" />
+              </dd>
+            </div>
+            <div>
+              <dt>Rev.</dt>
+              <dd>{contact.footer}</dd>
+            </div>
+          </dl>
         </section>
       </main>
-
-      <footer className="foot wrap">
-        <p>{contact.footer}</p>
-        <p>
-          <a href={EXPLORE}>The 3D journey</a>
-          <span aria-hidden="true"> · </span>
-          <TerminalButton className="linkish" />
-        </p>
-      </footer>
 
       <LabTerminal />
     </>

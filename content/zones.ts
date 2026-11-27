@@ -10,6 +10,7 @@ export const LAB_IMAGE = {
   webp: '/assets/lab/lab-v1.webp',
   width: 1376,
   height: 768,
+  sketch: '/assets/lab/lab-v1-sketch.webp',
   alt: 'A bright school innovation lab: an AI vision screen, coding desks, a humanoid robot and robot arm, a competition table, a drone cage, a learning-pathway board under a shelf of books and trophies, 3D printers, a VR headset and an electronics bench.',
 };
 
@@ -23,6 +24,9 @@ export type Zone = {
   /** Where the pin sits, as fractions of the image. */
   x: number;
   y: number;
+  /** Where the callout label sits, as fractions of the image. */
+  lx: number;
+  ly: number;
   title: string;
   body: string;
   /** Kit and tools, shown as chips. */
@@ -48,6 +52,8 @@ export const zones: Zone[] = [
     label: 'AI vision',
     x: 0.138,
     y: 0.423,
+    lx: 0.035,
+    ly: 0.29,
     title: 'AI literacy, taught on a real camera feed',
     body: brief('AI literacy'),
     kit: group('ai'),
@@ -58,6 +64,8 @@ export const zones: Zone[] = [
     label: 'Coding desks',
     x: 0.113,
     y: 0.677,
+    lx: 0.03,
+    ly: 0.88,
     title: 'Computing as a craft',
     body: `${brief('Computational thinking')} Then the languages, from first block to first program.`,
     kit: group('code'),
@@ -68,6 +76,8 @@ export const zones: Zone[] = [
     label: 'Robotics',
     x: 0.327,
     y: 0.6,
+    lx: 0.235,
+    ly: 0.9,
     title: 'Robotics, from floor turtle to humanoid',
     body: brief('Robotics pathway'),
     kit: group('robotics'),
@@ -78,6 +88,8 @@ export const zones: Zone[] = [
     label: 'Competition table',
     x: 0.545,
     y: 0.573,
+    lx: 0.47,
+    ly: 0.92,
     title: scale.fll.title,
     body: `${scale.fll.body} ${scale.fll.judged}`,
     points: [
@@ -90,6 +102,8 @@ export const zones: Zone[] = [
     label: 'Drone cage',
     x: 0.665,
     y: 0.49,
+    lx: 0.585,
+    ly: 0.36,
     title: 'Drones, flown in code',
     body: 'Flight is the quickest way to make a loop or a sensor reading matter: the drone either lands on the pad or it does not.',
     kit: group('drones'),
@@ -100,6 +114,8 @@ export const zones: Zone[] = [
     label: 'Learning pathway',
     x: 0.872,
     y: 0.482,
+    lx: 0.73,
+    ly: 0.64,
     title: 'Curriculum, from scope and sequence to Monday morning',
     body: 'Whole-school schemes for ICT, AI and STREAM, written for rooms that have the hardware and for screens that do not, with the teacher training attached.',
     points: briefs.items.map((b) => b.title),
@@ -109,6 +125,8 @@ export const zones: Zone[] = [
     label: 'Books and trophies',
     x: 0.836,
     y: 0.322,
+    lx: 0.72,
+    ly: 0.2,
     title: authoring.title,
     body: authoring.body,
     points: authoring.books.map((b) => b.title),
@@ -118,6 +136,8 @@ export const zones: Zone[] = [
     label: '3D printing',
     x: 0.716,
     y: 0.755,
+    lx: 0.59,
+    ly: 0.66,
     title: 'Design technology and the maker lab',
     body: brief('Maker lab setup'),
     kit: [...group('design'), ...group('mobility')],
@@ -128,6 +148,8 @@ export const zones: Zone[] = [
     label: 'VR station',
     x: 0.948,
     y: 0.6,
+    lx: 0.975,
+    ly: 0.42,
     title: 'Extended reality and what comes next',
     body: 'Headsets, motion platforms and brain-computer interfaces, tried in a lesson before anyone signs a purchase order.',
     kit: [...group('xr'), ...group('emerging')],
@@ -137,6 +159,8 @@ export const zones: Zone[] = [
     label: 'Electronics bench',
     x: 0.872,
     y: 0.833,
+    lx: 0.975,
+    ly: 0.95,
     title: 'Physical computing',
     body: brief('Physical computing'),
     kit: group('boards'),

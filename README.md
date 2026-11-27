@@ -1,22 +1,25 @@
 # Abdul Samadh — portfolio
 
-## Home: the lab (`/`)
+## Home: drawn, then built (`/`)
 
-The home page is a realistic school innovation lab, shown as one image
-(`public/assets/lab/`). The lab is the menu: pins sit on the objects (AI vision screen, coding
-desks, humanoid and robot arm, competition table, drone cage, learning-pathway board, books and
-trophies, 3D printers, VR station, electronics bench). Choosing one zooms toward it and opens a
-panel about that part of the work. Under the lab is a plain, paper-white reading layer: about,
-numbers, experience, software, authoring, briefs, recommendations, credentials and contact.
+The home page is a set of drawing sheets on drafting paper (graphite ink, one signal orange;
+Instrument Serif, Instrument Sans and JetBrains Mono).
 
-- Zones, pin positions and panel copy: `content/zones.ts` (copy is pulled from `content/site.ts`).
-  If the lab image is re-rendered, re-place the pins there (x and y are fractions of the image).
-- Scene: `components/lab/LabScene.tsx` and `lab.module.css`. Styles for the page: `app/paper.css`.
-- Keyboard: Tab through the pins, Enter to open, arrow keys for the next zone, Escape to close.
-  Phones get the image full width plus a tap list under it. Reduced motion turns off the zoom
-  animation and the pin pulse.
-- The terminal is still there as an easter egg: press <kbd>`</kbd>, or "Open the terminal" in the footer.
-- The lab image is a working image, to be re-rendered at higher resolution.
+- **Sheet 01, the lab.** A pencil drawing of a school innovation lab. Scrolling runs an orange
+  scan across it and renders the drawing into the built lab (the status in the title block flips
+  from DRAWN to BUILT). Before it is built, a lens under the mouse shows the finished room
+  through the drawing. Then numbered callouts draw in; each opens a detail sheet about that part
+  of the work, with kit and live builds. Arrow keys step through details, Escape closes.
+- **Sheets 02 to 06:** the brief and the figures, a to-scale timeline of the roles, a parts list
+  of the software, specifications (books, briefs, recommendations) and the sign-off with a title
+  block of credentials.
+- Zones, pins and callout positions: `content/zones.ts` (x/y is the object, lx/ly the label,
+  both fractions of the image). Scene: `components/lab/`. Page styles: `app/paper.css`.
+- The drawing (`public/assets/lab/lab-v1-sketch.webp`) is made from the render by edge
+  detection, so re-make it whenever the lab image changes.
+- Phones get the same scroll-to-build, numbered callouts and a tap list. Reduced motion shows
+  the built lab with callouts and no scrubbing.
+- The terminal is still there as an easter egg: press <kbd>`</kbd>, or use the link in the sign-off.
 
 ## The 3D journey (`/explore/`)
 
